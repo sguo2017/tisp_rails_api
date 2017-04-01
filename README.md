@@ -21,4 +21,4 @@ curl -X POST -H 'Content-Type: application/json' -d '{"user":{"email": "12345678
 curl -X POST -H "Content-Type: application/json" -d '{"serv_offer":{"serv_title":"title_test******","serv_detail":"detail_test******"}}' localhost:3000/serv_offers.json?[token](#token)=d653DiN4154_eUgti_q-
 
 参考：
-https://ruby-china.org/topics/25822
+http://www.tuicool.com/articles/RBVf22
