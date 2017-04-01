@@ -1,24 +1,11 @@
-# README
+##用curl发送请求举例：
+#注册
+curl -X POST -H 'Content-Type: application/json' -d '{"user":{"password":"12345678","password_confirmation":"12345678","email": "12345678@x.com"}}' http://localhost:3000/users.json
 
-This README would normally document whatever steps are necessary to get the
-application up and running.
+#登录
+curl -X POST -H 'Content-Type: application/json' -d '{"user":{"email": "12345678@x.com","password": "12345678"}}' http://localhost:3000/users/sign_in
 
-Things you may want to cover:
 
-* Ruby version
 
-* System dependencies
-
-* Configuration
-
-* Database creation
-
-* Database initialization
-
-* How to run the test suite
-
-* Services (job queues, cache servers, search engines, etc.)
-
-* Deployment instructions
-
-* ...
+参考：
+https://ruby-china.org/topics/25822
