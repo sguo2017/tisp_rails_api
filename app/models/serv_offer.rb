@@ -1,0 +1,2 @@
+class ServOffer < ApplicationRecord
+end

@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  serv_title: MyString
+  serv_detail: MyString
+  serv_imges: MyString
+  serv_catagory: MyString
+
+two:
+  serv_title: MyString
+  serv_detail: MyString
+  serv_imges: MyString
+  serv_catagory: MyString
