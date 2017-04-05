@@ -6,6 +6,7 @@ class Users::SessionsController < Devise::SessionsController
   #   super
   # end
 
+
   def create
     user = User.find_for_database_authentication(:email => params[:user][:email])
     return render json: {error: {status:-1}} unless user
@@ -15,6 +16,10 @@ class Users::SessionsController < Devise::SessionsController
         user.ensure_authentication_token
         format.json { 
           render json: {token:user.authentication_token, user_id: user.id}
+        }
+        format.js {
+          #render :js => "alert('hello')"    
+          redirect_to "/"   
         }
       else
         format.json {
