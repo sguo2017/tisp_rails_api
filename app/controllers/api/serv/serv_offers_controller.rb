@@ -1,38 +1,22 @@
-class ServOffersController < ApplicationController
+class Api::Serv::ServOffersController < ApplicationController
+  respond_to :json
 
-  #before_filter :authenticate_user_from_token!  
-
-  #before_action :authenticate_user!
-
-  before_filter :authenticate_user!
+  before_filter :authenticate_user_from_token!
 
   before_action :set_serv_offer, only: [:show, :edit, :update, :destroy]
 
-  #skip_before_filter :verify_authenticity_token
 
   # GET /serv_offers
   # GET /serv_offers.json
   def index
     @serv_offers = ServOffer.all
-    logger.debug "serv_offer all!!! current_user:#{@current_user} #{current_user}"
-
-    if @current_user 
-       logger.debug 'come on'
-    else
-       logger.debug 'nil'
-    end
- 
+    logger.debug "serv_offer all!!! current_user:#{@current_user}"
     if user_signed_in?
       logger.debug 'siged_id!!!!!!'
     else
       logger.debug 'why?'
     end
-
-    user = session[:current_tispr_user]
-    logger.debug "serv_offer all!!! session.tispr_user.email: #{user['email']} session.tispr_user.id: #{user['id']}"    
-
   end
-
 
   # GET /serv_offers/1
   # GET /serv_offers/1.json
@@ -52,7 +36,15 @@ class ServOffersController < ApplicationController
   # POST /serv_offers.json
   def create
     @serv_offer = ServOffer.new(serv_offer_params)
-    @serv_offer.user_id = current_user.id    
+    
+    token = params[:token].presence
+
+    user = token && User.find_by_authentication_token(token.to_s)
+
+    
+    logger.debug "current_user:#{user.email}"   
+ 
+    @serv_offer.user_id = user.id    
 
     respond_to do |format|
       if @serv_offer.save

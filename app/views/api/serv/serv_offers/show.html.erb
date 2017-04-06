@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Serv title:</strong>
+  <%= @serv_offer.serv_title %>
+</p>
+
+<p>
+  <strong>Serv detail:</strong>
+  <%= @serv_offer.serv_detail %>
+</p>
+
+<p>
+  <strong>Serv imges:</strong>
+  <%= @serv_offer.serv_imges %>
+</p>
+
+<p>
+  <strong>Serv catagory:</strong>
+  <%= @serv_offer.serv_catagory %>
+</p>
+
+<%= link_to 'Edit', edit_serv_offer_path(@serv_offer) %> |
+<%= link_to 'Back', serv_offers_path %>

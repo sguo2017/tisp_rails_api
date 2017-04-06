@@ -14,6 +14,17 @@ class Users::SessionsController < Devise::SessionsController
       if user.valid_password?(params[:user][:password])
         sign_in("user", user)
         user.ensure_authentication_token
+        
+        if !@current_user 
+           @current_user = user
+           Thread.current[:tispr_user] = user
+           session[:current_tispr_user] = user
+        end
+
+        logger.debug "serv_offer all!!! current_user: #{@current_user.email}"        
+        logger.debug "serv_offer all!!! thread.tispr_user: #{Thread.current[:tispr_user].email}"        
+        logger.debug "serv_offer all!!! session.tispr_user: #{session[:current_tispr_user].email}"        
+
         format.json { 
           render json: {token:user.authentication_token, user_id: user.id}
         }
