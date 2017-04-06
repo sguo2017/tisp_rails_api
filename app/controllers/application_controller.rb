@@ -1,7 +1,7 @@
 class ApplicationController < ActionController::Base
   #respond_to :html, :json  
 
-  after_filter :clear_thread_variable
+  #after_filter :clear_thread_variable
 
   protect_from_forgery with: :exception
 
