@@ -1,0 +1,2 @@
+class SysMsg < ApplicationRecord
+end

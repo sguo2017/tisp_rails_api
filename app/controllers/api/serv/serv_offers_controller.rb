@@ -41,13 +41,17 @@ class Api::Serv::ServOffersController < ApplicationController
 
     user = token && User.find_by_authentication_token(token.to_s)
 
-    
+
     logger.debug "current_user:#{user.email}"   
+
+    @sys_msg = SysMsg.new(:user_name=>user.name, :action_title=>'created an offer', :action_desc=>@serv_offer.serv_title, :user_id=>user.id)
+    
  
     @serv_offer.user_id = user.id    
 
     respond_to do |format|
       if @serv_offer.save
+        @sys_msg.save
         format.html { redirect_to @serv_offer, notice: 'Serv offer was successfully created.' }
         format.json { render :show, status: :created, location: @serv_offer }
       else
