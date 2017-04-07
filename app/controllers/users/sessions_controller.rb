@@ -6,6 +6,7 @@ class Users::SessionsController < Devise::SessionsController
   #   super
   # end
 
+  layout '_user'
 
   def create
     user = User.find_for_database_authentication(:email => params[:user][:email])
