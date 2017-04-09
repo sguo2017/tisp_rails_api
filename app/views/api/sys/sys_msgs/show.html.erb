@@ -1,0 +1,24 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>User name:</strong>
+  <%= @sys_msg.user_name %>
+</p>
+
+<p>
+  <strong>Action title:</strong>
+  <%= @sys_msg.action_title %>
+</p>
+
+<p>
+  <strong>Action desc:</strong>
+  <%= @sys_msg.action_desc %>
+</p>
+
+<p>
+  <strong>User:</strong>
+  <%= @sys_msg.user_id %>
+</p>
+
+<%= link_to 'Edit', edit_sys_msg_path(@sys_msg) %> |
+<%= link_to 'Back', sys_msgs_path %>
