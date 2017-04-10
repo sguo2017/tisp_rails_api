@@ -1,0 +1,37 @@
+<%= form_for(sys_msg) do |f| %>
+  <% if sys_msg.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(sys_msg.errors.count, "error") %> prohibited this sys_msg from being saved:</h2>
+
+      <ul>
+      <% sys_msg.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :user_name %>
+    <%= f.text_field :user_name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :action_title %>
+    <%= f.text_field :action_title %>
+  </div>
+
+  <div class="field">
+    <%= f.label :action_desc %>
+    <%= f.text_field :action_desc %>
+  </div>
+
+  <div class="field">
+    <%= f.label :user_id %>
+    <%= f.number_field :user_id %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

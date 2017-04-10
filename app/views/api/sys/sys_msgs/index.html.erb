@@ -1,0 +1,33 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Sys Msgs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>User name</th>
+      <th>Action title</th>
+      <th>Action desc</th>
+      <th>User</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @sys_msgs.each do |sys_msg| %>
+      <tr>
+        <td><%= sys_msg.user_name %></td>
+        <td><%= sys_msg.action_title %></td>
+        <td><%= sys_msg.action_desc %></td>
+        <td><%= sys_msg.user_id %></td>
+        <td><%= link_to 'Show', sys_msg %></td>
+        <td><%= link_to 'Edit', edit_sys_msg_path(sys_msg) %></td>
+        <td><%= link_to 'Destroy', sys_msg, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Sys Msg', new_sys_msg_path %>
