@@ -1,37 +1,55 @@
-<%= form_for(sys_msg) do |f| %>
-  <% if sys_msg.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(sys_msg.errors.count, "error") %> prohibited this sys_msg from being saved:</h2>
+<%= form_for @sys_msg, :html => { :class => "form-horizontal sys_msg" } do |f| %>
 
-      <ul>
-      <% sys_msg.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <% if @sys_msg.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@sys_msg.errors.count, "error") %> prohibited this sys_msg from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @sys_msg.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :user_name %>
-    <%= f.text_field :user_name %>
+  <div class="form-group">
+    <%= f.label :user_name, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :user_name, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:user_name) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :action_title, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :action_title, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:action_title) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :action_desc, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :action_desc, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:action_desc) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :user_id, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :user_id, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:user_id) %>
   </div>
 
-  <div class="field">
-    <%= f.label :action_title %>
-    <%= f.text_field :action_title %>
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                sys_msgs_path, :class => 'btn btn-default' %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :action_desc %>
-    <%= f.text_field :action_desc %>
-  </div>
-
-  <div class="field">
-    <%= f.label :user_id %>
-    <%= f.number_field :user_id %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>

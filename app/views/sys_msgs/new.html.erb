@@ -1,5 +1,5 @@
-<h1>New Sys Msg</h1>
-
-<%= render 'form', sys_msg: @sys_msg %>
-
-<%= link_to 'Back', sys_msgs_path %>
+<%- model_class = SysMsg -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => [:'helpers.titles.new', 'New %{model}'], :model => model_class.model_name.human.titleize %></h1>
+</div>
+<%= render :partial => 'form' %>

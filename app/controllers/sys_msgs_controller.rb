@@ -6,7 +6,7 @@ class SysMsgsController < ApplicationController
   # GET /sys_msgs
   # GET /sys_msgs.json
   def index
-    @sys_msgs = SysMsg.all
+    @sys_msgs = SysMsg.page(params[:page]).per(10)
   end
 
   # GET /sys_msgs/1

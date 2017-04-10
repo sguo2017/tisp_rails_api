@@ -1,33 +1,46 @@
-<p id="notice"><%= notice %></p>
-
-<h1>Serv Offers:<%= current_user =%></h1>
-
-<table>
+<%- model_class = ServOffer -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
+</yout：fixeddiv>
+<table class="table table-striped">
   <thead>
     <tr>
-      <th>Serv title</th>
-      <th>Serv detail</th>
-      <th>Serv imges</th>
-      <th>Serv catagory</th>
-      <th colspan="3"></th>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:serv_title) %></th>
+      <th><%= model_class.human_attribute_name(:serv_detail) %></th>
+      <th><%= model_class.human_attribute_name(:serv_imges) %></th>
+      <th><%= model_class.human_attribute_name(:serv_catagory) %></th>
+      <th><%= model_class.human_attribute_name(:user_id) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-
-  <tbody>
+  <tbody style="word-break:break-all;">
     <% @serv_offers.each do |serv_offer| %>
       <tr>
+        <td><%= link_to serv_offer.id, serv_offer_path(serv_offer) %></td>
         <td><%= serv_offer.serv_title %></td>
         <td><%= serv_offer.serv_detail %></td>
-        <td><image src="<%= serv_offer.serv_imges %>" alt="image" class="media-object"/></td>
+        <td style='width:18% !important;'><%= serv_offer.serv_imges %></td>
         <td><%= serv_offer.serv_catagory %></td>
-        <td><%= link_to 'Show', serv_offer %></td>
-        <td><%= link_to 'Edit', edit_serv_offer_path(serv_offer) %></td>
-        <td><%= link_to 'Destroy', serv_offer, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+        <td><%= serv_offer.user_id %></td>
+        <td><%=l serv_offer.created_at %></td>
+        <td>
+          <%= link_to t('.show', :default => t("helpers.links.show")),
+                      serv_offer_path(serv_offer), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
+                      edit_serv_offer_path(serv_offer), :class => 'btn btn-default btn-xs' %>
+          <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+                      serv_offer_path(serv_offer),
+                      :method => :delete,
+                      :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+                      :class => 'btn btn-xs btn-danger' %>
+        </td>
       </tr>
     <% end %>
   </tbody>
 </table>
-
-<br>
-
-<%= link_to 'New Serv Offer', new_serv_offer_path %>
+<%= paginate @serv_offers %>
+<%= link_to t('.new', :default => t("helpers.links.new")),
+            new_serv_offer_path,
+            :class => 'btn btn-primary' %>

@@ -17,4 +17,5 @@ Rails.application.routes.draw do
 
   end
 
+  root "serv_offers#index"
 end

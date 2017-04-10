@@ -13,7 +13,7 @@ class ServOffersController < ApplicationController
   # GET /serv_offers
   # GET /serv_offers.json
   def index
-    @serv_offers = ServOffer.all
+    @serv_offers = ServOffer.page(params[:page]).per(10)
     logger.debug "serv_offer all!!! current_user:#{@current_user} #{current_user}"
 
     if @current_user 
