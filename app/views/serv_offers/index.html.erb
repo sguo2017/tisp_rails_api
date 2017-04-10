@@ -21,7 +21,7 @@
         <td><%= link_to serv_offer.id, serv_offer_path(serv_offer) %></td>
         <td><%= serv_offer.serv_title %></td>
         <td><%= serv_offer.serv_detail %></td>
-        <td style='width:18% !important;'><image src="<%= serv_offer.serv_imges %>"/></td>
+        <td style='width:18% !important;'><image class="media-object" src="<%= serv_offer.serv_imges %>"/></td>
         <td><%= serv_offer.serv_catagory %></td>
         <td><%= serv_offer.user_id %></td>
         <td><%=l serv_offer.created_at %></td>
