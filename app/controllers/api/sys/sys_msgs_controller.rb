@@ -10,7 +10,19 @@ class Api::Sys::SysMsgsController < ApplicationController
   # GET /sys_msgs.json
   def index
     @sys_msgs = SysMsg.all
-   
+
+    @msgs = []
+    @sys_msgs.each do |msg|
+         m = msg.attributes.clone
+         u = User.find(msg.user_id)
+         u.authentication_token = "***"
+         m["user"]=u
+         @msgs.push(m)
+         #logger.debug "m:#{m}"
+    end 
+    
+    logger.debug "msgs:#{@msgs.to_json}"
+    
     logger.debug "sysMsg index"
 
     respond_to do |format| 
@@ -18,11 +30,9 @@ class Api::Sys::SysMsgsController < ApplicationController
 
         logger.debug "sysMsg index json"
         #render json: {error: {status:-1}}
-        #render json: {json.array! @sys_msgs, partial: 'sys_msgs/sys_msg', as: :sys_msg}
-        # render :json=> @sys_msgs.to_json
-        #format.json { render json: @sys_msg.errors, status: :unprocessable_entity }
         #render json: {page "1",total_pages "7", sysmsgs @sys_msgs.to_json}
-        render json: {page: "1",total_pages: "7", feeds: @sys_msgs.to_json}
+        #render json: {page: "1",total_pages: "7", feeds: @sys_msgs.to_json}
+        render json: {page: "1",total_pages: "7", feeds: @msgs.to_json}
       }  
     end
    

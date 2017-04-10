@@ -45,8 +45,8 @@ class Api::Serv::ServOffersController < ApplicationController
     logger.debug "current_user:#{user.email}"   
 
     @sys_msg = SysMsg.new(:user_name=>user.name, :action_title=>'created an offer', :action_desc=>@serv_offer.serv_title, :user_id=>user.id)
+    @sys_msg.user = user 
     
- 
     @serv_offer.user_id = user.id    
 
     respond_to do |format|
