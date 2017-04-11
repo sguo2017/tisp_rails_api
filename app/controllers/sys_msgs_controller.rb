@@ -6,7 +6,7 @@ class SysMsgsController < ApplicationController
   # GET /sys_msgs
   # GET /sys_msgs.json
   def index
-    @sys_msgs = SysMsg.page(params[:page]).per(10)
+    @sys_msgs = SysMsg.order("created_at DESC").page(params[:page]).per(10)
   end
 
   # GET /sys_msgs/1
