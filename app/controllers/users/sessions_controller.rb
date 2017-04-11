@@ -42,7 +42,8 @@ class Users::SessionsController < Devise::SessionsController
   end
 
   def destroy
-    current_user.authentication_token = Devise.friendly_token
+    #current_user.authentication_token = Devise.friendly_token
+    
     sign_out(current_user)
     render json: {success: true}
   end
