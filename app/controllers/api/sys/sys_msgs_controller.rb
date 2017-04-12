@@ -9,7 +9,7 @@ class Api::Sys::SysMsgsController < ApplicationController
   # GET /sys_msgs
   # GET /sys_msgs.json
   def index
-    @sys_msgs = SysMsg.all.order("created_at desc")
+    @sys_msgs = SysMsg.all.order("created_at desc").page(params[:page]).per(2)
 
     @msgs = []
     @sys_msgs.each do |msg|
