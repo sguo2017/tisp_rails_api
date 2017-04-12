@@ -14,7 +14,9 @@ Rails.application.routes.draw do
     namespace :sys do
       resources :sys_msgs, only: [:index, :create, :show, :update, :destroy]
     end
-
+    namespace :session do
+      resources :users,only: [:edit, :show, :update]
+    end
   end
 
   root "serv_offers#index"

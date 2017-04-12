@@ -50,6 +50,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
     yield resource if block_given?
     if resource_updated
       if @user.avatar
+        logger.info "==========="
+        logger.info @user.avatar
         session[:user_avatar_url]=@user.avatar_url
       end
       if is_flashing_format?
