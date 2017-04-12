@@ -19,9 +19,12 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
 
   # GET /resource/edit
-  # def edit
-  #   super
-  # end
+  def edit
+    @session_user=session[:current_tispr_user]
+    user_id = @session_user["id"]
+    @user = User.find_by_id(user_id.to_i)
+    logger.debug "=====xxxxxx======"
+  end
 
   # PUT /resource
   # def update
