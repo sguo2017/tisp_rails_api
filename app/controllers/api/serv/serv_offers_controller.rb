@@ -16,6 +16,27 @@ class Api::Serv::ServOffersController < ApplicationController
     else
       logger.debug 'why?'
     end
+   
+    @offers = []
+    @serv_offers.each do |offer|
+         s = offer.attributes.clone
+         u = User.find(offer.user_id)
+         u.authentication_token = "***"
+         s["user"]=u
+         @offers.push(s)
+         #logger.debug "m:#{s}"
+    end
+
+    logger.debug "msgs:#{@offers.to_json}"
+
+
+    respond_to do |format|
+      format.json {
+        logger.debug "sysMsg index json"
+        render json: {page: "1",total_pages: "7", feeds: @serv_offers.to_json}
+      }
+    end
+    
   end
 
   # GET /serv_offers/1
