@@ -2,11 +2,21 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
-
-  def index
+  def current_user
+      if @user.nil?
+                build_global_user_from_session
+            end
+      return @user
+  end
+  
+  def build_global_user_from_session
      @session_user = session[:current_tispr_user]
      user_id = @session_user["id"]
      @user = User.find_by_id(user_id.to_i)
+  end
+
+  def index
+     build_global_user_from_session
      logger.debug "user#edit***************#{@user.id}"
   end 
 
@@ -14,7 +24,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # def new
   #   super
   # end
-
 
   def create
     @user = User.new(user_params)
@@ -25,19 +34,37 @@ class Users::RegistrationsController < Devise::RegistrationsController
     end
   end
 
-
   # GET /resource/edit
   def edit
-     @session_user = session[:current_tispr_user]
-     user_id = @session_user["id"]
-     @user = User.find_by_id(user_id.to_i)
+     build_global_user_from_session
      logger.debug "user#edit***************#{@user.id}"
   end
-
+  
   # PUT /resource
-  # def update
-  #   super
-  # end
+  def update
+    #build_global_user_from_session
+    self.resource = resource_class.to_adapter.get!(send(:"current_#{resource_name}").to_key)
+    prev_unconfirmed_email = resource.unconfirmed_email if resource.respond_to?(:unconfirmed_email)
+
+    resource_updated = update_resource(resource, user_params)
+    yield resource if block_given?
+    if resource_updated
+      if @user.avatar
+        session[:user_avatar_url]=@user.avatar_url
+      end
+      if is_flashing_format?
+        flash_key = update_needs_confirmation?(resource, prev_unconfirmed_email) ?
+          :update_needs_confirmation : :updated
+        set_flash_message :notice, flash_key
+      end
+      bypass_sign_in resource, scope: resource_name
+      respond_with resource, location: after_update_path_for(resource)
+    else
+      clean_up_passwords resource
+      set_minimum_password_length
+      respond_with resource
+    end
+  end
 
   # DELETE /resource
   # def destroy
@@ -77,7 +104,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   private
   def user_params
-    params.require(:user).permit(:email, :password, :password_confirmation, :name)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :current_password, :avatar)
   end
 
 end

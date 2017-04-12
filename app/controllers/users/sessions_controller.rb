@@ -21,7 +21,9 @@ class Users::SessionsController < Devise::SessionsController
            Thread.current[:tispr_user] = user
            session[:current_tispr_user] = user
         end
-
+        if user.avatar
+            session[:user_avatar_url]=user.avatar_url
+        end
         logger.debug "serv_offer all!!! current_user: #{@current_user.email}"        
         logger.debug "serv_offer all!!! thread.tispr_user: #{Thread.current[:tispr_user].email}"        
         logger.debug "serv_offer all!!! session.tispr_user: #{session[:current_tispr_user].email}"        

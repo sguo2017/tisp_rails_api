@@ -6,6 +6,10 @@
   <div class="panel-body">
     <%= form_for(resource, as: resource_name, url: registration_path(resource_name), html: { method: :put }) do |f| %>
       <div class="form-group">
+        <%= f.label :姓名 %>
+        <%= f.text_field :name, autofocus: true, class: 'form-control'%>
+      </div>
+      <div class="form-group">
         <%= f.label :email %>
         <%= f.email_field :email, autofocus: true, class: 'form-control' %>
       </div>
@@ -20,6 +24,11 @@
       <div class="form-group">
         <%= f.label :current_password %> <i>(<%= t('.we_need_your_current_password_to_confirm_your_changes', default: 'we need your current password to confirm your changes') %>)</i>
         <%= f.password_field :current_password, class: 'form-control' %>
+      </div>
+      <div class="form-group">
+        <%= f.label :头像上传%>
+        <%= f.file_field :avatar, :class => 'form-control' %>
+        <%=f.error_span(:image) %>
       </div>
       <%= f.submit t('.update', default: 'Update'), class: 'btn btn-primary' %>
     <% end %>
