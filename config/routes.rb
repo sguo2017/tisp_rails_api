@@ -3,6 +3,8 @@ Rails.application.routes.draw do
   resources :sys_msgs
   resources :serv_offers
 
+  #devise_for :users
+
   devise_for :users, controllers:{registrations:'users/registrations', sessions:'users/sessions'}
 
   namespace :api do

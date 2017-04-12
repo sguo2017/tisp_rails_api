@@ -2,6 +2,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
 
+
+  def index
+     @session_user = session[:current_tispr_user]
+     user_id = @session_user["id"]
+     @user = User.find_by_id(user_id.to_i)
+     logger.debug "user#edit***************#{@user.id}"
+  end 
+
   # GET /resource/sign_up
   # def new
   #   super
@@ -20,10 +28,10 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   # GET /resource/edit
   def edit
-    @session_user=session[:current_tispr_user]
-    user_id = @session_user["id"]
-    @user = User.find_by_id(user_id.to_i)
-    logger.debug "=====xxxxxx======"
+     @session_user = session[:current_tispr_user]
+     user_id = @session_user["id"]
+     @user = User.find_by_id(user_id.to_i)
+     logger.debug "user#edit***************#{@user.id}"
   end
 
   # PUT /resource
