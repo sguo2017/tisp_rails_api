@@ -1,0 +1,13 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  deal_id: 1
+  chat_content: MyString
+  user_id: 1
+  catalog: MyString
+
+two:
+  deal_id: 1
+  chat_content: MyString
+  user_id: 1
+  catalog: MyString

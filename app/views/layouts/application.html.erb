@@ -77,6 +77,7 @@
             <li><%= link_to "系统消息", "/sys_msgs"  %></li>
             <li><%= link_to "交易单", "/deals"  %></li>
             <li><%= link_to "聊天", "/deal_chats"  %></li>
+            <li><%= link_to "聊天详情", "/deal_chat_details"  %></li>
             <li class='menu-right'><%= link_to "退出",destroy_user_session_path,:method=>:delete%></li>
             <li class='menu-right'><%=link_to "个人信息修改", edit_user_registration_path(current_user)%><li>
           </ul>

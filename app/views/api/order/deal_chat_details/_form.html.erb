@@ -1,0 +1,55 @@
+<%= form_for @deal_chat_detail, :html => { :class => "form-horizontal deal_chat_detail" } do |f| %>
+
+  <% if @deal_chat_detail.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@deal_chat_detail.errors.count, "error") %> prohibited this deal_chat_detail from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @deal_chat_detail.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :deal_id, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :deal_id, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:deal_id) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :chat_content, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :chat_content, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:chat_content) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :user_id, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :user_id, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:user_id) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :catalog, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :catalog, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:catalog) %>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                deal_chat_details_path, :class => 'btn btn-default' %>
+    </div>
+  </div>
+
+<% end %>
