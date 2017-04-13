@@ -1,10 +1,14 @@
-class DealsController < ApplicationController
+class Api::Order::DealsController < ApplicationController
+  respond_to :json
+
+  before_filter :authenticate_user_from_token!
+ 
   before_action :set_deal, only: [:show, :edit, :update, :destroy]
 
   # GET /deals
   # GET /deals.json
   def index
-    @deals = Deal.page(params[:page]).per(4)
+    @deals = Deal.page(params[:page]).per(5)
   end
 
   # GET /deals/1

@@ -16,7 +16,10 @@ Rails.application.routes.draw do
       resources :sys_msgs, only: [:index, :create, :show, :update, :destroy]
     end
     namespace :session do
-      resources :users,only: [:edit, :show, :update]
+      resources :users, only: [:edit, :show, :update]
+    end
+    namespace :order do
+      resources :deals, only: [:index, :create, :show, :update, :destroy]
     end
   end
 
