@@ -50,9 +50,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
     yield resource if block_given?
     if resource_updated
       if @user.avatar
-        logger.info "==========="
-        logger.info @user.avatar
-        session[:user_avatar_url]=@user.avatar_url
+        session[:user_avatar]=@user.avatar
       end
       if is_flashing_format?
         flash_key = update_needs_confirmation?(resource, prev_unconfirmed_email) ?
