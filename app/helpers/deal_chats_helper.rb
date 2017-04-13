@@ -1,0 +1,2 @@
+module DealChatsHelper
+end

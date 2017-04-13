@@ -1,0 +1,35 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      deal_chat: "交易沟通"
+    attributes:
+      deal_chat:
+        deal_id: "交易沟通ID"
+        serv_offer_id: "交易服务"
+        serv_offer_user_name: "服务提供者"
+        serv_offer_titile: "服务名称"
+        lately_chat_content: "最近聊天内容"
+  helpers:
+    submit:
+      deal_chat:
+        create: "新建"
+        update: "修改"
+  deal_chats:
+    edit:
+      title: "编辑"
+    form:
+      deal_chat: "Deal chat"
+    index:
+      confirm: "Are you sure you want to delete the deal chat?"
+      empty: "No deal chats found"
+      new_deal_chat: "Add a new deal chat"
+      title: "Listing of deal chats"
+    new:
+      title: "Adding a new deal chat"
+    show:
+      title: "Deal chat details"
+    was_created: "Deal chat was successfully added"
+    was_deleted: "Deal chat was successfully deleted"
+    was_updated: "Deal chat was successfully updated"
+

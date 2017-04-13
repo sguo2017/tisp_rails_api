@@ -1,0 +1,38 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      deal: "交易"
+    attributes:
+      deal:
+        serv_offer_title: "服务提供标题"
+        serv_offer_id: "服务提供ID"
+        offer_user_id: "服务提供者ID"
+        request_user_id: "服务请求者ID"
+        status: "状态"
+        connect_time: "接触时间"
+        deal_time: "成交时间"
+        finish_time: "完成时间"
+  helpers:
+    submit:
+      deal:
+        create: "创建交易"
+        update: "修改交易"
+  deals:
+    edit:
+      title: "编辑交易"
+    form:
+      deal: "Deal"
+    index:
+      confirm: "您确定删除?"
+      empty: "没有记录"
+      new_deal: "新增"
+      title: "列表"
+    new:
+      title: "信息"
+    show:
+      title: "详细"
+    was_created: "Deal was successfully added"
+    was_deleted: "Deal was successfully deleted"
+    was_updated: "Deal was successfully updated"
+

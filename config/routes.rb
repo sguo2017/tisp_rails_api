@@ -1,5 +1,8 @@
 Rails.application.routes.draw do
 
+  resources :deal_chat_details
+  resources :deal_chats
+  resources :deals
   resources :sys_msgs
   resources :serv_offers
 
@@ -15,7 +18,12 @@ Rails.application.routes.draw do
       resources :sys_msgs, only: [:index, :create, :show, :update, :destroy]
     end
     namespace :session do
-      resources :users,only: [:edit, :show, :update]
+      resources :users, only: [:edit, :show, :update]
+    end
+    namespace :order do
+      resources :deals, only: [:index, :create, :show, :update, :destroy]
+      resources :deal_chats, only: [:index, :create, :show, :update, :destroy]
+      resources :deal_chat_details, only: [:index, :create, :show, :update, :destroy]
     end
   end
 

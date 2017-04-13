@@ -61,6 +61,9 @@ gem 'devise-i18n-views'
 gem 'kaminari'
 gem 'kaminari-i18n'
 gem 'carrierwave'
+gem 'annotate'
+gem 'i18n_scaffold_generator'
+gem 'translations_sync'
 
 
 

@@ -1,0 +1,21 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  serv_offer_title: MyString
+  serv_offer_id: 1
+  offer_user_id: 1
+  request_user_id: 1
+  status: MyString
+  connect_time: 2017-04-13 09:19:14
+  deal_time: 2017-04-13 09:19:14
+  finish_time: 2017-04-13 09:19:14
+
+two:
+  serv_offer_title: MyString
+  serv_offer_id: 1
+  offer_user_id: 1
+  request_user_id: 1
+  status: MyString
+  connect_time: 2017-04-13 09:19:14
+  deal_time: 2017-04-13 09:19:14
+  finish_time: 2017-04-13 09:19:14
