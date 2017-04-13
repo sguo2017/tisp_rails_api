@@ -8,6 +8,23 @@ class Api::Order::DealChatsController < ApplicationController
 
   def index
     @deal_chats = DealChat.page(params[:page]).per(5)
+    @chats = []
+    @deal_chats.each do |chat|
+         c = chat.attributes.clone
+        # u = User.find(chat.user_id)
+        # u.authentication_token = "***"
+        # c["user"]=u
+         @chats.push(c)
+    end
+
+    logger.debug "chats:#{@chats.to_json}"
+
+    respond_to do |format|
+      format.json {      
+        render json: {page: "1",total_pages: "7", feeds: @chats.to_json}
+      }
+    end
+
   end
 
   def show
