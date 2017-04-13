@@ -75,6 +75,7 @@
           <ul class="nav navbar-nav nav-tisp">
             <li><%= link_to "服务提供", "/serv_offers"  %></li>
             <li><%= link_to "系统消息", "/sys_msgs"  %></li>
+            <li><%= link_to "交易单", "/deals"  %></li>
             <li class='menu-right'><%= link_to "退出",destroy_user_session_path,:method=>:delete%></li>
             <li class='menu-right'><%=link_to "个人信息修改", edit_user_registration_path(current_user)%><li>
           </ul>

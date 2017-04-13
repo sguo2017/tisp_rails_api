@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :deals
   resources :sys_msgs
   resources :serv_offers
 
