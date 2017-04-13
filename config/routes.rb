@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :deal_chats
   resources :deals
   resources :sys_msgs
   resources :serv_offers
@@ -20,6 +21,7 @@ Rails.application.routes.draw do
     end
     namespace :order do
       resources :deals, only: [:index, :create, :show, :update, :destroy]
+      resources :deal_chats, only: [:index, :create, :show, :update, :destroy]
     end
   end
 

@@ -1,0 +1,62 @@
+<%= form_for @deal_chat, :html => { :class => "form-horizontal deal_chat" } do |f| %>
+
+  <% if @deal_chat.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@deal_chat.errors.count, "error") %> prohibited this deal_chat from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @deal_chat.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
+    </div>
+  <% end %>
+
+  <div class="form-group">
+    <%= f.label :deal_id, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :deal_id, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:deal_id) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :serv_offer_id, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :serv_offer_id, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:serv_offer_id) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :serv_offer_user_name, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :serv_offer_user_name, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:serv_offer_user_name) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :serv_offer_titile, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :serv_offer_titile, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:serv_offer_titile) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :lately_chat_content, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :lately_chat_content, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:lately_chat_content) %>
+  </div>
+
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                deal_chats_path, :class => 'btn btn-default' %>
+    </div>
+  </div>
+
+<% end %>

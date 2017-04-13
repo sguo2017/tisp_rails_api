@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  deal_id: 1
+  serv_offer_id: 1
+  serv_offer_user_name: MyString
+  serv_offer_titile: MyString
+  lately_chat_content: MyString
+
+two:
+  deal_id: 1
+  serv_offer_id: 1
+  serv_offer_user_name: MyString
+  serv_offer_titile: MyString
+  lately_chat_content: MyString
