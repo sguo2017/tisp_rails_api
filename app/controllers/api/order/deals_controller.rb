@@ -29,7 +29,12 @@ class Api::Order::DealsController < ApplicationController
   # POST /deals.json
   def create
     @deal = Deal.new(deal_params)
-
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s)
+    @deal.request_user_id = user.id
+    @deal.status = '00A'
+    @deal.connect_time = Time.new
+    logger.debug "deal:#{@deal}"
     respond_to do |format|
       if @deal.save
         format.html { redirect_to @deal, notice: 'Deal was successfully created.' }
