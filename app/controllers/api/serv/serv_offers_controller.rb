@@ -72,6 +72,8 @@ class Api::Serv::ServOffersController < ApplicationController
 
     respond_to do |format|
       if @serv_offer.save
+        @sys_msg.serv_id = @serv_offer.id
+        logger.debug "serv_id:#{@sys_msg.serv_id} id:#{@serv_offer.id}"
         @sys_msg.save
         format.html { redirect_to @serv_offer, notice: 'Serv offer was successfully created.' }
         format.json { render :show, status: :created, location: @serv_offer }

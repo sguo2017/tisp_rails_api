@@ -15,6 +15,9 @@ class Api::Sys::SysMsgsController < ApplicationController
     @sys_msgs.each do |msg|
          m = msg.attributes.clone
          u = User.find(msg.user_id)
+         logger.debug "u:#{msg.to_s}"
+         s = ServOffer.find(msg.serv_id)
+         m["serv_offer"] = s
          u.authentication_token = "***"
          m["user"]=u
          @msgs.push(m)
@@ -101,7 +104,7 @@ class Api::Sys::SysMsgsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sys_msg_params
-      params.require(:sys_msg).permit(:user_name, :action_title, :action_desc, :user_id)
+      params.require(:sys_msg).permit(:user_name, :action_title, :action_desc, :user_id, :serv_id)
     end
 
 
