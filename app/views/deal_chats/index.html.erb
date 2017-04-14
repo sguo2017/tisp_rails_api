@@ -8,8 +8,8 @@
       <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:deal_id) %></th>
       <th><%= model_class.human_attribute_name(:serv_offer_id) %></th>
-      <th><%= model_class.human_attribute_name(:serv_offer_user_name) %></th>
-      <th><%= model_class.human_attribute_name(:serv_offer_titile) %></th>
+      <th><%= model_class.human_attribute_name(:offer_user_id) %></th>
+      <th><%= model_class.human_attribute_name(:request_user_id) %></th>
       <th><%= model_class.human_attribute_name(:lately_chat_content) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
@@ -21,8 +21,8 @@
         <td><%= link_to deal_chat.id, deal_chat_path(deal_chat) %></td>
         <td><%= deal_chat.deal_id %></td>
         <td><%= deal_chat.serv_offer_id %></td>
-        <td><%= deal_chat.serv_offer_user_name %></td>
-        <td><%= deal_chat.serv_offer_titile %></td>
+        <td><%= deal_chat.offer_user_id %></td>
+        <td><%= deal_chat.request_user_id %></td>
         <td><%= deal_chat.lately_chat_content %></td>
         <td><%=l deal_chat.created_at %></td>
         <td>

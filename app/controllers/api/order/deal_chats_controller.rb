@@ -77,7 +77,7 @@ class Api::Order::DealChatsController < ApplicationController
     end
 
     def deal_chat_params
-      params.require(:deal_chat).permit(:deal_id, :serv_offer_id, :serv_offer_user_name, :serv_offer_titile, :lately_chat_content)
+      params.require(:deal_chat).permit(:deal_id, :serv_offer_id, :serv_offer_user_name, :serv_offer_titile, :lately_chat_content, :offer_user_id, :request_user_id)
     end
 end
 

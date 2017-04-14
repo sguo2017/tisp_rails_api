@@ -37,6 +37,13 @@ class Api::Order::DealsController < ApplicationController
     logger.debug "deal:#{@deal}"
     respond_to do |format|
       if @deal.save
+        @deal_chat = DealChat.new()
+        @deal_chat.deal_id = @deal.id
+        @deal_chat.serv_offer_id = @deal.serv_offer_id        
+        @deal_chat.offer_user_id = @deal.offer_user_id
+        @deal_chat.request_user_id = @deal.request_user_id
+        @deal_chat.lately_chat_content = "your offer is awesome"
+        @deal_chat.save
         format.html { redirect_to @deal, notice: 'Deal was successfully created.' }
         format.json { render :show, status: :created, location: @deal }
       else

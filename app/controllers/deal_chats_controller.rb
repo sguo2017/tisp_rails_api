@@ -4,7 +4,7 @@ class DealChatsController < ApplicationController
   # GET /deal_chats
   # GET /deal_chats.json
   def index
-    @deal_chats = DealChat.page(params[:page]).per(5)
+    @deal_chats = DealChat.order("created_at DESC").page(params[:page]).per(5)
   end
 
   # GET /deal_chats/1
@@ -69,6 +69,6 @@ class DealChatsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def deal_chat_params
-      params.require(:deal_chat).permit(:deal_id, :serv_offer_id, :serv_offer_user_name, :serv_offer_titile, :lately_chat_content)
+      params.require(:deal_chat).permit(:deal_id, :serv_offer_id, :serv_offer_user_name, :serv_offer_titile, :lately_chat_content, :offer_user_id, :request_user_id)
     end
 end

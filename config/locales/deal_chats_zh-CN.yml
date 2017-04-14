@@ -7,9 +7,12 @@ zh-CN:
       deal_chat:
         deal_id: "交易沟通ID"
         serv_offer_id: "交易服务"
+        offer_user_id: "服务提供者ID"
+        request_user_id: "服务请求者ID"       
         serv_offer_user_name: "服务提供者"
         serv_offer_titile: "服务名称"
         lately_chat_content: "最近聊天内容"
+        created_at: "创建时间"   
   helpers:
     submit:
       deal_chat:
