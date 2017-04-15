@@ -42,6 +42,7 @@
        console.log("url:" + url);
        var input_file = document.getElementById('user_avatar_file');
        if(input_file.files.length!=1){
+          $('#edit_user').submit();
           return;
        }
        formData.append("image", input_file.files[0]);
