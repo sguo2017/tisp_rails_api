@@ -1,0 +1,45 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      serv_offer: "Serv offer"
+    attributes:
+      serv_offer:
+        id: "ID" 
+        serv_title: "服务名称"
+        serv_detail: "服务详情"
+        serv_imges: "服务图片"
+        serv_catagory: "目录"
+        user_id: "用户ID"
+        created_at: "创建时间"
+        actions: "操作"
+  helpers:
+    links:
+      show: "查看"
+      edit: "编辑"
+      destroy: "删除"
+      new: "新增"
+      back: "返回"
+      cancel: "取消"
+    actions: "操作"
+    submit:
+      serv_offer:
+        create: "创建 serv offer"
+        update: "更新 serv offer"
+  serv_offers:
+    edit:
+      title: "编辑 serv offer"
+    form:
+      serv_offer: "Serv offer"
+    index:
+      confirm: "你确定要删除这个serv offer吗?"
+      empty: "没有找到serv offer"
+      new_serv_offer: "创建一个新的serv offer"
+      title: "serv offers 列表"
+    new:
+      title: "创建serv offer"
+    show:
+      title: "serv offer 详情"
+    was_created: "serv offer 成功创建"
+    was_deleted: "serv offer 成功删除"
+    was_updated: "Serv offer 成功更新"
