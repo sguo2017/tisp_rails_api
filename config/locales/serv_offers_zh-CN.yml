@@ -2,7 +2,7 @@
 zh-CN:
   activerecord:
     models:
-      serv_offer: "Serv offer"
+      serv_offer: "正向商品[Serv offer]"
     attributes:
       serv_offer:
         id: "ID" 
@@ -35,7 +35,7 @@ zh-CN:
       confirm: "你确定要删除这个serv offer吗?"
       empty: "没有找到serv offer"
       new_serv_offer: "创建一个新的serv offer"
-      title: "serv offers 列表"
+      title: "正向商品[serv offers]列表"
     new:
       title: "创建serv offer"
     show:
