@@ -11,6 +11,7 @@ zh-CN:
         action_desc: "操作描述"
         user_id: "用户ID"
         created_at: "创建时间"
+        serv_id: "serv_id"
         actions: "操作"
   helpers:
     links:
