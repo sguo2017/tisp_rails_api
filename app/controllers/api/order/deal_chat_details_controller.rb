@@ -7,8 +7,39 @@ class Api::Order::DealChatDetailsController < ApplicationController
 
   # GET /deal_chat_details
   # GET /deal_chat_details.json
+
   def index
-    @deal_chat_details = DealChatDetail.page(params[:page]).per(5)
+    @deal_id = params[:deal_id].presence
+    logger.debug "deal_id: #{@deal_id.to_s}"
+    #@deal_chat_details = DealChatDetail.find_by(deal_id: @deal_id.to_s)
+    @deal_chat_details = DealChatDetail.where('deal_id ='+@deal_id.to_s)
+    logger.debug "deal_chat_details1 :#{@deal_chat_details.to_json}"
+    @chats = []
+    @deal_chat_details.each do |chat|
+         c = chat.attributes.clone
+         @deal = Deal.find(chat.deal_id)
+         logger.debug "deal #{@deal}"
+         @serv = ServOffer.find(@deal.serv_offer_id)
+         @request_user = User.find(@deal.request_user_id)
+         @request_user.authentication_token = "***"
+         @offer_user = User.find(@deal.offer_user_id)
+         @offer_user.authentication_token = "***"         
+         c["_id"]=@offer_user.id
+         c["name"]=@offer_user.name
+         c["avatar"]=@offer_user.avatar
+         @chats.push(c)
+    end
+
+    logger.debug "msgs:#{@chats.to_json}"
+
+
+    respond_to do |format|
+      format.json {
+        logger.debug "DealChatDetail index json"
+        render json: {messages: @chats.to_json}
+      }
+    end
+
   end
 
   # GET /deal_chat_details/1

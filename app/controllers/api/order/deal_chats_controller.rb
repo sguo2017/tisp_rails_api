@@ -7,13 +7,25 @@ class Api::Order::DealChatsController < ApplicationController
   before_action :set_deal_chat, only: [:show, :edit, :update, :destroy]
 
   def index
-    @deal_chats = DealChat.page(params[:page]).per(5)
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s)
+    #@deal_chats = DealChat.page(params[:page]).per(5)
+    @deal_chats = DealChat.where('offer_user_id ='+user.id.to_s).or(DealChat.where('request_user_id ='+ user.id.to_s))
+    logger.debug "deal_chats:#{@deal_chats.to_json}"
     @chats = []
     @deal_chats.each do |chat|
          c = chat.attributes.clone
-        # u = User.find(chat.user_id)
-        # u.authentication_token = "***"
-        # c["user"]=u
+         logger.debug "deal_id #{chat.deal_id}"
+         @deal = Deal.find(chat.deal_id)
+         logger.debug "deal #{@deal}"
+         @serv = ServOffer.find(@deal.serv_offer_id)
+         @request_user = User.find(@deal.request_user_id)
+         @request_user.authentication_token = "***"
+         @offer_user = User.find(@deal.offer_user_id)
+         @offer_user.authentication_token = "***"
+         c["request_user"]=@request_user.name
+         c["offer_user"]=@offer_user.name
+         c["serv"]=@serv.serv_title
          @chats.push(c)
     end
 
