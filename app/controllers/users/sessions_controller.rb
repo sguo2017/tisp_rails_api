@@ -29,7 +29,7 @@ class Users::SessionsController < Devise::SessionsController
         logger.debug "serv_offer all!!! session.tispr_user: #{session[:current_tispr_user].email}"        
 
         format.json { 
-          render json: {token:user.authentication_token, user_id: user.id}
+          render json: {token:user.authentication_token, user: user.to_json}
         }
         format.js {
           #render :js => "alert('hello')"    
