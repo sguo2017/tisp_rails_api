@@ -1,5 +1,20 @@
 <%- model_class = ServOffer -%>
 <div class="page-header">
+  <form class="form-inline" role="form" action="/conditions_query/serv_offers" method="get">
+    <div class="form-group">
+      <label class="control-label" for="q_id">ID：</label>
+      <input type="text" size="4" class="form-control" name="q_id" id="q_id" placeholder="ID" value='<%= @q_id if @q_id %>'/>
+      <label class="control-label" for="q_user_id">用户ID：</label>
+      <input type="text" size="4" class="form-control" name="q_user_id" id="q_user_id" placeholder="用户ID" value='<%= @q_user_id if @q_user_id %>'/>
+      <label class="control-label" for="q_serv_title">服务名称：</label>
+      <input type="text" size="14" class="form-control" name="q_serv_title" id="q_serv_title" placeholder="服务名称" value='<%= @q_serv_title if @q_serv_title %>'/>
+      <label class="control-label" for="q_serv_detail">服务详情：</label>
+      <input type="text" size="14" class="form-control" name="q_serv_detail" id="q_serv_detail" placeholder="服务详情" value='<%= @q_serv_detail if @q_serv_detail %>'/>
+      <label class="control-label" for="q_created_at">创建时间：</label>
+      <input type="text" size="12" class="form-control" name="q_created_at" id="q_created_at" placeholder="创建时间" value='<%= @q_created_at if @q_created_at %>'/>
+      <input type="submit" class="btn btn-primary" value="查找"/>
+    </div>
+  </form>
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </yout：fixeddiv>
 <table class="table table-striped">

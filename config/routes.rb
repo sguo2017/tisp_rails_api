@@ -26,6 +26,7 @@ Rails.application.routes.draw do
       resources :deal_chat_details, only: [:index, :create, :show, :update, :destroy]
     end
   end
-
+  
+  match '/conditions_query/serv_offers' ,to: 'conditions_query#serv_offers', via: [:get,:post]
   root "serv_offers#index"
 end
