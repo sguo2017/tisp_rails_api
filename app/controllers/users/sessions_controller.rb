@@ -14,7 +14,7 @@ class Users::SessionsController < Devise::SessionsController
     respond_to do |format|
       if user.valid_password?(params[:user][:password])
         sign_in("user", user)
-        user.ensure_authentication_token
+        #user.ensure_authentication_token
         
         if !@current_user 
            @current_user = user
@@ -24,10 +24,11 @@ class Users::SessionsController < Devise::SessionsController
         if user.avatar
             session[:user_avatar]=user.avatar
         end
-        logger.debug "serv_offer all!!! current_user: #{@current_user.email}"        
-        logger.debug "serv_offer all!!! thread.tispr_user: #{Thread.current[:tispr_user].email}"        
-        logger.debug "serv_offer all!!! session.tispr_user: #{session[:current_tispr_user].email}"        
+        #logger.debug "serv_offer all!!! current_user: #{@current_user.email}"        
+        #logger.debug "serv_offer all!!! thread.tispr_user: #{Thread.current[:tispr_user].email}"        
+        #logger.debug "serv_offer all!!! session.tispr_user: #{session[:current_tispr_user].email}"        
 
+        logger.debug "user info: #{user.to_json}"        
         format.json { 
           render json: {token:user.authentication_token, user: user.to_json}
         }
