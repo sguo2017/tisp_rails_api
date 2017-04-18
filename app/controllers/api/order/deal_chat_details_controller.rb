@@ -12,7 +12,7 @@ class Api::Order::DealChatDetailsController < ApplicationController
     @deal_id = params[:deal_id].presence
     logger.debug "deal_id: #{@deal_id.to_s}"
     #@deal_chat_details = DealChatDetail.find_by(deal_id: @deal_id.to_s)
-    @deal_chat_details = DealChatDetail.where('deal_id ='+@deal_id.to_s)
+    @deal_chat_details = DealChatDetail.where('deal_id ='+@deal_id.to_s).order("created_at DESC")
     logger.debug "deal_chat_details1 :#{@deal_chat_details.to_json}"
     @chats = []
     @deal_chat_details.each do |chat|
