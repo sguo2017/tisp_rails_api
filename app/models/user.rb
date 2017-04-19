@@ -9,11 +9,15 @@ class User < ApplicationRecord
 
 
   #token为空时自动生成新的token
-
+  #通过登录修改登录次数来触发token更新，避免token是静态。后面可以改判断时间周期：一天前登录就失效
   def ensure_authentication_token    
      if authentication_token.blank?      		
-         self.authentication_token = generate_authentication_token    	
+         #self.authentication_token = generate_authentication_token    	
      end  
+
+     self.authentication_token = generate_authentication_token    	
+     
+    logger.debug "authentication_token:#{authentication_token}"
   end
 
 
