@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :favorites
   resources :deal_chat_details
   resources :deal_chats
   resources :deals

@@ -1,0 +1,32 @@
+zh-CN:
+  activerecord:
+    models:
+      favorite: "收藏"
+    attributes:
+      favorite:
+        obj_id: "对象ID"
+        obj_type: "对象类型"
+        user_id: "用户"
+  helpers:
+    submit:
+      favorite:
+        create: "创建"
+        update: "修改"
+  favorites:
+    edit:
+      title: "编辑"
+    form:
+      favorite: "Favorite"
+    index:
+      confirm: "确认删除?"
+      empty: "没有数据"
+      new_favorite: "新增"
+      title: "列表"
+    new:
+      title: "新增"
+    show:
+      title: "详情"
+    was_created: "添加成功"
+    was_deleted: "删除成功"
+    was_updated: "修改成功"
+
