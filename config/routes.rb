@@ -21,6 +21,9 @@ Rails.application.routes.draw do
     namespace :session do
       resources :users, only: [:edit, :show, :update, :create]
     end
+    namespace :me do
+      resources :favorites, only: [:edit, :show, :update, :create]
+    end
     namespace :order do
       resources :deals, only: [:index, :create, :show, :update, :destroy]
       resources :deal_chats, only: [:index, :create, :show, :update, :destroy]
