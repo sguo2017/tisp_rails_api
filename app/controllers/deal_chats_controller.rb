@@ -4,7 +4,7 @@ class DealChatsController < ApplicationController
   # GET /deal_chats
   # GET /deal_chats.json
   def index
-    @deal_chats = DealChat.order("created_at DESC").page(params[:page]).per(5)
+     @deal_chats = DealChat.where(deal_id: params[:deal_id]).order("created_at DESC").page(params[:page]).per(5) 
   end
 
   # GET /deal_chats/1
