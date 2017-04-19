@@ -9,7 +9,32 @@ class Api::Me::FavoritesController < ApplicationController
   # GET /favorites
   # GET /favorites.json
   def index
+   #@favorites = Favorite.order("created_at DESC").page(params[:page]).per(5)
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s)
+    user_id = user.id
+    @favorites = Favorite.where(user_id: user_id)
     @favorites = Favorite.order("created_at DESC").page(params[:page]).per(5)
+    
+    @offers = []
+    @favorites.each do |favorite|
+         offer = ServOffer.find(favorite.obj_id)
+         s = offer.attributes.clone
+         logger.debug "s:#{s.to_s}"
+         u = User.find(offer.user_id)
+         u.authentication_token = "***"
+         s["user"]=u
+         @offers.push(s)
+    end
+
+    logger.debug "offers:#{@offers.to_json}"
+
+    respond_to do |format|
+      format.json {
+        logger.debug "sysMsg index json"
+        render json: {page: "1",total_pages: "7", feeds: @offers.to_json}
+      }
+    end
   end
 
   # GET /favorites/1

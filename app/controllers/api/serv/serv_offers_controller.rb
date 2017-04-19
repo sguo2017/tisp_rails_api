@@ -16,9 +16,9 @@ class Api::Serv::ServOffersController < ApplicationController
     else
       logger.debug 'why?'
     end
-   
+
     @offers = []
-    @serv_offers.each do |offer|
+    @favorites.each do |favorite|
          s = offer.attributes.clone
          u = User.find(offer.user_id)
          u.authentication_token = "***"

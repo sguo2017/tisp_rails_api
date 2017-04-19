@@ -22,7 +22,7 @@ Rails.application.routes.draw do
       resources :users, only: [:edit, :show, :update, :create]
     end
     namespace :me do
-      resources :favorites, only: [:edit, :show, :update, :create]
+      resources :favorites, only: [:index, :create, :show, :update, :destroy]
     end
     namespace :order do
       resources :deals, only: [:index, :create, :show, :update, :destroy]
