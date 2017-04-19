@@ -1,0 +1,17 @@
+<%= form_for(@serv_offers_search,html: {:class=>'form-inline',:role=>'form' }) do |f| %>
+  <div class="form-group">
+	<%= f.label :'服务id：'%>
+	<%= f.text_field :serv_id, class: 'form-control',:size=>1%>
+	<%= f.label :'用户id：'%>
+	<%= f.text_field :user_id, class: 'form-control',:size=>1%>
+	<%= f.label :'服务名称：'%>
+	<%= f.text_field :serv_title, class: 'form-control',:size=>10%>
+	<%= f.label :'服务详情：'%>
+	<%= f.text_field :serv_detail,class: 'form-control',:size=>10%>
+	<%= f.label :'服务目录：'%>
+	<%= f.text_field :serv_category, class: 'form-control',:size=>10%>
+	<%= f.label :'创建时间：'%>
+	<%= f.text_field :serv_created, class: 'form-control',:size=>10%>
+  </div>
+  <%= f.submit :'查找', :class => 'btn btn-primary' %>
+<% end %>
