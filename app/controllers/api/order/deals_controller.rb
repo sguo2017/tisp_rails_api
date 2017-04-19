@@ -33,6 +33,7 @@ class Api::Order::DealsController < ApplicationController
     user = token && User.find_by_authentication_token(token.to_s)
     @deal.request_user_id = user.id
     @deal.status = '00A'
+    @deal.lately_chat_content = "your offer is awesome"
     @deal.connect_time = Time.new
     logger.debug "deal:#{@deal}"
     respond_to do |format|
@@ -85,6 +86,6 @@ class Api::Order::DealsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def deal_params
-      params.require(:deal).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :status, :connect_time, :deal_time, :finish_time)
+      params.require(:deal).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :status, :connect_time, :deal_time, :finish_time, :lately_chat_content)
     end
 end
