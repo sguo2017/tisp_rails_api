@@ -1,7 +1,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
-
+  layout '_user' ,only: [:new]
   def current_user
       if @user.nil?
                 build_global_user_from_session
@@ -26,12 +26,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   def create
-    @user = User.new(user_params)
-    respond_to do |format|
-      if @user.save
-        format.json { render json: { success: true, token:@user.authentication_token, user_id:@user.id }}
-      end
-    end
+     super
+     reset_session
   end
 
   # GET /resource/edit
