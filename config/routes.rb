@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :favorites
   resources :deal_chat_details
   resources :deal_chats
   resources :deals
@@ -19,6 +20,9 @@ Rails.application.routes.draw do
     end
     namespace :session do
       resources :users, only: [:edit, :show, :update, :create]
+    end
+    namespace :me do
+      resources :favorites, only: [:index, :create, :show, :update, :destroy]
     end
     namespace :order do
       resources :deals, only: [:index, :create, :show, :update, :destroy]

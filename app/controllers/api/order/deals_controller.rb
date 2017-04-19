@@ -8,7 +8,37 @@ class Api::Order::DealsController < ApplicationController
   # GET /deals
   # GET /deals.json
   def index
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s)
+    @deals = Deal.where('offer_user_id ='+user.id.to_s).or(Deal.where('request_user_id ='+ user.id.to_s))
     @deals = Deal.page(params[:page]).per(5)
+    logger.debug "deals:#{@deals.to_json}"
+    @orders = []
+    @deals.each do |deal|
+         o = deal.attributes.clone
+         logger.debug "deal_id #{deal.deal_id}"
+         logger.debug "deal #{@deal}"
+         @serv = ServOffer.find(deal.serv_offer_id)
+         @request_user = User.find(deal.request_user_id)
+         @request_user.authentication_token = "***"
+         @offer_user = User.find(deal.offer_user_id)
+         @offer_user.authentication_token = "***"
+         o["request_user"]=@request_user.name
+         o["request_user_avatar"]=@request_user.avatar
+         o["offer_user"]=@offer_user.name
+         o["offer_user_avatar"]=@offer_user.avatar
+         o["serv"]=@serv.serv_title
+         @orders.push(o)
+    end
+
+    logger.debug "chats:#{@orders.to_json}"
+
+    respond_to do |format|
+      format.json {
+        render json: {page: "1",total_pages: "7", feeds: @orders.to_json}
+      }
+    end
+
   end
 
   # GET /deals/1

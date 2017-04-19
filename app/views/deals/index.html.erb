@@ -26,7 +26,7 @@
         <td><%= deal.serv_offer_id %></td>
         <td><%= deal.offer_user_id %></td>
         <td><%= deal.request_user_id %></td>
-        <td><%= deal.status %></td>
+        <td><%= link_to deal.status,{:controller => "deal_chats", :action => "index", :deal_id => deal.id},{:deal_id => deal.id} %></td>
         <td><%= deal.connect_time %></td>
         <td><%= deal.deal_time %></td>
         <td><%= deal.finish_time %></td>
