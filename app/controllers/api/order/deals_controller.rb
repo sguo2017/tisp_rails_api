@@ -16,7 +16,7 @@ class Api::Order::DealsController < ApplicationController
     @orders = []
     @deals.each do |deal|
          o = deal.attributes.clone
-         logger.debug "deal_id #{deal.deal_id}"
+         logger.debug "deal_id #{deal.id}"
          logger.debug "deal #{@deal}"
          @serv = ServOffer.find(deal.serv_offer_id)
          @request_user = User.find(deal.request_user_id)
@@ -28,6 +28,9 @@ class Api::Order::DealsController < ApplicationController
          o["offer_user"]=@offer_user.name
          o["offer_user_avatar"]=@offer_user.avatar
          o["serv"]=@serv.serv_title
+         o["deal_id"]=deal.id
+         o["serv_offer_user_name"]=@offer_user.name
+         o["serv_offer_titile"]=@serv.serv_title
          @orders.push(o)
     end
 
