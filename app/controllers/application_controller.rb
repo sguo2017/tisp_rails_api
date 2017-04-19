@@ -28,6 +28,18 @@ class ApplicationController < ActionController::Base
     Thread.current[:tispr_user] = nil
   end
 
+  def current_user
+      if @user.nil?
+                build_global_user_from_session
+            end
+      return @user
+  end
+  
+  def build_global_user_from_session
+     @session_user = session[:current_tispr_user]
+     user_id = @session_user["id"]
+     @user = User.find_by_id(user_id.to_i)
+  end
 end
 
 

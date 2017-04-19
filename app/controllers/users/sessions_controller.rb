@@ -48,6 +48,7 @@ class Users::SessionsController < Devise::SessionsController
     #current_user.authentication_token = Devise.friendly_token
     
     sign_out(current_user)
+    reset_session
     redirect_to(:action=>'new')
   end
 
