@@ -31,6 +31,6 @@ Rails.application.routes.draw do
     end
   end
   
-  match '/conditions_query/serv_offers' ,to: 'conditions_query#serv_offers', via: [:get,:post]
+  resources :serv_offers_searches
   root "serv_offers#index"
 end

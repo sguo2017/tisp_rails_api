@@ -7,6 +7,8 @@ class ServOffersController < ApplicationController
   before_filter :authenticate_user!
 
   before_action :set_serv_offer, only: [:show, :edit, :update, :destroy]
+  
+  before_action :set_serv_offers_search
 
   #skip_before_filter :verify_authenticity_token
 
@@ -99,4 +101,10 @@ class ServOffersController < ApplicationController
     def serv_offer_params
       params.require(:serv_offer).permit(:serv_title, :serv_detail, :serv_imges, :serv_catagory, :user_id)
     end
+	
+	def set_serv_offers_search
+	   if !@serv_offers_search
+	      @serv_offers_search=ServOffersSearch.new
+	   end
+	end
 end

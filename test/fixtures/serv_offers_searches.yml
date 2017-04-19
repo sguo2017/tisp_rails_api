@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  serv_id: 1
+  user_id: 1
+  serv_title: MyString
+  serv_detail: MyString
+  serv_category: MyString
+  serv_created: MyString
+
+two:
+  serv_id: 1
+  user_id: 1
+  serv_title: MyString
+  serv_detail: MyString
+  serv_category: MyString
+  serv_created: MyString
