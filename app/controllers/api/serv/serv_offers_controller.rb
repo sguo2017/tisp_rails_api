@@ -11,11 +11,6 @@ class Api::Serv::ServOffersController < ApplicationController
   def index
     @serv_offers = ServOffer.all
     logger.debug "serv_offer all!!! current_user:#{@current_user}"
-    if user_signed_in?
-      logger.debug 'siged_id!!!!!!'
-    else
-      logger.debug 'why?'
-    end
 
     @offers = []
     @serv_offers.each do |offer|
