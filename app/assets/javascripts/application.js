@@ -12,6 +12,8 @@
 //
 //= require jquery
 //= require jquery_ujs
-//= require bootstrap-sprockets
+//= require bootstrap
 //= require turbolinks
 //= require_tree .
+//= require bootstrap-datepicker.min
+//= require tisp-global

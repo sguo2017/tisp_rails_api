@@ -1,4 +1,5 @@
 class ServOffersSearchesController < ApplicationController
+   before_action :authenticate_user!
 
    # 创建搜索
    # 创建完成后重定向到#show
