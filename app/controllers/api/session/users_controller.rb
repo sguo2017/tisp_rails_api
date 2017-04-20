@@ -40,6 +40,14 @@ class Api::Session::UsersController < ApplicationController
       end
     end
   end
+  
+  def avatar_server_url
+    respond_to do |format|
+	    format.json {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/"}}
+		format.js {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/"}}
+		format.html {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/"}}
+	end
+  end
 
   private
     # Use callbacks to share common setup or constraints between actions.

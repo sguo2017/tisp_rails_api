@@ -19,3 +19,36 @@ $(function(){
     });
 });
 
+function updateUserWithAvatar(){
+	var input_file = document.getElementById('user_avatar_file');
+	if(input_file.files.length!=1){
+		$('#edit_user').submit();
+		return;
+	}else{
+		fetch("/api/session/users/avatar/server_url")
+		.then(response => response.text())
+		.then(text=>JSON.parse(text)['server_url'])
+		.then(server_url =>uploadAndSubmit(server_url))
+		.catch(e => console.log("error:", e));
+		var uploadAndSubmit=function(avatar_server_url){
+			let formData = new FormData();
+			let url = avatar_server_url
+			formData.append("image", input_file.files[0]);
+			fetch(url, {
+			   method: 'POST',
+			   mode: "cors",
+			   body: formData,
+			})
+		   .then((response) => response.text())
+		   .then((responseData) => {
+			  console.log('responseData', responseData);
+			  img_url=JSON.parse(responseData)['image'];
+			  $('#user_avatar').val(img_url);
+			  $('#user_avatar_file').removeAttr('name');
+			  $('#edit_user').submit();
+		   })
+		   .catch((error) => { console.error('error', error) });
+		};
+	}
+}
+

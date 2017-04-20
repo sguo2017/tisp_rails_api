@@ -31,37 +31,11 @@
         <%= f.hidden_field :avatar %>
         <%=f.error_span(:image) %>
       </div>
-      <%= f.button t('.update', default: 'Update'), class: 'btn btn-primary' ,onclick: 'upload()' ,type: 'button' %>
+      <%= f.button t('.update', default: 'Update'), class: 'btn btn-primary' ,onclick: 'updateUserWithAvatar()' ,type: 'button' %>
     <% end %>
   </div>
 </div>
-<script>
-     function upload(){
-       let formData = new FormData();
-       let url = 'http://123.56.157.233:9090/FastDFSWeb/'
-       console.log("url:" + url);
-       var input_file = document.getElementById('user_avatar_file');
-       if(input_file.files.length!=1){
-          $('#edit_user').submit();
-          return;
-       }
-       formData.append("image", input_file.files[0]);
-       fetch(url, {
-           method: 'POST',
-           mode: "cors",
-           body: formData,
-       })
-           .then((response) => response.text())
-           .then((responseData) => {
-              console.log('responseData', responseData);
-              img_url=JSON.parse(responseData)['image'];
-              $('#user_avatar').val(img_url);
-              $('#user_avatar_file').removeAttr('name');
-              $('#edit_user').submit();
-           })
-           .catch((error) => { console.error('error', error) });
-      }
-</script>
+
 <p><%= t('.unhappy', default: 'Unhappy') %>? <%= link_to t('.cancel_my_account', default: 'Cancel my account'), registration_path(resource_name), data: { confirm: t('.are_you_sure', default: "Are you sure?") }, method: :delete %>.</p>
 
 <%= link_to t('.back', default: 'Back'), :back %>

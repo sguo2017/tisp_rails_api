@@ -20,6 +20,7 @@ Rails.application.routes.draw do
     end
     namespace :session do
       resources :users, only: [:edit, :show, :update, :create]
+	  match '/users/avatar/server_url' ,to: 'users#avatar_server_url', via: [:get,:post]
     end
     namespace :me do
       resources :favorites, only: [:index, :create, :show, :update, :destroy]
