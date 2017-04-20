@@ -18,7 +18,7 @@ class Api::Serv::ServOffersController < ApplicationController
     end
 
     @offers = []
-    @serv_offers.each do |favorite|
+    @serv_offers.each do |offer|
          s = offer.attributes.clone
          u = User.find(offer.user_id)
          u.authentication_token = "***"
