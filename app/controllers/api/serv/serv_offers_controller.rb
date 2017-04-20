@@ -9,14 +9,21 @@ class Api::Serv::ServOffersController < ApplicationController
   # GET /serv_offers
   # GET /serv_offers.json
   def index
-    @serv_offers = ServOffer.all
-    logger.debug "serv_offer all!!! current_user:#{@current_user}"
-
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s)
+    @serv_offers = ServOffer.order("created_at DESC").page(params[:page]).per(5)
     @offers = []
     @serv_offers.each do |offer|
          s = offer.attributes.clone
          u = User.find(offer.user_id)
          u.authentication_token = "***"
+         #是否收藏
+         f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "serv_offer")
+         if f.blank?
+           s["isFavorited"] = false
+         else
+           s["isFavorited"] = true
+         end
          s["user"]=u
          @offers.push(s)
          #logger.debug "m:#{s}"
@@ -28,7 +35,7 @@ class Api::Serv::ServOffersController < ApplicationController
     respond_to do |format|
       format.json {
         logger.debug "sysMsg index json"
-        render json: {page: @serv_offers.current_page, total_pages: @serv_offers.total_pages, feeds: @serv_offers.to_json}
+        render json: {page: @serv_offers.current_page, total_pages: @serv_offers.total_pages, feeds: @offers.to_json}
       }
     end
     

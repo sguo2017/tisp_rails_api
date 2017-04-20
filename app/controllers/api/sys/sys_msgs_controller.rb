@@ -9,17 +9,24 @@ class Api::Sys::SysMsgsController < ApplicationController
   # GET /sys_msgs
   # GET /sys_msgs.json
   def index
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s)
     @sys_msgs = SysMsg.all.order("created_at desc").page(params[:page]).per(7)
-
     @msgs = []
     @sys_msgs.each do |msg|
          m = msg.attributes.clone
          u = User.find(msg.user_id)
-         logger.debug "u:#{msg.to_s}"
          s = ServOffer.find(msg.serv_id)
          m["serv_offer"] = s
          u.authentication_token = "***"
          m["user"]=u
+         #是否收藏
+         f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, s.id, "serv_offer")
+         if f.blank?
+           m["isFavorited"] = false
+         else
+           m["isFavorited"] = true
+         end
          @msgs.push(m)
          #logger.debug "m:#{m}"
     end 
