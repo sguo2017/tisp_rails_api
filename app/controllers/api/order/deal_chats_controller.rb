@@ -33,7 +33,7 @@ class Api::Order::DealChatsController < ApplicationController
 
     respond_to do |format|
       format.json {      
-        render json: {page: "1",total_pages: "7", feeds: @chats.to_json}
+        render json: {page: @chats.current_page, total_pages: @chats.total_pages, feeds: @chats.to_json}
       }
     end
 

@@ -9,7 +9,7 @@ class Api::Sys::SysMsgsController < ApplicationController
   # GET /sys_msgs
   # GET /sys_msgs.json
   def index
-    @sys_msgs = SysMsg.all.order("created_at desc").page(params[:page]).per(2)
+    @sys_msgs = SysMsg.all.order("created_at desc").page(params[:page]).per(7)
 
     @msgs = []
     @sys_msgs.each do |msg|
@@ -26,16 +26,9 @@ class Api::Sys::SysMsgsController < ApplicationController
     
     logger.debug "msgs:#{@msgs.to_json}"
     
-    logger.debug "sysMsg index"
-
     respond_to do |format| 
       format.json { 
-
-        logger.debug "sysMsg index json"
-        #render json: {error: {status:-1}}
-        #render json: {page "1",total_pages "7", sysmsgs @sys_msgs.to_json}
-        #render json: {page: "1",total_pages: "7", feeds: @sys_msgs.to_json}
-        render json: {page: "1",total_pages: "7", feeds: @msgs.to_json}
+        render json: {page: @sys_msgs.current_page,total_pages: @sys_msgs.total_pages, feeds: @msgs.to_json}
       }  
     end
    

@@ -28,7 +28,7 @@ class Api::Serv::ServOffersController < ApplicationController
     respond_to do |format|
       format.json {
         logger.debug "sysMsg index json"
-        render json: {page: "1",total_pages: "7", feeds: @serv_offers.to_json}
+        render json: {page: @serv_offers.current_page, total_pages: @serv_offers.total_pages, feeds: @serv_offers.to_json}
       }
     end
     
