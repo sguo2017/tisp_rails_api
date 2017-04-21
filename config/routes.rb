@@ -1,8 +1,8 @@
 Rails.application.routes.draw do
 
   resources :favorites
-  resources :deal_chat_details
-  resources :deal_chats
+  resources :chats
+  resources :order_items
   resources :deals
   resources :sys_msgs
   resources :serv_offers
