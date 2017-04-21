@@ -1,4 +1,4 @@
-<%- model_class = DealChatDetail -%>
+<%- model_class = Chat -%>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </div>
@@ -15,21 +15,21 @@
     </tr>
   </thead>
   <tbody>
-    <% @deal_chat_details.each do |deal_chat_detail| %>
+    <% @chats.each do |chat| %>
       <tr>
-        <td><%= link_to deal_chat_detail.id, deal_chat_detail_path(deal_chat_detail) %></td>
-        <td><%= deal_chat_detail.deal_id %></td>
-        <td><%= deal_chat_detail.chat_content %></td>
-        <td><%= deal_chat_detail.user_id %></td>
-        <td><%= deal_chat_detail.catalog %></td>
-        <td><%=l deal_chat_detail.created_at %></td>
+        <td><%= link_to chat.id, chat_path(chat) %></td>
+        <td><%= chat.deal_id %></td>
+        <td><%= chat.chat_content %></td>
+        <td><%= chat.user_id %></td>
+        <td><%= chat.catalog %></td>
+        <td><%=l chat.created_at %></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
-                      deal_chat_detail_path(deal_chat_detail), :class => 'btn btn-default btn-xs' %>
+                      chat_path(chat), :class => 'btn btn-default btn-xs' %>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_deal_chat_detail_path(deal_chat_detail), :class => 'btn btn-default btn-xs' %>
+                      edit_chat_path(chat), :class => 'btn btn-default btn-xs' %>
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      deal_chat_detail_path(deal_chat_detail),
+                      chat_path(chat),
                       :method => :delete,
                       :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                       :class => 'btn btn-xs btn-danger' %>
@@ -38,7 +38,7 @@
     <% end %>
   </tbody>
 </table>
-<%= paginate @deal_chat_details %>
+<%= paginate @chats %>
 <%= link_to t('.new', :default => t("helpers.links.new")),
-            new_deal_chat_detail_path,
+            new_chat_path,
             :class => 'btn btn-primary' %>

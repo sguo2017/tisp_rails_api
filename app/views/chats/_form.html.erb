@@ -1,13 +1,13 @@
-<%= form_for @deal_chat_detail, :html => { :class => "form-horizontal deal_chat_detail" } do |f| %>
+<%= form_for @chat, :html => { :class => "form-horizontal chat" } do |f| %>
 
-  <% if @deal_chat_detail.errors.any? %>
+  <% if @chat.errors.any? %>
     <div id="error_expl" class="panel panel-danger">
       <div class="panel-heading">
-        <h3 class="panel-title"><%= pluralize(@deal_chat_detail.errors.count, "error") %> prohibited this deal_chat_detail from being saved:</h3>
+        <h3 class="panel-title"><%= pluralize(@chat.errors.count, "error") %> prohibited this chat from being saved:</h3>
       </div>
       <div class="panel-body">
         <ul>
-        <% @deal_chat_detail.errors.full_messages.each do |msg| %>
+        <% @chat.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
         </ul>
@@ -48,7 +48,7 @@
     <div class="col-lg-offset-2 col-lg-10">
       <%= f.submit nil, :class => 'btn btn-primary' %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                deal_chat_details_path, :class => 'btn btn-default' %>
+                chats_path, :class => 'btn btn-default' %>
     </div>
   </div>
 

@@ -1,2 +1,0 @@
-class DealChatDetail < ApplicationRecord
-end
