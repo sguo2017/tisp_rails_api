@@ -1,0 +1,7 @@
+<%- model_class = User -%>
+<div class="page-header">
+  <h1><%=t '.title', :default => [:'helpers.titles.edit', '编辑%{model}'], :model => model_class.model_name.human.titleize %></h1>
+</div>
+<%= render :partial => 'users/form_edit' %>
+
+<%= link_to t('.back', :default => t("helpers.links.back")), admin_users_path, :class => 'btn btn-default' %>

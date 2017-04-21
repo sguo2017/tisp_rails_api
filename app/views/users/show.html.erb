@@ -1,0 +1,26 @@
+<%- model_class = ServOffer -%>
+<div class="page-header">
+  <h1>用户详情</h1>
+</div>
+
+<dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:email) %>:</strong></dt>
+  <dd><%= @target_user.email %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
+  <dd><%= @target_user.name %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:admin) %>:</strong></dt>
+  <dd><%= @target_user.admin %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:created_at) %>:</strong></dt>
+  <dd><%= @target_user.created_at %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:updated_at) %>:</strong></dt>
+  <dd><%= @target_user.updated_at %></dd>
+</dl>
+<%= link_to t('.back', :default => t("helpers.links.back")),
+              admin_users_path, :class => 'btn btn-default'  %>
+<%= link_to t('.edit', :default => t("helpers.links.edit")),
+              edit_admin_user_path(@target_user), :class => 'btn btn-default' %>
+<%= link_to t('.destroy', :default => t("helpers.links.destroy")),
+              admin_user_path(@target_user),
+              :method => 'delete',
+              :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
+              :class => 'btn btn-danger' %>

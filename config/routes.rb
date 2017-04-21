@@ -31,7 +31,7 @@ Rails.application.routes.draw do
       resources :deal_chat_details, only: [:index, :create, :show, :update, :destroy]
     end
   end
-  
+  resources :admin_users
   resources :serv_offers_searches
   resources :sys_msgs_searches
   resources :favorites_searches
