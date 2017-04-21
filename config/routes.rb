@@ -26,14 +26,14 @@ Rails.application.routes.draw do
       resources :favorites, only: [:index, :create, :show, :update, :destroy]
     end
     namespace :order do
-      resources :deals, only: [:index, :create, :show, :update, :destroy]
+      resources :orders, only: [:index, :create, :show, :update, :destroy]
       resources :order_items, only: [:index, :create, :show, :update, :destroy]
     end
     namespace :chat do
       resources :chats, only: [:index, :create, :show, :update, :destroy]
     end
   end
-  resources :admin_users
+  
   resources :serv_offers_searches
   resources :sys_msgs_searches
   resources :favorites_searches

@@ -16,7 +16,7 @@ class Api::Chat::ChatsController < ApplicationController
     @chat_list = []
     @chats.each do |chat|
          c = chat.attributes.clone
-         @deal = Deal.find(chat.deal_id)
+         @deal = Order.find(chat.deal_id)
          logger.debug "deal #{@deal}"
          @serv = ServOffer.find(@deal.serv_offer_id)
          @request_user = User.find(@deal.request_user_id)
