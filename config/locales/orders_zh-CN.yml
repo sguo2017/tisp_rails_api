@@ -2,9 +2,9 @@
 zh-CN:
   activerecord:
     models:
-      deal: "交易"
+      order: "交易"
     attributes:
-      deal:
+      order:
         serv_offer_title: "服务提供标题"
         serv_offer_id: "服务提供ID"
         offer_user_id: "服务提供者ID"
@@ -15,18 +15,18 @@ zh-CN:
         finish_time: "完成时间"
   helpers:
     submit:
-      deal:
+      order:
         create: "创建交易"
         update: "修改交易"
-  deals:
+  orders:
     edit:
       title: "编辑交易"
     form:
-      deal: "Deal"
+      order: "Order"
     index:
       confirm: "您确定删除?"
       empty: "没有记录"
-      new_deal: "新增"
+      new_order: "新增"
       title: "列表"
     new:
       title: "信息"

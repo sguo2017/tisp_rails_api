@@ -3,7 +3,7 @@ Rails.application.routes.draw do
   resources :favorites
   resources :chats
   resources :order_items
-  resources :deals
+  resources :orders
   resources :sys_msgs
   resources :serv_offers
 

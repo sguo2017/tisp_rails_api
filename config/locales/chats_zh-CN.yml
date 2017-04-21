@@ -2,27 +2,27 @@
 zh-CN:
   activerecord:
     models:
-      deal_chat_detail: "交易单沟通详情"
+      chat: "交易单沟通详情"
     attributes:
-      deal_chat_detail:
+      chat:
         deal_id: "交易单"
         chat_content: "聊天内容"
         user_id: "发言人"
         catalog: "提供者或请求者"
   helpers:
     submit:
-      deal_chat_detail:
+      chat:
         create: "创建"
         update: "修改"
-  deal_chat_details:
+  chats:
     edit:
       title: "编辑交易沟通详情"
     form:
-      deal_chat_detail: "交易单沟通详情"
+      chat: "交易单沟通详情"
     index:
       confirm: "确认删除?"
       empty: "没有数据"
-      new_deal_chat_detail: "新增"
+      new_chat: "新增"
       title: "列表"
     new:
       title: "新增"

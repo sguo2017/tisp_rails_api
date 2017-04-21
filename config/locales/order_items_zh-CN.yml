@@ -2,9 +2,9 @@
 zh-CN:
   activerecord:
     models:
-      deal_chat: "交易沟通"
+      order_item: "交易沟通"
     attributes:
-      deal_chat:
+      order_item:
         deal_id: "交易沟通ID"
         serv_offer_id: "交易服务"
         offer_user_id: "服务提供者ID"
@@ -15,18 +15,18 @@ zh-CN:
         created_at: "创建时间"   
   helpers:
     submit:
-      deal_chat:
+      order_item:
         create: "新建"
         update: "修改"
-  deal_chats:
+  order_items:
     edit:
       title: "编辑"
     form:
-      deal_chat: "Deal chat"
+      order_item: "Deal chat"
     index:
       confirm: "Are you sure you want to delete the deal chat?"
       empty: "No deal chats found"
-      new_deal_chat: "Add a new deal chat"
+      new_order_item: "Add a new deal chat"
       title: "Listing of deal chats"
     new:
       title: "Adding a new deal chat"

@@ -21,11 +21,12 @@ class Api::Sys::SysMsgsController < ApplicationController
          u.authentication_token = "***"
          m["user"]=u
          #是否收藏
-         f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, s.id, "serv_offer")
+         f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, s.id, "serv_offer").first
          if f.blank?
            m["isFavorited"] = false
          else
            m["isFavorited"] = true
+           m["favorite_id"] = f["id"].to_s
          end
          @msgs.push(m)
          #logger.debug "m:#{m}"
