@@ -38,7 +38,7 @@ class Api::Order::DealsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render json: {page: @orders.current_page, total_pages: @orders.total_pages, feeds: @orders.to_json}
+        render json: {page: @deals.current_page, total_pages: @deals.total_pages, feeds: @orders.to_json}
       }
     end
 
