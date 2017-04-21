@@ -18,11 +18,12 @@ class Api::Serv::ServOffersController < ApplicationController
          u = User.find(offer.user_id)
          u.authentication_token = "***"
          #是否收藏
-         f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "serv_offer")
+         f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "serv_offer").first
          if f.blank?
            s["isFavorited"] = false
          else
            s["isFavorited"] = true
+           m["favorite_id"] = f["id"].to_s
          end
          s["user"]=u
          @offers.push(s)

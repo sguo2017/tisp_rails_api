@@ -1,9 +1,9 @@
 Rails.application.routes.draw do
 
   resources :favorites
-  resources :deal_chat_details
-  resources :deal_chats
-  resources :deals
+  resources :chats
+  resources :order_items
+  resources :orders
   resources :sys_msgs
   resources :serv_offers
 
@@ -27,8 +27,10 @@ Rails.application.routes.draw do
     end
     namespace :order do
       resources :deals, only: [:index, :create, :show, :update, :destroy]
-      resources :deal_chats, only: [:index, :create, :show, :update, :destroy]
-      resources :deal_chat_details, only: [:index, :create, :show, :update, :destroy]
+      resources :order_items, only: [:index, :create, :show, :update, :destroy]
+    end
+    namespace :chat do
+      resources :chats, only: [:index, :create, :show, :update, :destroy]
     end
   end
   resources :admin_users

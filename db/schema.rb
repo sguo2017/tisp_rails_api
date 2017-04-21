@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170421106438) do
+ActiveRecord::Schema.define(version: 20170421174737) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -19,32 +19,6 @@ ActiveRecord::Schema.define(version: 20170421106438) do
     t.string   "catalog"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
-  end
-
-  create_table "deal_chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.integer  "deal_id"
-    t.integer  "serv_offer_id"
-    t.string   "serv_offer_user_name"
-    t.string   "serv_offer_titile"
-    t.string   "lately_chat_content"
-    t.datetime "created_at",           null: false
-    t.datetime "updated_at",           null: false
-    t.integer  "offer_user_id"
-    t.integer  "request_user_id"
-  end
-
-  create_table "deals", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
-    t.string   "serv_offer_title"
-    t.integer  "serv_offer_id"
-    t.integer  "offer_user_id"
-    t.integer  "request_user_id"
-    t.string   "status"
-    t.datetime "connect_time"
-    t.datetime "deal_time"
-    t.datetime "finish_time"
-    t.datetime "created_at",          null: false
-    t.datetime "updated_at",          null: false
-    t.string   "lately_chat_content"
   end
 
   create_table "favorites", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -63,6 +37,32 @@ ActiveRecord::Schema.define(version: 20170421106438) do
     t.string   "favor_created"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
+  end
+
+  create_table "order_items", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "deal_id"
+    t.integer  "serv_offer_id"
+    t.string   "serv_offer_user_name"
+    t.string   "serv_offer_titile"
+    t.string   "lately_chat_content"
+    t.datetime "created_at",           null: false
+    t.datetime "updated_at",           null: false
+    t.integer  "offer_user_id"
+    t.integer  "request_user_id"
+  end
+
+  create_table "orders", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "serv_offer_title"
+    t.integer  "serv_offer_id"
+    t.integer  "offer_user_id"
+    t.integer  "request_user_id"
+    t.string   "status"
+    t.datetime "connect_time"
+    t.datetime "deal_time"
+    t.datetime "finish_time"
+    t.datetime "created_at",          null: false
+    t.datetime "updated_at",          null: false
+    t.string   "lately_chat_content"
   end
 
   create_table "serv_offers", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

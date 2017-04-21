@@ -59,7 +59,10 @@ class Api::Me::FavoritesController < ApplicationController
     respond_to do |format|
       if @favorite.save
         format.html { redirect_to @favorite, notice: 'Favorite was successfully created.' }
-        format.json { render :show, status: :created, location: @favorite }
+        #format.json { render :show, status: :created, location: @favorite }
+        format.json {
+           render json: {status:-1, msg:"ÊÕ²Ø³É¹¦"}
+        }
       else
         format.html { render :new }
         format.json { render json: @favorite.errors, status: :unprocessable_entity }
