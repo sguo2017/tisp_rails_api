@@ -27,7 +27,7 @@ Rails.application.routes.draw do
     end
     namespace :order do
       resources :deals, only: [:index, :create, :show, :update, :destroy]
-      resources :deal_chats, only: [:index, :create, :show, :update, :destroy]
+      resources :order_items, only: [:index, :create, :show, :update, :destroy]
     end
     namespace :chat do
       resources :chats, only: [:index, :create, :show, :update, :destroy]
