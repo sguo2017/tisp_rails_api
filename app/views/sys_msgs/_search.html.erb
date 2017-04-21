@@ -1,0 +1,19 @@
+<%= form_for(@sys_msgs_search,html: {:class=>'form-inline',:role=>'form' }) do |f| %>
+  <div class="form-group">
+	<%= f.label :'id：'%>
+	<%= f.text_field :sys_id, class: 'form-control',:size=>1%>
+	<%= f.label :'用户名称：'%>
+	<%= f.text_field :user_name, class: 'form-control',:size=>2%>
+	<%= f.label :'操作名称：'%>
+	<%= f.text_field :action_title, class: 'form-control',:size=>6%>
+	<%= f.label :'操作描述：'%>
+	<%= f.text_field :action_desc, class: 'form-control',:size=>8%>
+	<%= f.label :'用户id：'%>
+	<%= f.text_field :user_id, class: 'form-control',:size=>1%>
+	<%= f.label :'服务id：'%>
+	<%= f.text_field :serv_id, class: 'form-control',:size=>1%>
+	<%= f.label :'创建时间：'%>
+	<%= f.text_field :sys_created, class: 'form-control',:size=>8%>
+  </div>
+  <%= f.submit :'查找', :class => 'btn btn-primary' %>
+<% end %>

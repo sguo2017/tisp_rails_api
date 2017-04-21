@@ -33,5 +33,6 @@ Rails.application.routes.draw do
   end
   
   resources :serv_offers_searches
+  resources :sys_msgs_searches
   root "serv_offers#index"
 end

@@ -1,5 +1,6 @@
 <%- model_class = SysMsg -%>
 <div class="page-header">
+  <%=render 'sys_msgs/search'%>
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </div>
 <table class="table table-striped">

@@ -2,6 +2,8 @@ class SysMsgsController < ApplicationController
   before_action :set_sys_msg, only: [:show, :edit, :update, :destroy]
 
   before_filter :authenticate_user!
+  
+  before_action :set_sys_msgs_search
 
   # GET /sys_msgs
   # GET /sys_msgs.json
@@ -73,4 +75,10 @@ class SysMsgsController < ApplicationController
     def sys_msg_params
       params.require(:sys_msg).permit(:user_name, :action_title, :action_desc, :user_id)
     end
+	
+	def set_sys_msgs_search
+	  if !@sys_msgs_search
+        @sys_msgs_search=SysMsgsSearch.new
+      end
+	end
 end
