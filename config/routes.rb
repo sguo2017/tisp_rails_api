@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   resources :favorites
-  resources :chats
+  resources :deal_chat_details
   resources :deal_chats
   resources :deals
   resources :sys_msgs
@@ -36,5 +36,6 @@ Rails.application.routes.draw do
   
   resources :serv_offers_searches
   resources :sys_msgs_searches
+  resources :favorites_searches
   root "serv_offers#index"
 end

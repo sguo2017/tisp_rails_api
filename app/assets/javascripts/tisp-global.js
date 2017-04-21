@@ -1,5 +1,9 @@
 //整个网站使用到的一些全局的js,会被引入application.js当中，全站有效
-$(function(){
+
+//Rails中JQuery的ready事件只会在网站第一次被打开时加触发，在链接跳转时不会触发
+//所以这里使用了'turbolinks:load'事件
+$(document).on('turbolinks:load', showDatePicker); 
+function showDatePicker(){
 	$.fn.datepicker.dates['cn'] = {
 		days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
 		daysShort: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
@@ -12,13 +16,12 @@ $(function(){
 		titleFormat: "yyyy年 MM", /* Leverages same syntax as 'format' */
 		weekStart: 0
 	};
-	$('#serv_offers_search_serv_created').datepicker({
+	$('.date-picker').datepicker({
 		format: 'yyyy-mm-dd',
 		endDate: '0d',
 		language: 'cn'
     });
-});
-
+}
 function updateUserWithAvatar(){
 	var input_file = document.getElementById('user_avatar_file');
 	if(input_file.files.length!=1){

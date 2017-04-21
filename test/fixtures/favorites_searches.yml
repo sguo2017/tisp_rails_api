@@ -1,0 +1,15 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  favor_id: 1
+  obj_id: 1
+  obj_type: MyString
+  user_id: 1
+  favor_created: MyString
+
+two:
+  favor_id: 1
+  obj_id: 1
+  obj_type: MyString
+  user_id: 1
+  favor_created: MyString

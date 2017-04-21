@@ -1,0 +1,15 @@
+<%= form_for(@favorites_search,html: {:class=>'form-inline',:role=>'form' }) do |f| %>
+  <div class="form-group">
+	<%= f.label :'id：'%>
+	<%= f.text_field :favor_id, class: 'form-control',:size=>1%>
+	<%= f.label :'对象id：'%>
+	<%= f.text_field :obj_id, class: 'form-control',:size=>1%>
+	<%= f.label :'对象类型：'%>
+	<%= f.text_field :obj_type, class: 'form-control',:size=>10%>
+	<%= f.label :'用户id：'%>
+	<%= f.text_field :user_id,class: 'form-control',:size=>10%>
+	<%= f.label :'创建时间：'%>
+	<%= f.text_field :favor_created, class: 'form-control date-picker', :size=>10%>
+  </div>
+  <%= f.submit :'查找', :class => 'btn btn-primary' %>
+<% end %>
