@@ -68,7 +68,14 @@ class Api::Goods::ServOffersController < ApplicationController
 
     logger.debug "current_user:#{user.email}"   
 
-    @sys_msg = SysMsg.new(:user_name=>user.name, :action_title=>'created an offer', :action_desc=>@serv_offer.serv_title, :user_id=>user.id)
+		action_title = ""
+		if params[:serv_catagory] == "serv_offer" 
+			action_title =  'created an offer'
+		else
+			action_title =  'requested an offer'
+	  end
+
+    @sys_msg = SysMsg.new(:user_name=>user.name, :action_title=>action_title, :action_desc=>@serv_offer.serv_title, :user_id=>user.id)
     @sys_msg.user = user 
     
     @serv_offer.user_id = user.id    

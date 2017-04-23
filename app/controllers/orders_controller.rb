@@ -4,7 +4,7 @@ class OrdersController < ApplicationController
   # GET /orders
   # GET /orders.json
   def index
-    @orders = Order.order("created_at DESC").page(params[:page]).per(4)
+    @orders = Deal.order("created_at DESC").page(params[:page]).per(4)
   end
 
   # GET /orders/1
@@ -14,7 +14,7 @@ class OrdersController < ApplicationController
 
   # GET /orders/new
   def new
-    @order = Order.new
+    @order = Deal.new
   end
 
   # GET /orders/1/edit
@@ -24,7 +24,7 @@ class OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new(order_params)
+    @order = Deal.new(order_params)
 
     respond_to do |format|
       if @order.save
@@ -64,7 +64,7 @@ class OrdersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_order
-      @order = Order.find(params[:id])
+      @order = Deal.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
