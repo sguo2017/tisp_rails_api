@@ -11,14 +11,14 @@ class Api::Chat::ChatsController < ApplicationController
   def index
     @deal_id = params[:deal_id].presence
     #@chats = Chat.find_by(deal_id: @deal_id.to_s)
-    @chats = Chat.where('deal_id ='+@deal_id.to_s).order("created_at DESC")
+    @chats = Dialogue.where('deal_id ='+@deal_id.to_s).order("created_at DESC")
     logger.debug "chats1 :#{@chats.to_json}"
     @chat_list = []
     @chats.each do |chat|
          c = chat.attributes.clone
-         @deal = Order.find(chat.deal_id)
+         @deal = Deal.find(chat.deal_id)
          logger.debug "deal #{@deal}"
-         @serv = ServOffer.find(@deal.serv_offer_id)
+         @serv = Good.find(@deal.serv_offer_id)
          @request_user = User.find(@deal.request_user_id)
          @request_user.authentication_token = "***"
          @offer_user = User.find(@deal.offer_user_id)
@@ -47,7 +47,7 @@ class Api::Chat::ChatsController < ApplicationController
 
   # GET /chats/new
   def new
-    @chat = Chat.new
+    @chat = Dialogue.new
   end
 
   # GET /chats/1/edit
@@ -57,7 +57,7 @@ class Api::Chat::ChatsController < ApplicationController
   # POST /chats
   # POST /chats.json
   def create
-    @chat = Chat.new(chat_params)
+    @chat = Dialogue.new(chat_params)
 
     respond_to do |format|
       if @chat.save
@@ -103,7 +103,7 @@ class Api::Chat::ChatsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_chat
-      @chat = Chat.find(params[:id])
+      @chat = Dialogue.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

@@ -10,7 +10,7 @@ class Api::Order::OrdersController < ApplicationController
   def index
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
-    @orders = Order.where('offer_user_id ='+user.id.to_s).or(Order.where('request_user_id ='+ user.id.to_s)).page(params[:page]).per(5)
+    @orders = Deal.where('offer_user_id ='+user.id.to_s).or(Deal.where('request_user_id ='+ user.id.to_s)).page(params[:page]).per(5)
     #@orders = Order.page(params[:page]).per(5)
     logger.debug "orders:#{@orders.to_json}"
     @order_list = []
@@ -67,7 +67,7 @@ class Api::Order::OrdersController < ApplicationController
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new(order_params)
+    @order = Deal.new(order_params)
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
     @order.request_user_id = user.id
