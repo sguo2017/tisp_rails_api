@@ -20,7 +20,7 @@ class Api::Order::OrdersController < ApplicationController
          logger.debug "order #{@order}"
          #@serv = ServOffer.find(order.serv_offer_id) rescue nil
          begin
-              @serv = ServOffer.find(order.serv_offer_id)     
+              @serv = Good.find(order.serv_offer_id)     
               o["serv_offer_titile"]=@serv.serv_title 
          rescue ActiveRecord::RecordNotFound => e
               o["serv_offer_titile"]=""

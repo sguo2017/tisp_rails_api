@@ -1,4 +1,4 @@
-class Api::Serv::ServOffersController < ApplicationController
+class Api::Goods::ServOffersController < ApplicationController
   respond_to :json
 
   before_filter :authenticate_user_from_token!
@@ -11,7 +11,7 @@ class Api::Serv::ServOffersController < ApplicationController
   def index
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
-    @serv_offers = ServOffer.order("created_at DESC").page(params[:page]).per(5)
+    @serv_offers = Good.order("created_at DESC").page(params[:page]).per(5)
     @offers = []
     @serv_offers.each do |offer|
          s = offer.attributes.clone
@@ -49,7 +49,7 @@ class Api::Serv::ServOffersController < ApplicationController
 
   # GET /serv_offers/new
   def new
-    @serv_offer = ServOffer.new
+    @serv_offer = Good.new
   end
 
   # GET /serv_offers/1/edit
@@ -59,7 +59,7 @@ class Api::Serv::ServOffersController < ApplicationController
   # POST /serv_offers
   # POST /serv_offers.json
   def create
-    @serv_offer = ServOffer.new(serv_offer_params)
+    @serv_offer = Good.new(serv_offer_params)
     
     token = params[:token].presence
 
@@ -79,7 +79,10 @@ class Api::Serv::ServOffersController < ApplicationController
         logger.debug "serv_id:#{@sys_msg.serv_id} id:#{@serv_offer.id}"
         @sys_msg.save
         format.html { redirect_to @serv_offer, notice: 'Serv offer was successfully created.' }
-        format.json { render :show, status: :created, location: @serv_offer }
+        #format.json { render :show, status: :created, location: @serv_offer }
+        format.json {
+           render json: {status:-1, msg:"success"}
+        }
       else
         format.html { render :new }
         format.json { render json: @serv_offer.errors, status: :unprocessable_entity }
@@ -114,7 +117,7 @@ class Api::Serv::ServOffersController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_serv_offer
-      @serv_offer = ServOffer.find(params[:id])
+      @serv_offer = Good.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

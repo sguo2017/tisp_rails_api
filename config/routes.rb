@@ -1,18 +1,24 @@
 Rails.application.routes.draw do
 
   resources :favorites
+  resources :favorites_searches
+  
+  resources :sys_msgs
+  resources :sys_msgs_searches
+  
+  resources :goods
+  resources :goods_searches
+  
   resources :chats
   resources :order_items
   resources :orders
-  resources :sys_msgs
-  resources :goods
-
+  
   #devise_for :users
 
   devise_for :users, controllers:{registrations:'users/registrations', sessions:'users/sessions',passwords:'users/passwords'}
 
   namespace :api do
-    namespace :serv do
+    namespace :goods do
       resources :serv_offers, only: [:index, :create, :show, :update, :destroy] 
     end
     namespace :sys do
@@ -34,8 +40,5 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :goods_searches
-  resources :sys_msgs_searches
-  resources :favorites_searches
   root "serv_offers#index"
 end
