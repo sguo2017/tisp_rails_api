@@ -4,7 +4,7 @@ class ChatsController < ApplicationController
   # GET /chats
   # GET /chats.json
   def index
-    @chats = Chat.page(params[:page]).per(5)
+    @chats = Dialogue.page(params[:page]).per(5)
   end
 
   # GET /chats/1
@@ -14,7 +14,7 @@ class ChatsController < ApplicationController
 
   # GET /chats/new
   def new
-    @chat = Chat.new
+    @chat = Dialogue.new
   end
 
   # GET /chats/1/edit
@@ -24,7 +24,7 @@ class ChatsController < ApplicationController
   # POST /chats
   # POST /chats.json
   def create
-    @chat = Chat.new(chat_params)
+    @chat = Dialogue.new(chat_params)
 
     respond_to do |format|
       if @chat.save
@@ -64,7 +64,7 @@ class ChatsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_chat
-      @chat = Chat.find(params[:id])
+      @chat = Dialogue.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
