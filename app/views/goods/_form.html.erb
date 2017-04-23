@@ -1,13 +1,13 @@
-<%= form_for @serv_offer, :html => { :class => "form-horizontal serv_offer" } do |f| %>
+<%= form_for @good, :html => { :class => "form-horizontal good" } do |f| %>
 
-  <% if @serv_offer.errors.any? %>
+  <% if @good.errors.any? %>
     <div id="error_expl" class="panel panel-danger">
       <div class="panel-heading">
-        <h3 class="panel-title"><%= pluralize(@serv_offer.errors.count, "error") %> prohibited this serv_offer from being saved:</h3>
+        <h3 class="panel-title"><%= pluralize(@good.errors.count, "error") %> prohibited this good from being saved:</h3>
       </div>
       <div class="panel-body">
         <ul>
-        <% @serv_offer.errors.full_messages.each do |msg| %>
+        <% @good.errors.full_messages.each do |msg| %>
           <li><%= msg %></li>
         <% end %>
         </ul>
@@ -55,7 +55,7 @@
     <div class="col-lg-offset-2 col-lg-10">
       <%= f.submit nil, :class => 'btn btn-primary' %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                serv_offers_path, :class => 'btn btn-default' %>
+                goods_path, :class => 'btn btn-default' %>
     </div>
   </div>
 

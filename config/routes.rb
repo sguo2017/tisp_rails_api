@@ -5,7 +5,7 @@ Rails.application.routes.draw do
   resources :order_items
   resources :orders
   resources :sys_msgs
-  resources :serv_offers
+  resources :goods
 
   #devise_for :users
 
@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     end
   end
   
-  resources :serv_offers_searches
+  resources :goods_searches
   resources :sys_msgs_searches
   resources :favorites_searches
   root "serv_offers#index"

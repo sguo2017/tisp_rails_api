@@ -1,6 +1,6 @@
-<%- model_class = ServOffer -%>
+<%- model_class = Good -%>
 <div class="page-header">
-  <%=render 'serv_offers/search'%>
+  <%=render 'goods/search'%>
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </yout：fixeddiv>
 <table class="table table-striped">
@@ -17,22 +17,22 @@
     </tr>
   </thead>
   <tbody style="word-break:break-all;">
-    <% @serv_offers.each do |serv_offer| %>
+    <% @goods.each do |good| %>
       <tr>
-        <td><%= link_to serv_offer.id, serv_offer_path(serv_offer) %></td>
-        <td><%= serv_offer.serv_title %></td>
-        <td><%= serv_offer.serv_detail %></td>
-        <td style='width:18% !important;'><image class="media-object" src="<%= serv_offer.serv_imges %>"/></td>
-        <td><%= serv_offer.serv_catagory %></td>
-        <td><%= serv_offer.user_id %></td>
-        <td><%=l serv_offer.created_at %></td>
+        <td><%= link_to good.id, good_path(good) %></td>
+        <td><%= good.serv_title %></td>
+        <td><%= good.serv_detail %></td>
+        <td style='width:18% !important;'><image class="media-object" src="<%= good.serv_imges %>"/></td>
+        <td><%= good.serv_catagory %></td>
+        <td><%= good.user_id %></td>
+        <td><%=l good.created_at %></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
-                      serv_offer_path(serv_offer), :class => 'btn btn-default btn-xs' %>
+                      good_path(good), :class => 'btn btn-default btn-xs' %>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
-                      edit_serv_offer_path(serv_offer), :class => 'btn btn-default btn-xs' %>
+                      edit_good_path(good), :class => 'btn btn-default btn-xs' %>
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
-                      serv_offer_path(serv_offer),
+                      good_path(good),
                       :method => :delete,
                       :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                       :class => 'btn btn-xs btn-danger' %>
@@ -41,7 +41,7 @@
     <% end %>
   </tbody>
 </table>
-<%= paginate @serv_offers %>
+<%= paginate @goods %>
 <%= link_to t('.new', :default => t("helpers.links.new")),
-            new_serv_offer_path,
+            new_good_path,
             :class => 'btn btn-primary' %>
