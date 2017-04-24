@@ -23,7 +23,7 @@ class Api::Goods::ServOffersController < ApplicationController
            s["isFavorited"] = false
          else
            s["isFavorited"] = true
-           m["favorite_id"] = f["id"].to_s
+           s["favorite_id"] = f["id"].to_s
          end
          s["user"]=u
          @offers.push(s)
