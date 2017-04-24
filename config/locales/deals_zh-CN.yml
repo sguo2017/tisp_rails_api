@@ -2,23 +2,24 @@
 zh-CN:
   activerecord:
     models:
-      order: "交易"
+      deal: "交易"
     attributes:
-      order:
+      deal:
         serv_offer_title: "服务提供标题"
         serv_offer_id: "服务提供ID"
         offer_user_id: "服务提供者ID"
         request_user_id: "服务请求者ID"
         status: "状态"
         connect_time: "接触时间"
-        deal_time: "成交时间"
-        finish_time: "完成时间"
+        bidder: "报价人"
+        signature: "确认人"
+        created_at: "创建时间"
   helpers:
     submit:
-      order:
+      deal:
         create: "创建交易"
         update: "修改交易"
-  orders:
+  deals:
     edit:
       title: "编辑交易"
     form:
@@ -32,7 +33,7 @@ zh-CN:
       title: "信息"
     show:
       title: "详细"
-    was_created: "Deal was successfully added"
-    was_deleted: "Deal was successfully deleted"
-    was_updated: "Deal was successfully updated"
+    was_created: "订单添加成功"
+    was_deleted: "订单删除成功"
+    was_updated: "订单修改成功"
 

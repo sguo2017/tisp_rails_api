@@ -12,8 +12,8 @@
       <th><%= model_class.human_attribute_name(:request_user_id) %></th>
       <th><%= model_class.human_attribute_name(:status) %></th>
       <th><%= model_class.human_attribute_name(:connect_time) %></th>
-      <th><%= model_class.human_attribute_name(:deal_time) %></th>
-      <th><%= model_class.human_attribute_name(:finish_time) %></th>
+      <th><%= model_class.human_attribute_name(:bidder) %></th>
+      <th><%= model_class.human_attribute_name(:signature) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -28,8 +28,8 @@
         <td><%= order.request_user_id %></td>
         <td><%= link_to order.status,{:controller => "order_items", :action => "index", :deal_id => order.id},{:deal_id => order.id} %></td>
         <td><%= order.connect_time %></td>
-        <td><%= order.deal_time %></td>
-        <td><%= order.finish_time %></td>
+        <td><%= order.bidder %></td>
+        <td><%= order.signature %></td>
         <td><%=l order.created_at %></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),

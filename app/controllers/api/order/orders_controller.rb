@@ -104,6 +104,13 @@ class Api::Order::OrdersController < ApplicationController
   def update
     respond_to do |format|
       if @order.update(order_params)
+        @order_chat = OrderItem.new()
+        @order_chat.deal_id = @order.id
+        @order_chat.serv_offer_id = @order.serv_offer_id
+        @order_chat.offer_user_id = @order.offer_user_id
+        @order_chat.request_user_id = @order.request_user_id
+        @order_chat.lately_chat_content = "your offer is awesome"
+        @order_chat.save
         format.html { redirect_to @order, notice: 'Order was successfully updated.' }
         format.json { render :show, status: :ok, location: @order }
       else
@@ -131,6 +138,6 @@ class Api::Order::OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :status, :connect_time, :deal_time, :finish_time, :lately_chat_content)
+      params.require(:order).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :status, :connect_time, :bidder, :signature, :lately_chat_content)
     end
 end
