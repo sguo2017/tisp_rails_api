@@ -40,5 +40,5 @@ Rails.application.routes.draw do
     end
   end
   
-  root "serv_offers#index"
+  root "goods#index"
 end
