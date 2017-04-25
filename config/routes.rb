@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :goods_catalogs
   resources :favorites
   resources :favorites_searches
   

@@ -84,13 +84,11 @@ class Api::Orders::OrdersController < ApplicationController
         @order_chat.request_user_id = @order.request_user_id
         @order_chat.lately_chat_content = "your offer is awesome"
         @order_chat.save
-        format.html { redirect_to @order, notice: 'Order was successfully created.' }
         #format.json { render :show, status: :created, location: @order }
         format.json {
            render json: {status:0, msg:"success"}
         }
       else
-        format.html { render :new }
         #format.json { render json: @order.errors, status: :unprocessable_entity }
          format.json {
            render json: {status:-1, msg:"fail"}
@@ -104,18 +102,24 @@ class Api::Orders::OrdersController < ApplicationController
   def update
     respond_to do |format|
       if @order.update(order_params)
-        @order_chat = OrderItem.new()
-        @order_chat.deal_id = @order.id
-        @order_chat.serv_offer_id = @order.serv_offer_id
-        @order_chat.offer_user_id = @order.offer_user_id
-        @order_chat.request_user_id = @order.request_user_id
-        @order_chat.lately_chat_content = "your offer is awesome"
-        @order_chat.save
-        format.html { redirect_to @order, notice: 'Order was successfully updated.' }
-        format.json { render :show, status: :ok, location: @order }
+        @order_item = OrderItem.new()
+        @order_item.deal_id = @order.id
+        @order_item.serv_offer_id = @order.serv_offer_id
+        @order_item.offer_user_id = @order.offer_user_id
+        @order_item.request_user_id = @order.request_user_id
+        @order_item.lately_chat_content = @order.lately_chat_content
+        @order_item.bidder = @order.bidder
+        @order_item.signature = @order.signature   
+        @order_item.save
+        #format.json { render :show, status: :ok, location: @order }
+        format.json {
+           render json: {status:0, msg:"success"}
+        }
       else
-        format.html { render :edit }
-        format.json { render json: @order.errors, status: :unprocessable_entity }
+        #format.json { render json: @order.errors, status: :unprocessable_entity }
+        format.json {
+           render json: {status:-1, msg:"fail"}
+        }
       end
     end
   end
@@ -125,15 +129,14 @@ class Api::Orders::OrdersController < ApplicationController
   def destroy
     @order.destroy
     respond_to do |format|
-      format.html { redirect_to orders_url, notice: 'Order was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
 
   private
     # Use callbacks to share common setup or constraints between actions.
-    def set_deal
-      @order = Order.find(params[:id])
+    def set_order
+      @order = Deal.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

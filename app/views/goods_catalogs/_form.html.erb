@@ -1,0 +1,32 @@
+<%= form_for(goods_catalog) do |f| %>
+  <% if goods_catalog.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(goods_catalog.errors.count, "error") %> prohibited this goods_catalog from being saved:</h2>
+
+      <ul>
+      <% goods_catalog.errors.full_messages.each do |message| %>
+        <li><%= message %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :name %>
+    <%= f.text_field :name %>
+  </div>
+
+  <div class="field">
+    <%= f.label :image %>
+    <%= f.text_field :image %>
+  </div>
+
+  <div class="field">
+    <%= f.label :level %>
+    <%= f.number_field :level %>
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>
