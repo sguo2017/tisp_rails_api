@@ -1,0 +1,31 @@
+<p id="notice"><%= notice %></p>
+
+<h1>Goods Catalogs</h1>
+
+<table>
+  <thead>
+    <tr>
+      <th>Name</th>
+      <th>Image</th>
+      <th>Level</th>
+      <th colspan="3"></th>
+    </tr>
+  </thead>
+
+  <tbody>
+    <% @goods_catalogs.each do |goods_catalog| %>
+      <tr>
+        <td><%= goods_catalog.name %></td>
+        <td><%= goods_catalog.image %></td>
+        <td><%= goods_catalog.level %></td>
+        <td><%= link_to 'Show', goods_catalog %></td>
+        <td><%= link_to 'Edit', edit_goods_catalog_path(goods_catalog) %></td>
+        <td><%= link_to 'Destroy', goods_catalog, method: :delete, data: { confirm: 'Are you sure?' } %></td>
+      </tr>
+    <% end %>
+  </tbody>
+</table>
+
+<br>
+
+<%= link_to 'New Goods Catalog', new_goods_catalog_path %>

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170425091726) do
+ActiveRecord::Schema.define(version: 20170425091728) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -50,12 +50,22 @@ ActiveRecord::Schema.define(version: 20170425091726) do
     t.string   "catalog"
   end
 
+  create_table "goods_catalogs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.string   "image"
+    t.integer  "level"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.string   "ancestry"
+    t.index ["ancestry"], name: "index_goods_catalogs_on_ancestry", using: :btree
+  end
+
   create_table "goods_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "serv_id"
     t.integer  "user_id"
     t.string   "serv_title"
     t.string   "serv_detail"
-    t.string   "serv_category"
+    t.string   "serv_catagory"
     t.string   "serv_created"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false

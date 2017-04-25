@@ -1,0 +1,19 @@
+<p id="notice"><%= notice %></p>
+
+<p>
+  <strong>Name:</strong>
+  <%= @goods_catalog.name %>
+</p>
+
+<p>
+  <strong>Image:</strong>
+  <%= @goods_catalog.image %>
+</p>
+
+<p>
+  <strong>Level:</strong>
+  <%= @goods_catalog.level %>
+</p>
+
+<%= link_to 'Edit', edit_goods_catalog_path(@goods_catalog) %> |
+<%= link_to 'Back', goods_catalogs_path %>
