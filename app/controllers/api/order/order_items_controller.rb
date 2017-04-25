@@ -54,11 +54,15 @@ class Api::Order::OrderItemsController < ApplicationController
 
     respond_to do |format|
       if @order_item.save
-        format.html { redirect_to @order_item, notice: 'Deal chat was successfully created.' }
-        format.json { render :show, status: :created, location: @order_item }
+        #format.json { render :show, status: :created, location: @order_item }
+        format.json {
+           render json: {status:0, msg:"success"}
+        }        
       else
-        format.html { render :new }
-        format.json { render json: @order_item.errors, status: :unprocessable_entity }
+        #format.json { render json: @order_item.errors, status: :unprocessable_entity }
+        format.json {
+           render json: {status:-1, msg:"fail"}
+        }        
       end
     end
   end
@@ -66,11 +70,15 @@ class Api::Order::OrderItemsController < ApplicationController
   def update
     respond_to do |format|
       if @order_item.update(order_item_params)
-        format.html { redirect_to @order_item, notice: 'Deal chat was successfully updated.' }
-        format.json { render :show, status: :ok, location: @order_item }
+        #format.json { render :show, status: :ok, location: @order_item }
+        format.json {
+           render json: {status:0, msg:"success"}
+        }        
       else
-        format.html { render :edit }
-        format.json { render json: @order_item.errors, status: :unprocessable_entity }
+        #format.json { render json: @order_item.errors, status: :unprocessable_entity }
+        format.json {
+           render json: {status:0, msg:"fail"}
+        }        
       end
     end
   end
@@ -78,7 +86,6 @@ class Api::Order::OrderItemsController < ApplicationController
   def destroy
     @order_item.destroy
     respond_to do |format|
-      format.html { redirect_to order_items_url, notice: 'Deal chat was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
