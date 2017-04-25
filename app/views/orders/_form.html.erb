@@ -51,26 +51,27 @@
     <%=f.error_span(:status) %>
   </div>
   <div class="form-group">
+    <%= f.label :bidder, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :bidder, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:bidder) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :signature, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :signature, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:signature) %>
+  </div>
+  <div class="form-group">
     <%= f.label :connect_time, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
       <%= f.text_field :connect_time, :class => 'form-control' %>
     </div>
     <%=f.error_span(:connect_time) %>
   </div>
-  <div class="form-group">
-    <%= f.label :order_time, :class => 'control-label col-lg-2' %>
-    <div class="col-lg-10">
-      <%= f.text_field :deal_time, :class => 'form-control' %>
-    </div>
-    <%=f.error_span(:order_time) %>
-  </div>
-  <div class="form-group">
-    <%= f.label :finish_time, :class => 'control-label col-lg-2' %>
-    <div class="col-lg-10">
-      <%= f.text_field :finish_time, :class => 'form-control' %>
-    </div>
-    <%=f.error_span(:finish_time) %>
-  </div>
+ 
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">

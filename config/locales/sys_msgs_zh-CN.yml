@@ -2,7 +2,7 @@
 zh-CN:
   activerecord:
     models:
-      sys_msg: "Sys Msg"
+      sys_msg: "系统消息"
     attributes:
       sys_msg:
         id: "ID" 
@@ -11,7 +11,7 @@ zh-CN:
         action_desc: "操作描述"
         user_id: "用户ID"
         created_at: "创建时间"
-        serv_id: "serv_id"
+        serv_id: "商品ID"
         actions: "操作"
   helpers:
     links:
@@ -24,22 +24,24 @@ zh-CN:
     actions: "操作"
     submit:
       sys_msg:
-        create: "创建 sys msg"
-        update: "更新 sys msg"
+        create: "创建系统消息"
+        update: "更新系统消息"
   sys_msgs:
     edit:
-      title: "编辑 sys msg"
+      title: "编辑系统消息"
     form:
-      sys_msg: "Serv offer"
+      sys_msg: "系统消息"
     index:
-      confirm: "你确定要删除这个sys msg吗?"
-      empty: "没有找到sys msg"
-      new_sys_msg: "创建一个新的sys msg"
-      title: "sys msgs 列表"
+      confirm: "你确定要删除这个系统消息吗?"
+      empty: "没有记录"
+      new_sys_msg: "创建系统消息"
+      title: "系统消息列表"
     new:
-      title: "创建sys msg"
+      title: "创建系统消息"
     show:
-      title: "sys msg 详情"
-    was_created: "sys msg 成功创建"
-    was_deleted: "sys msg 成功删除"
-    was_updated: "sys msg 成功更新"
+      title: "系统消息详情"
+      confirm: "你确定要删除这个系统消息吗?"
+      empty: "没有记录"
+    was_created: "系统消息成功创建"
+    was_deleted: "系统消息成功删除"
+    was_updated: "系统消息成功更新"

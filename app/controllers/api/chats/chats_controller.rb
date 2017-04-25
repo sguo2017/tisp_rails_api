@@ -1,4 +1,4 @@
-class Api::Chat::ChatsController < ApplicationController
+class Api::Chats::ChatsController < ApplicationController
   respond_to :json
 
   before_action :authenticate_user_from_token!
@@ -10,7 +10,7 @@ class Api::Chat::ChatsController < ApplicationController
 
   def index
     @deal_id = params[:deal_id].presence
-	  @deal = Deal.find(chat.deal_id)
+	  @deal = Order.find(chat.deal_id)
 	  logger.debug "deal #{@deal}"
 	  @serv = Good.find(@deal.serv_offer_id)
 	  @request_user = User.find(@deal.request_user_id)
@@ -18,7 +18,7 @@ class Api::Chat::ChatsController < ApplicationController
 	  @offer_user = User.find(@deal.offer_user_id)
 	  @offer_user.authentication_token = "***"   
     #@chats = Chat.find_by(deal_id: @deal_id.to_s)
-    @chats = Dialogue.where('deal_id ='+@deal_id.to_s).order("created_at DESC")
+    @chats = Chat.where('deal_id ='+@deal_id.to_s).order("created_at DESC")
     logger.debug "chats1 :#{@chats.to_json}"
     @chat_list = []
     @chats.each do |chat|
@@ -47,7 +47,7 @@ class Api::Chat::ChatsController < ApplicationController
 
   # GET /chats/new
   def new
-    @chat = Dialogue.new
+    @chat = Chat.new
   end
 
   # GET /chats/1/edit
@@ -57,7 +57,7 @@ class Api::Chat::ChatsController < ApplicationController
   # POST /chats
   # POST /chats.json
   def create
-    @chat = Dialogue.new(chat_params)
+    @chat = Chat.new(chat_params)
 
     respond_to do |format|
       if @chat.save
@@ -103,7 +103,7 @@ class Api::Chat::ChatsController < ApplicationController
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_chat
-      @chat = Dialogue.find(params[:id])
+      @chat = Chat.find(params[:id])
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.

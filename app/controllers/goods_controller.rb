@@ -58,7 +58,7 @@ class GoodsController < ApplicationController
 
     respond_to do |format|
       if @good.save
-        format.html { redirect_to @good, notice: 'Serv offer was successfully created.' }
+        format.html { redirect_to @good, notice: '成功创建商品！' }
         format.json { render :show, status: :created, location: @good }
       else
         format.html { render :new }
@@ -72,7 +72,7 @@ class GoodsController < ApplicationController
   def update
     respond_to do |format|
       if @good.update(good_params)
-        format.html { redirect_to @good, notice: 'Serv offer was successfully updated.' }
+        format.html { redirect_to @good, notice: '成功更新商品！' }
         format.json { render :show, status: :ok, location: @good }
       else
         format.html { render :edit }
@@ -86,7 +86,7 @@ class GoodsController < ApplicationController
   def destroy
     @good.destroy
     respond_to do |format|
-      format.html { redirect_to goods_url, notice: 'Serv offer was successfully destroyed.' }
+      format.html { redirect_to goods_url, notice: '成功删除商品！' }
       format.json { head :no_content }
     end
   end

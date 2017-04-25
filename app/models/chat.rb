@@ -1,17 +1,16 @@
 # == Schema Information
 #
-# Table name: sys_msgs
+# Table name: chats
 #
 #  id           :integer          not null, primary key
-#  user_name    :string(255)
-#  action_title :string(255)
-#  action_desc  :string(255)
+#  deal_id      :integer
+#  chat_content :string(255)
 #  user_id      :integer
+#  catalog      :string(255)
 #  created_at   :datetime         not null
 #  updated_at   :datetime         not null
-#  serv_id      :integer
 #
 
-class SysMsg < ApplicationRecord
-  belongs_to :user
+class Chat < ApplicationRecord
+	self.table_name="chats"
 end

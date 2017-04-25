@@ -16,23 +16,25 @@ zh-CN:
   helpers:
     submit:
       order_item:
-        create: "新建"
-        update: "修改"
+        create: "新建订单项目"
+        update: "修改订单项目"
   order_items:
     edit:
-      title: "编辑"
+      title: "编辑订单项目"
     form:
-      order_item: "Deal chat"
+      order_item: "订单项目"
     index:
-      confirm: "Are you sure you want to delete the deal chat?"
-      empty: "No deal chats found"
-      new_order_item: "Add a new deal chat"
-      title: "Listing of deal chats"
+      confirm: "你确认删除这个订单项目吗？"
+      empty: "没有记录"
+      new_order_item: "新增订单项目"
+      title: "订单项目列表"
     new:
-      title: "Adding a new deal chat"
+      title: "新增订单项目"
     show:
-      title: "Deal chat details"
-    was_created: "Deal chat was successfully added"
-    was_deleted: "Deal chat was successfully deleted"
-    was_updated: "Deal chat was successfully updated"
+      title: "订单项目详情"
+      confirm: "你确认删除这个订单项目吗？"
+      empty: "没有记录"
+    was_created: "成功添加订单项目"
+    was_deleted: "成功删除订单项目"
+    was_updated: "成功更新订单项目"
 

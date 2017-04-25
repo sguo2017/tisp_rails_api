@@ -7,25 +7,29 @@ zh-CN:
         obj_id: "对象ID"
         obj_type: "对象类型"
         user_id: "用户"
+        created_at: "创建时间"
+        actions: "操作"
   helpers:
     submit:
       favorite:
-        create: "创建"
-        update: "修改"
+        create: "创建收藏"
+        update: "修改收藏"
   favorites:
     edit:
-      title: "编辑"
+      title: "编辑收藏"
     form:
-      favorite: "Favorite"
+      favorite: "收藏"
     index:
-      confirm: "确认删除?"
-      empty: "没有数据"
+      confirm: "你确认删除这条收藏吗?"
+      empty: "没有记录"
       new_favorite: "新增"
-      title: "列表"
+      title: "收藏列表"
     new:
-      title: "新增"
+      title: "新增收藏"
     show:
-      title: "详情"
+      title: "收藏详情"
+      confirm: "你确认删除这条收藏吗?"
+      empty: "没有记录"
     was_created: "添加成功"
     was_deleted: "删除成功"
     was_updated: "修改成功"

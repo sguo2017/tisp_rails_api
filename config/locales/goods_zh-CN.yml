@@ -1,0 +1,47 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      good: "商品"
+    attributes:
+      good:
+        id: "ID" 
+        serv_title: "商品名称"
+        serv_detail: "商品详情"
+        serv_imges: "商品图片"
+        serv_catagory: "商品类型"
+        user_id: "用户ID"
+        created_at: "创建时间"
+        actions: "操作"
+  helpers:
+    links:
+      show: "查看"
+      edit: "编辑"
+      destroy: "删除"
+      new: "新增"
+      back: "返回"
+      cancel: "取消"
+    actions: "操作"
+    submit:
+      good:
+        create: "创建商品"
+        update: "更新商品"
+  goods:
+    edit:
+      title: "编辑商品"
+    form:
+      good: "商品"
+    index:
+      confirm: "你确定要删除这个商品吗?"
+      empty: "没有记录"
+      new_good: "创建一个新的商品"
+      title: "商品列表"
+    new:
+      title: "创建商品"
+    show:
+      title: "商品详情"
+      confirm: "你确定要删除这个商品吗?"
+      empty: "没有记录"
+    was_created: "成功创建商品"
+    was_deleted: "成功删除商品"
+    was_updated: "成功更新商品"

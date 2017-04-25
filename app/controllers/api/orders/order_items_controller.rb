@@ -1,4 +1,4 @@
-class Api::Order::OrderItemsController < ApplicationController
+class Api::Orders::OrderItemsController < ApplicationController
 
   respond_to :json
 

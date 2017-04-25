@@ -4,25 +4,25 @@ class AdminUsersController < ApplicationController
   # GET /users
   # GET /users.json
   def index
-    @users = User.all
-	render 'users/index'
+    @users = User.order("created_at DESC").page(params[:page]).per(10)
+	render 'users_manager/index'
   end
 
   # GET /users/1
   # GET /users/1.json
   def show
-    render 'users/show'
+    render 'users_manager/show'
   end
 
   # GET /users/new
   def new
     @target_user = User.new
-	render 'users/new'
+	render 'users_manager/new'
   end
 
   # GET /users/1/edit
   def edit
-    render 'users/edit'
+    render 'users_manager/edit'
   end
 
   # POST /users
@@ -33,7 +33,7 @@ class AdminUsersController < ApplicationController
       if @target_user.save
         format.html { redirect_to admin_user_path(@target_user), notice: '用户创建成功' }
       else
-        format.html { render 'users/new' }
+        format.html { render 'users_manager/new' }
       end
     end
   end
@@ -45,7 +45,7 @@ class AdminUsersController < ApplicationController
       if @target_user.update(user_params)
         format.html { redirect_to admin_user_path(@target_user), notice: '用户更新成功' }
       else
-        format.html { render 'users/edit' }
+        format.html { render 'users_manager/edit' }
       end
     end
   end

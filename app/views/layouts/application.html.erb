@@ -73,7 +73,7 @@
         </div>
         <div class="navbar-collapse collapse navbar-responsive-collapse">
           <ul class="nav navbar-nav nav-tisp">
-            <li><% if can? :manage,User%><%= link_to "用户","#"%><% end %></li>
+            <li><% if can? :manage,User%><%= link_to "用户",admin_users_path %><% end %></li>
             <li><%= link_to "商品", "/goods"  %></li>
             <li><%= link_to "订单", "/orders"  %></li>
             <li><%= link_to "会话", "/chats"  %></li>

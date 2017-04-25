@@ -28,7 +28,7 @@ class GoodsSearchesController < ApplicationController
    
    private
      def permit_params
-	   params.require(:goods_search).permit(:serv_id,:user_id,:serv_title,:serv_detail,:serv_category,:serv_created,:id)
+	   params.require(:goods_search).permit(:serv_id,:user_id,:serv_title,:serv_detail,:serv_catagory,:serv_created,:id)
    end
 
 end

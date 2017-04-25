@@ -1,4 +1,4 @@
-<%- model_class = Deal -%>
+<%- model_class = Order -%>
 <div class="page-header">
   <h1><%=t '.title', :default => model_class.model_name.human.titleize %></h1>
 </div>
@@ -16,10 +16,10 @@
   <dd><%= @order.status %></dd>
   <dt><strong><%= model_class.human_attribute_name(:connect_time) %>:</strong></dt>
   <dd><%= @order.connect_time %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:order_time) %>:</strong></dt>
-  <dd><%= @order.deal_time %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:finish_time) %>:</strong></dt>
-  <dd><%= @order.finish_time %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:bidder) %>:</strong></dt>
+  <dd><%= @order.bidder %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:signature) %>:</strong></dt>
+  <dd><%= @order.signature %></dd>
 </dl>
 
 <%= link_to t('.back', :default => t("helpers.links.back")),

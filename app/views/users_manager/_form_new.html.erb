@@ -1,4 +1,4 @@
-<%= form_for @target_user, :html => { :class => "form-horizontal user" } do |f| %>
+<%= form_for @target_user, :url=>{ :controller => "admin_users", :action => "create"}, :html => { :class => "form-horizontal user" } do |f| %>
 
   <% if @target_user.errors.any? %>
     <div id="error_expl" class="panel panel-danger">
@@ -67,7 +67,7 @@
     <div class="col-lg-offset-2 col-lg-10">
       <%= f.submit nil, :class => 'btn btn-primary' %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
-                users_path, :class => 'btn btn-default' %>
+                admin_users_path, :class => 'btn btn-default' %>
     </div>
   </div>
 <% end %>

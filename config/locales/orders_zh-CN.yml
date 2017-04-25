@@ -2,10 +2,10 @@
 zh-CN:
   activerecord:
     models:
-      deal: "交易"
+      order: "订单"
     attributes:
-      deal:
-        serv_offer_title: "服务提供标题"
+      order:
+        serv_offer_title: "服务提供名称"
         serv_offer_id: "服务提供ID"
         offer_user_id: "服务提供者ID"
         request_user_id: "服务请求者ID"
@@ -16,23 +16,25 @@ zh-CN:
         created_at: "创建时间"
   helpers:
     submit:
-      deal:
-        create: "创建交易"
-        update: "修改交易"
-  deals:
+      order:
+        create: "创建订单"
+        update: "更新订单"
+  orders:
     edit:
-      title: "编辑交易"
+      title: "编辑订单"
     form:
-      order: "Order"
+      order: "订单"
     index:
-      confirm: "您确定删除?"
+      confirm: "你确定删除这个订单吗?"
       empty: "没有记录"
       new_order: "新增"
-      title: "列表"
+      title: "订单列表"
     new:
-      title: "信息"
+      title: "新增订单"
     show:
-      title: "详细"
+      title: "订单详情"
+      confirm: "你确定删除这个订单吗?"
+      empty: "没有记录"
     was_created: "订单添加成功"
     was_deleted: "订单删除成功"
     was_updated: "订单修改成功"

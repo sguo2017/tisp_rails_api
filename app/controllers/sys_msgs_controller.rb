@@ -32,7 +32,7 @@ class SysMsgsController < ApplicationController
 
     respond_to do |format|
       if @sys_msg.save
-        format.html { redirect_to @sys_msg, notice: 'Sys msg was successfully created.' }
+        format.html { redirect_to @sys_msg, notice: '成功创建系统消息！' }
         format.json { render :show, status: :created, location: @sys_msg }
       else
         format.html { render :new }
@@ -46,7 +46,7 @@ class SysMsgsController < ApplicationController
   def update
     respond_to do |format|
       if @sys_msg.update(sys_msg_params)
-        format.html { redirect_to @sys_msg, notice: 'Sys msg was successfully updated.' }
+        format.html { redirect_to @sys_msg, notice: '成功更新系统消息！' }
         format.json { render :show, status: :ok, location: @sys_msg }
       else
         format.html { render :edit }
@@ -60,7 +60,7 @@ class SysMsgsController < ApplicationController
   def destroy
     @sys_msg.destroy
     respond_to do |format|
-      format.html { redirect_to sys_msgs_url, notice: 'Sys msg was successfully destroyed.' }
+      format.html { redirect_to sys_msgs_url, notice: '成功删除系统消息！' }
       format.json { head :no_content }
     end
   end

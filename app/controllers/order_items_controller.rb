@@ -28,7 +28,7 @@ class OrderItemsController < ApplicationController
 
     respond_to do |format|
       if @order_item.save
-        format.html { redirect_to @order_item, notice: 'Deal chat was successfully created.' }
+        format.html { redirect_to @order_item, notice: '成功创建订单项目！' }
         format.json { render :show, status: :created, location: @order_item }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class OrderItemsController < ApplicationController
   def update
     respond_to do |format|
       if @order_item.update(order_item_params)
-        format.html { redirect_to @order_item, notice: 'Deal chat was successfully updated.' }
+        format.html { redirect_to @order_item, notice: '成功更新订单项目！' }
         format.json { render :show, status: :ok, location: @order_item }
       else
         format.html { render :edit }
@@ -56,7 +56,7 @@ class OrderItemsController < ApplicationController
   def destroy
     @order_item.destroy
     respond_to do |format|
-      format.html { redirect_to order_items_url, notice: 'Deal chat was successfully destroyed.' }
+      format.html { redirect_to order_items_url, notice: '成功删除订单项目！' }
       format.json { head :no_content }
     end
   end
