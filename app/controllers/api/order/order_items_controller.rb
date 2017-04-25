@@ -96,6 +96,6 @@ class Api::Order::OrderItemsController < ApplicationController
     end
 
     def order_item_params
-      params.require(:order_item).permit(:deal_id, :serv_offer_id, :serv_offer_user_name, :serv_offer_titile, :lately_chat_content, :offer_user_id, :request_user_id)
+      params.require(:order_item).permit(:deal_id, :serv_offer_id, :serv_offer_user_name, :serv_offer_titile, :lately_chat_content, :offer_user_id, :request_user_id, :bidder, :signature)
     end
 end

@@ -102,13 +102,15 @@ class Api::Order::OrdersController < ApplicationController
   def update
     respond_to do |format|
       if @order.update(order_params)
-        @order_chat = OrderItem.new()
-        @order_chat.deal_id = @order.id
-        @order_chat.serv_offer_id = @order.serv_offer_id
-        @order_chat.offer_user_id = @order.offer_user_id
-        @order_chat.request_user_id = @order.request_user_id
-        @order_chat.lately_chat_content = @order.lately_chat_content
-        @order_chat.save
+        @order_item = OrderItem.new()
+        @order_item.deal_id = @order.id
+        @order_item.serv_offer_id = @order.serv_offer_id
+        @order_item.offer_user_id = @order.offer_user_id
+        @order_item.request_user_id = @order.request_user_id
+        @order_item.lately_chat_content = @order.lately_chat_content
+        @order_item.bidder = @order.bidder
+        @order_item.signature = @order.signature   
+        @order_item.save
         #format.json { render :show, status: :ok, location: @order }
         format.json {
            render json: {status:0, msg:"success"}
