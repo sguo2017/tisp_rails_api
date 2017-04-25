@@ -1,3 +1,18 @@
+# == Schema Information
+#
+# Table name: goods_searches
+#
+#  id            :integer          not null, primary key
+#  serv_id       :integer
+#  user_id       :integer
+#  serv_title    :string(255)
+#  serv_detail   :string(255)
+#  serv_category :string(255)
+#  serv_created  :string(255)
+#  created_at    :datetime         not null
+#  updated_at    :datetime         not null
+#
+
 class GoodsSearch < ApplicationRecord
 
   def goods

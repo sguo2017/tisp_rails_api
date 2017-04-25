@@ -15,19 +15,25 @@ class Api::Sys::SysMsgsController < ApplicationController
     @msgs = []
     @sys_msgs.each do |msg|
          m = msg.attributes.clone
+         begin
+             s = Good.find(msg.serv_id)    
+             m["serv_offer"] = s
+             f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, s.id, "serv_offer").first
+             #是否收藏
+		         if f.blank?
+		           m["isFavorited"] = false
+		         else
+		           m["isFavorited"] = true
+		           m["favorite_id"] = f["id"].to_s
+		         end
+         rescue ActiveRecord::RecordNotFound => e
+             
+         end      
+           
          u = User.find(msg.user_id)
-         s = Good.find(msg.serv_id)
-         m["serv_offer"] = s
          u.authentication_token = "***"
          m["user"]=u
-         #是否收藏
-         f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, s.id, "serv_offer").first
-         if f.blank?
-           m["isFavorited"] = false
-         else
-           m["isFavorited"] = true
-           m["favorite_id"] = f["id"].to_s
-         end
+         
          @msgs.push(m)
          #logger.debug "m:#{m}"
     end 
@@ -64,10 +70,8 @@ class Api::Sys::SysMsgsController < ApplicationController
 
     respond_to do |format|
       if @sys_msg.save
-        format.html { redirect_to @sys_msg, notice: 'Sys msg was successfully created.' }
         format.json { render :show, status: :created, location: @sys_msg }
       else
-        format.html { render :new }
         format.json { render json: @sys_msg.errors, status: :unprocessable_entity }
       end
     end
@@ -78,10 +82,8 @@ class Api::Sys::SysMsgsController < ApplicationController
   def update
     respond_to do |format|
       if @sys_msg.update(sys_msg_params)
-        format.html { redirect_to @sys_msg, notice: 'Sys msg was successfully updated.' }
         format.json { render :show, status: :ok, location: @sys_msg }
       else
-        format.html { render :edit }
         format.json { render json: @sys_msg.errors, status: :unprocessable_entity }
       end
     end
@@ -92,7 +94,6 @@ class Api::Sys::SysMsgsController < ApplicationController
   def destroy
     @sys_msg.destroy
     respond_to do |format|
-      format.html { redirect_to sys_msgs_url, notice: 'Sys msg was successfully destroyed.' }
       format.json { head :no_content }
     end
   end
