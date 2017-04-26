@@ -15,8 +15,14 @@ class Api::Goods::ServOffersController < ApplicationController
     @offers = []
     @serv_offers.each do |offer|
          s = offer.attributes.clone
-         u = User.find(offer.user_id)
-         u.authentication_token = "***"
+         begin 
+            u = User.find(offer.user_id)
+            u.authentication_token = "***"
+            s["user"]=u
+         rescue ActiveRecord::RecordNotFound => e
+
+         end
+         
          #是否收藏
          f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "serv_offer").first
          if f.blank?
@@ -25,7 +31,6 @@ class Api::Goods::ServOffersController < ApplicationController
            s["isFavorited"] = true
            s["favorite_id"] = f["id"].to_s
          end
-         s["user"]=u
          @offers.push(s)
          #logger.debug "m:#{s}"
     end

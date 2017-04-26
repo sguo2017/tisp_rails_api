@@ -18,12 +18,16 @@ class Api::Me::FavoritesController < ApplicationController
     
     @offers = []
     @favorites.each do |favorite|
-         offer = ServOffer.find(favorite.obj_id)
+         offer = Good.find(favorite.obj_id)
          s = offer.attributes.clone
          logger.debug "s:#{s.to_s}"
-         u = User.find(offer.user_id)
-         u.authentication_token = "***"
-         s["user"]=u
+	 begin
+            u = User.find(offer.user_id)
+            u.authentication_token = "***"
+            s["user"]=u
+	 rescue ActiveRecord::RecordNotFound => e
+
+	 end
          @offers.push(s)
     end
 
