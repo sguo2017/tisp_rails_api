@@ -4,7 +4,7 @@ class GoodsCatalogsController < ApplicationController
   # GET /goods_catalogs
   # GET /goods_catalogs.json
   def index
-    @goods_catalogs = GoodsCatalog.all
+    @goods_catalogs = GoodsCatalog.order("created_at ASC").page(params[:page]).per(10)
   end
 
   # GET /goods_catalogs/1
@@ -28,7 +28,7 @@ class GoodsCatalogsController < ApplicationController
 
     respond_to do |format|
       if @goods_catalog.save
-        format.html { redirect_to @goods_catalog, notice: 'Goods catalog was successfully created.' }
+        format.html { redirect_to @goods_catalog, notice: '成功创建商品分类！' }
         format.json { render :show, status: :created, location: @goods_catalog }
       else
         format.html { render :new }
@@ -42,7 +42,7 @@ class GoodsCatalogsController < ApplicationController
   def update
     respond_to do |format|
       if @goods_catalog.update(goods_catalog_params)
-        format.html { redirect_to @goods_catalog, notice: 'Goods catalog was successfully updated.' }
+        format.html { redirect_to @goods_catalog, notice: '成功更新商品分类' }
         format.json { render :show, status: :ok, location: @goods_catalog }
       else
         format.html { render :edit }
@@ -56,7 +56,7 @@ class GoodsCatalogsController < ApplicationController
   def destroy
     @goods_catalog.destroy
     respond_to do |format|
-      format.html { redirect_to goods_catalogs_url, notice: 'Goods catalog was successfully destroyed.' }
+      format.html { redirect_to goods_catalogs_url, notice: '成功删除商品分类' }
       format.json { head :no_content }
     end
   end

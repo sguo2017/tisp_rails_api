@@ -1,0 +1,41 @@
+zh-CN:
+  activerecord:
+    models:
+      goods_catalog: "商品分类"
+    attributes:
+      goods_catalog:
+        id: "ID"
+        name: "名称"
+        image: "图片"
+        level: "层级"
+        ancestry: "祖先"
+        parent: "父节点"
+        parent_id: "父节点id"
+        children: "子节点"
+        created_at: "创建时间"
+        actions: "操作"
+  helpers:
+    submit:
+      goods_catalog:
+        create: "创建分类"
+        update: "修改分类"
+  goods_catalogs:
+    edit:
+      title: "编辑分类"
+    form:
+      goods_catalog: "商品分类"
+    index:
+      confirm: "你确认删除这个类别吗?"
+      empty: "没有记录"
+      new_goods_catalog: "新增分类"
+      title: "分类列表"
+    new:
+      title: "新增分类"
+    show:
+      title: "分类详情"
+      confirm: "你确认删除这个类别吗?"
+      empty: "没有记录"
+    was_created: "添加成功"
+    was_deleted: "删除成功"
+    was_updated: "修改成功"
+

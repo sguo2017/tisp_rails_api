@@ -1,32 +1,55 @@
-<%= form_for(goods_catalog) do |f| %>
-  <% if goods_catalog.errors.any? %>
-    <div id="error_explanation">
-      <h2><%= pluralize(goods_catalog.errors.count, "error") %> prohibited this goods_catalog from being saved:</h2>
+<%= form_for @goods_catalog, :html => { :class => "form-horizontal goods_catalog" } do |f| %>
 
-      <ul>
-      <% goods_catalog.errors.full_messages.each do |message| %>
-        <li><%= message %></li>
-      <% end %>
-      </ul>
+  <% if @goods_catalog.errors.any? %>
+    <div id="error_expl" class="panel panel-danger">
+      <div class="panel-heading">
+        <h3 class="panel-title"><%= pluralize(@goods_catalog.errors.count, "error") %> prohibited this goods_catalog from being saved:</h3>
+      </div>
+      <div class="panel-body">
+        <ul>
+        <% @goods_catalog.errors.full_messages.each do |msg| %>
+          <li><%= msg %></li>
+        <% end %>
+        </ul>
+      </div>
     </div>
   <% end %>
 
-  <div class="field">
-    <%= f.label :name %>
-    <%= f.text_field :name %>
+  <div class="form-group">
+    <%= f.label :name, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :name, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:name) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :image, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :image, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:image) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :level, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :level, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:level) %>
+  </div>
+  <div class="form-group">
+    <%= f.label :ancestry, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= f.text_field :ancestry, :class => 'form-control' %>
+    </div>
+    <%=f.error_span(:ancestry) %>
   </div>
 
-  <div class="field">
-    <%= f.label :image %>
-    <%= f.text_field :image %>
+  <div class="form-group">
+    <div class="col-lg-offset-2 col-lg-10">
+      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
+                goods_catalogs_path, :class => 'btn btn-default' %>
+    </div>
   </div>
 
-  <div class="field">
-    <%= f.label :level %>
-    <%= f.number_field :level %>
-  </div>
-
-  <div class="actions">
-    <%= f.submit %>
-  </div>
 <% end %>
