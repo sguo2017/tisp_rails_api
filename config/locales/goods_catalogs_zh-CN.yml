@@ -10,7 +10,7 @@ zh-CN:
         level: "层级"
         ancestry: "祖先"
         parent: "父节点"
-        parent_id: "父节点id"
+        parent_id: "父节点"
         children: "子节点"
         created_at: "创建时间"
         actions: "操作"

@@ -30,18 +30,28 @@
     <%=f.error_span(:image) %>
   </div>
   <div class="form-group">
-    <%= f.label :level, :class => 'control-label col-lg-2' %>
+    <%= f.label :parent_id, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= f.text_field :level, :class => 'form-control' %>
+	  <%
+	    if @goods_catalog.parent
+		  parent = @goods_catalog.parent
+		  parent = [parent.name,parent.id,{ 'data-level' =>parent.level }]
+		else
+		  parent = ['无',nil,{'data-level' =>-1}]
+		end
+	  %>
+	  <%= select_tag "goods_catalog[parent_id]", 
+	  options_for_select([['无',nil,{'data-level' =>-1}]]+GoodsCatalog.all.map{ |c| [c.name,c.id, { 'data-level' =>c.level }]}, selected=parent), 
+	  {:class =>"form-control"} %>
     </div>
-    <%=f.error_span(:level) %>
+    <%=f.error_span(:parent_id) %>
   </div>
   <div class="form-group">
-    <%= f.label :ancestry, :class => 'control-label col-lg-2' %>
+    <%= f.label :level, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= f.text_field :ancestry, :class => 'form-control' %>
+      <%= f.text_field :level, :class => 'form-control', :readonly => 'readonly' %>
     </div>
-    <%=f.error_span(:ancestry) %>
+    <%=f.error_span(:level) %>
   </div>
 
   <div class="form-group">

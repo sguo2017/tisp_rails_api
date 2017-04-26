@@ -39,6 +39,10 @@ Rails.application.routes.draw do
     namespace :chats do
       resources :chats, only: [:index, :create, :show, :update, :destroy]
     end
+	namespace :goods_catalogs do
+      resources :goods_catalogs, only: [:index, :create, :show, :update, :destroy]
+	  match '/json' ,to: 'goods_catalogs#catalogs_json', via: [:get,:post]
+    end
   end
    resources :admin_users
    resources :goods_searches

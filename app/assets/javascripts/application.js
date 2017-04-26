@@ -17,3 +17,4 @@
 //= require_tree .
 //= require bootstrap-datepicker.min
 //= require tisp-global
+//= require jsoneditor.min

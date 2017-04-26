@@ -69,6 +69,6 @@ class GoodsCatalogsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def goods_catalog_params
-      params.require(:goods_catalog).permit(:name, :image, :level)
+      params.require(:goods_catalog).permit(:name, :image, :level, :parent_id)
     end
 end
