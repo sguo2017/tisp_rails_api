@@ -3,7 +3,6 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).on 'turbolinks:load', ->
-  # 获取json
   $.post '/api/goods_catalogs/json', (data) ->
     container = undefined
     editor = undefined
@@ -11,10 +10,13 @@ $(document).on 'turbolinks:load', ->
     container = document.getElementById('jsoneditor')
     if container
       options = mode: 'view'
+      if $('#jsoneditor').length > 0
+        $('#jsoneditor').empty()
       editor = new JSONEditor(container, options)
       editor.set data[0]
       editor.setName '所有分类'
     return
+  return
 	
   # 捕捉下拉框事件
   $('#goods_catalog_parent_id').change ->
