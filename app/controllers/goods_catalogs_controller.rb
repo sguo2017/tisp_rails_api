@@ -1,5 +1,6 @@
 class GoodsCatalogsController < ApplicationController
   before_action :set_goods_catalog, only: [:show, :edit, :update, :destroy]
+  before_action :set_root_id
 
   # GET /goods_catalogs
   # GET /goods_catalogs.json
@@ -54,11 +55,17 @@ class GoodsCatalogsController < ApplicationController
   # DELETE /goods_catalogs/1
   # DELETE /goods_catalogs/1.json
   def destroy
-    @goods_catalog.destroy
-    respond_to do |format|
-      format.html { redirect_to goods_catalogs_url, notice: '成功删除商品分类' }
-      format.json { head :no_content }
-    end
+    if @goods_catalog.id == @root_id
+	  respond_to do |format|
+        format.html { redirect_to goods_catalogs_url, notice: '根节点不可删除！' }
+      end
+	else
+      @goods_catalog.destroy
+      respond_to do |format|
+        format.html { redirect_to goods_catalogs_url, notice: '成功删除商品分类' }
+        format.json { head :no_content }
+      end
+	end
   end
 
   private
@@ -71,4 +78,8 @@ class GoodsCatalogsController < ApplicationController
     def goods_catalog_params
       params.require(:goods_catalog).permit(:name, :image, :level, :parent_id)
     end
+	
+	def set_root_id
+	  @root_id = 1
+	end
 end

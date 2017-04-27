@@ -39,10 +39,15 @@
 		else
 		  parent = ['无',nil,{'data-level' =>-1}]
 		end
+		if @goods_catalog.id==1
+		  html_options={:class =>"form-control", :disabled =>"disabled"}
+		else 
+		  html_options={:class =>"form-control"}
+		end
 	  %>
 	  <%= select_tag "goods_catalog[parent_id]", 
 	  options_for_select([['无',nil,{'data-level' =>-1}]]+GoodsCatalog.all.map{ |c| [c.name,c.id, { 'data-level' =>c.level }]}, selected=parent), 
-	  {:class =>"form-control"} %>
+	  html_options %>
     </div>
     <%=f.error_span(:parent_id) %>
   </div>
