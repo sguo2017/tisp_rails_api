@@ -24,6 +24,7 @@
 class User < ApplicationRecord
   has_many :goods
   has_many :sys_msgs
+  has_many :sms_sends
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   before_save :ensure_authentication_token

@@ -4,7 +4,7 @@ class SmsSendsController < ApplicationController
   # GET /sms_sends
   # GET /sms_sends.json
   def index
-    @sms_sends = SmsSend.order("created_at DESC").page(params[:page]).per(5)
+    @sms_sends = SmsSend.all
   end
 
   # GET /sms_sends/1
@@ -69,6 +69,6 @@ class SmsSendsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sms_send_params
-      params.require(:sms_send).permit(:recv_num, :send_content, :state, :sms_type)
+      params.require(:sms_send).permit(:recv_num, :send_content, :state, :sms_type, :user_id)
     end
 end

@@ -8,6 +8,7 @@ zh-CN:
         send_content: "短信内容"
         state: "状态"
         sms_type: "短信类型"
+        user_id: "用户"
         created_at: "创建时间"
   helpers:
     submit:

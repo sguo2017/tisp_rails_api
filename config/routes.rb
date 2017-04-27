@@ -29,6 +29,7 @@ Rails.application.routes.draw do
     end
     namespace :sys do
       resources :sys_msgs, only: [:index, :create, :show, :update, :destroy]
+      resources :sms_sends, only: [:index, :create, :show, :update, :destroy]
     end
     namespace :session do
       resources :users, only: [:edit, :show, :update, :create]
