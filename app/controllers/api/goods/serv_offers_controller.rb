@@ -11,7 +11,13 @@ class Api::Goods::ServOffersController < ApplicationController
   def index
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
-    @serv_offers = Good.order("created_at DESC").page(params[:page]).per(5)
+    @serv_offers 
+    user_id = params[:user_id].presence
+    if user_id.nil?
+        @serv_offers = Good.order("created_at DESC").page(params[:page]).per(5)
+    else
+        @serv_offers = Good.where("user_id = ?", user_id).order("created_at DESC").page(params[:page]).per(5)
+    end
     @offers = []
     @serv_offers.each do |offer|
          s = offer.attributes.clone
