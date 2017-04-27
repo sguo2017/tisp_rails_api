@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :sms_sends
   resources :goods_catalogs
   resources :favorites
   resources :favorites_searches
@@ -13,7 +14,11 @@ Rails.application.routes.draw do
   resources :chats
   resources :order_items
   resources :orders
-  
+  resources :admin_users
+  resources :goods_searches
+  resources :sys_msgs_searches
+  resources :favorites_searches
+ 
   #devise_for :users
 
   devise_for :users, controllers:{registrations:'users/registrations', sessions:'users/sessions',passwords:'users/passwords'}
@@ -44,10 +49,6 @@ Rails.application.routes.draw do
 	  match '/json' ,to: 'goods_catalogs#catalogs_json', via: [:get,:post]
     end
   end
-   resources :admin_users
-   resources :goods_searches
-   resources :sys_msgs_searches
-   resources :favorites_searches
   
   root "goods#index"
 end

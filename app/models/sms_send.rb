@@ -1,0 +1,2 @@
+class SmsSend < ApplicationRecord
+end
