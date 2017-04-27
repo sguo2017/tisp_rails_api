@@ -14,6 +14,8 @@
   <dd><%= @goods_catalog.parent.name+"(id=#{@goods_catalog.parent_id})" if @goods_catalog.parent %></dd>
   <dt><strong><%= model_class.human_attribute_name(:ancestry) %>:</strong></dt>
   <dd><%= @goods_catalog.ancestry %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:goods_count) %>:</strong></dt>
+  <dd><%= @goods_catalog.goods.size %></dd>
 </dl>
 
 <%= link_to t('.back', :default => t("helpers.links.back")),

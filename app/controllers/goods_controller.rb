@@ -9,6 +9,8 @@ class GoodsController < ApplicationController
   before_action :set_good, only: [:show, :edit, :update, :destroy]
   
   before_action :set_goods_search
+  
+  before_action :set_list_for_select, only: [:new, :edit]
 
   #skip_before_filter :verify_authenticity_token
 
@@ -44,17 +46,23 @@ class GoodsController < ApplicationController
   # GET /goods/new
   def new
     @good = Good.new
+	@selected=['无', nil]
   end
 
   # GET /goods/1/edit
   def edit
+    if @good.goods_catalog.nil?
+      @selected=['无', nil]
+	else
+	  @selected=[@good.goods_catalog.name, @good.goods_catalog.id]
+	end
   end
 
   # POST /goods
   # POST /goods.json
   def create
     @good = Good.new(good_params)
-    @good.user_id = current_user.id    
+    @good.user_id = current_user.id 
 
     respond_to do |format|
       if @good.save
@@ -99,12 +107,16 @@ class GoodsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def good_params
-      params.require(:good).permit(:serv_title, :serv_detail, :serv_imges, :serv_catagory, :user_id)
+      params.require(:good).permit(:serv_title, :serv_detail, :serv_imges, :serv_catagory, :user_id, :goods_catalog_id)
     end
 	
 	def set_goods_search
 	   if !@goods_search
 	      @goods_search=GoodsSearch.new
 	   end
+	end
+	
+	def set_list_for_select
+	  @select_list = [['无', nil]]+GoodsCatalog.all.map{ |c| [c.name,c.id]}
 	end
 end

@@ -22,7 +22,7 @@
 #
 
 class User < ApplicationRecord
-  has_many :serv_offers
+  has_many :goods
   has_many :sys_msgs
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable

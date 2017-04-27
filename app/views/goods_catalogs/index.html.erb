@@ -12,6 +12,7 @@
 		  <th><%= model_class.human_attribute_name(:level) %></th>
 		  <th><%= model_class.human_attribute_name(:parent_id) %></th>
 		  <th><%= model_class.human_attribute_name(:ancestry) %></th>
+		  <th><%= model_class.human_attribute_name(:goods_count) %></th>
 		  <th><%= model_class.human_attribute_name(:created_at) %></th>
 		  <th><%=t '.actions', :default => t("helpers.actions") %></th>
 		</tr>
@@ -21,10 +22,11 @@
 		  <tr>
 			<td><%= link_to goods_catalog.id, goods_catalog_path(goods_catalog) %></td>
 			<td><%= goods_catalog.name %></td>
-			<td><div class="image-warpper"><%= image_tag(goods_catalog.image, :class => "catalog-image") if !goods_catalog.image.empty? %></div></td>
+			<td><div class="image-warpper"><%= image_tag(goods_catalog.image, :class => "catalog-image") if !goods_catalog.image.blank? %></div></td>
 			<td><%= goods_catalog.level %></td>
 			<td><%= goods_catalog.parent.name if goods_catalog.parent %></td>
 			<td><%= goods_catalog.ancestry %></td>
+			<td><%= goods_catalog.goods.size%></td>
 			<td><%=l goods_catalog.created_at %></td>
 			<td>
 			  <%= link_to t('.show', :default => t("helpers.links.show")),

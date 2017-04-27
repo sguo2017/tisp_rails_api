@@ -15,4 +15,5 @@
 
 class Good < ApplicationRecord
   belongs_to :user
+  belongs_to :goods_catalog, counter_cache: true
 end
