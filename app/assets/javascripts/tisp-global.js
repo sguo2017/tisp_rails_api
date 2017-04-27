@@ -22,10 +22,16 @@ function showDatePicker(){
 		language: 'cn'
     });
 }
-function updateUserWithAvatar(){
-	var input_file = document.getElementById('user_avatar_file');
+function submitFormWithImage(form,fileFieldId,hiddenFieldId){
+	var input_file = document.getElementById(fileFieldId);
+	if(document.getElementById(form)){
+		var formObj=$('#'+form)
+	}
+	else{
+		var formObj=$('form.'+form)
+	}
 	if(input_file.files.length!=1){
-		$('#edit_user').submit();
+		formObj.submit();
 		return;
 	}else{
 		fetch("/api/session/users/avatar/server_url")
@@ -46,9 +52,9 @@ function updateUserWithAvatar(){
 		   .then((responseData) => {
 			  console.log('responseData', responseData);
 			  img_url=JSON.parse(responseData)['image'];
-			  $('#user_avatar').val(img_url);
-			  $('#user_avatar_file').removeAttr('name');
-			  $('#edit_user').submit();
+			  $('#'+hiddenFieldId).val(img_url);
+			  $('#'+fileFieldId).removeAttr('name');
+			  formObj.submit();
 		   })
 		   .catch((error) => { console.error('error', error) });
 		};

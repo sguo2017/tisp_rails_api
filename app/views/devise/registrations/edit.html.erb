@@ -31,7 +31,7 @@
         <%= f.hidden_field :avatar %>
         <%=f.error_span(:image) %>
       </div>
-      <%= f.button t('.update', default: 'Update'), class: 'btn btn-primary' ,onclick: 'updateUserWithAvatar()' ,type: 'button' %>
+      <%= f.button t('.update', default: 'Update'), class: 'btn btn-primary' ,onclick: 'submitFormWithImage("edit_user","user_avatar_file","user_avatar")' ,type: 'button' %>
     <% end %>
   </div>
 </div>

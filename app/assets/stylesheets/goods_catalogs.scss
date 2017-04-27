@@ -1,3 +1,24 @@
 // Place all the styles related to the goods_catalogs controller here.
 // They will automatically be included in application.css.
 // You can use Sass (SCSS) here: http://sass-lang.com/
+
+td{
+vertical-align: middle !important;
+text-align: center;
+}
+th{
+text-align: center !important;
+}
+.catalog-image{
+  max-width:100px !important;
+  min-height:100px !important;
+}
+.image-warpper{
+  width:100px;
+  height:100px;
+  overflow:hidden;
+  margin:0 auto;
+}
+dd{
+margin:10px auto 10px;
+}

@@ -16,7 +16,6 @@ $(document).on 'turbolinks:load', ->
       editor.set data[0]
       editor.setName '所有分类'
     return
-  return
 	
   # 捕捉下拉框事件
   $('#goods_catalog_parent_id').change ->

@@ -25,7 +25,9 @@
   <div class="form-group">
     <%= f.label :image, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= f.text_field :image, :class => 'form-control' %>
+      <%= f.file_field :image_file, :class => 'form-control' %>
+      <%= f.hidden_field :image %>
+      <%=f.error_span(:image) %>
     </div>
     <%=f.error_span(:image) %>
   </div>
@@ -61,7 +63,7 @@
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
-      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= f.button nil, class: 'btn btn-primary' ,onclick: 'submitFormWithImage("goods_catalog","goods_catalog_image_file","goods_catalog_image")' ,type: 'button' %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 goods_catalogs_path, :class => 'btn btn-default' %>
     </div>
