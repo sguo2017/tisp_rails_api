@@ -1,6 +1,7 @@
 class GoodsCatalogsController < ApplicationController
   before_action :set_goods_catalog, only: [:show, :edit, :update, :destroy]
   before_action :set_root_id
+  load_and_authorize_resource
 
   # GET /goods_catalogs
   # GET /goods_catalogs.json

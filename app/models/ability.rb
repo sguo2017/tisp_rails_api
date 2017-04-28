@@ -3,34 +3,30 @@ class Ability
 
   def initialize(user)
     user ||= User.new # guest user (not logged in)
+	#超级管理员,无限制
+	if user.admin and user.id < 10
+	   can :manage, :all
+	end
+	#普通管理员，只能查看所有东西
     if user.admin?
-      can :manage, :all
+      can :read, :all
     end
-    # Define abilities for the passed in user here. For example:
-    #
-    #   user ||= User.new # guest user (not logged in)
-    #   if user.admin?
-    #     can :manage, :all
-    #   else
-    #     can :read, :all
-    #   end
-    #
-    # The first argument to `can` is the action you are giving the user
-    # permission to do.
-    # If you pass :manage it will apply to every action. Other common actions
-    # here are :read, :create, :update and :destroy.
-    #
-    # The second argument is the resource the user can perform the action on.
-    # If you pass :all it will apply to every resource. Otherwise pass a Ruby
-    # class of the resource.
-    #
-    # The third argument is an optional hash of conditions to further filter the
-    # objects.
-    # For example, here the user can only update published articles.
-    #
-    #   can :update, Article, :published => true
-    #
-    # See the wiki for details:
-    # https://github.com/CanCanCommunity/cancancan/wiki/Defining-Abilities
+	#限制用户添加商品的数量
+	if avaliable_goods_to_add(user) < 0
+	  cannot :create, :Good
+	end
+    
   end
+  
+  def avaliable_goods_to_add(user)
+    has_added = user.goods.where("created_at >= ?", Time.now.beginning_of_day).size
+	limit = 0
+    limit = 10 if user.level == 1
+	limit = 20 if user.level == 2
+	limit = 30 if user.level == 3
+	limit = has_added + 1 if user.admin #管理员无限制
+	avaliable=limit - has_added
+	return avaliable
+  end
+  
 end

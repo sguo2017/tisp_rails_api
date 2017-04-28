@@ -1,7 +1,7 @@
 class AdminUsersController < ApplicationController
+
   before_action :set_user, only: [:show, :edit, :update, :destroy]
-  
-  before_action :authorize_user
+  load_and_authorize_resource :class => User
 
   # GET /users
   # GET /users.json
@@ -69,12 +69,7 @@ class AdminUsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :name, :password, :admin, :avatar)
+      params.require(:user).permit(:email, :name, :password,:password_confirmation, :admin, :avatar, :level)
     end
 	
-	def authorize_user
-	  if !can? :manage,@user
-	    redirect_to goods_path,notice: '你无权访问该页面'
-	  end
-	end
 end

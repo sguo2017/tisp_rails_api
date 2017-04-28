@@ -11,6 +11,8 @@ class GoodsController < ApplicationController
   before_action :set_goods_search
   
   before_action :set_list_for_select, only: [:new, :edit]
+  
+  load_and_authorize_resource :only => [:new, :create]
 
   #skip_before_filter :verify_authenticity_token
 

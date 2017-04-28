@@ -43,9 +43,9 @@ class Api::Session::UsersController < ApplicationController
   
   def avatar_server_url
     respond_to do |format|
-	    format.json {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/"}}
-		format.js {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/"}}
-		format.html {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/"}}
+	    format.json {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/servlet/imageUploadServlet"}}
+		format.js {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/servlet/imageUploadServlet"}}
+		format.html {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/servlet/imageUploadServlet"}}
 	end
   end
 

@@ -1,0 +1,21 @@
+zh-CN:
+  unauthorized:
+    manage:
+      all: "您没有权限查看该页面！"
+    read:
+      user: "您没有权限查看用户列表！"
+      goods_catalog: "您没有权限查看商品分类！"
+      sms_send: "您没有权限查看短信列表！"
+    create:
+      user: "您没有权限创建用户！"
+      goods_catalog: "您没有权限创建商品分类！"
+      sms_send: "您没有权限发送短信！"
+      good: "您今天创建的商品数已达上限！"
+    update:
+      user: "您没有权限更新用户！"
+      goods_catalog: "您没有权限更新商品分类！"
+      sms_send: "您没有权限修改短信！"
+    destroy:
+      user: "您没有权限删除用户！"
+      goods_catalog: "您没有权限删除商品分类！"
+      sms_send: "您没有权限删除短信！"

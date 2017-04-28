@@ -1,5 +1,6 @@
 class SmsSendsController < ApplicationController
   before_action :set_sms_send, only: [:show, :edit, :update, :destroy]
+  load_and_authorize_resource
 
   # GET /sms_sends
   # GET /sms_sends.json
