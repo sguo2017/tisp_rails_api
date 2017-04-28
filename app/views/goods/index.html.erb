@@ -16,13 +16,13 @@
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
-  <tbody style="word-break:break-all;">
+  <tbody>
     <% @goods.each do |good| %>
       <tr>
         <td><%= link_to good.id, good_path(good) %></td>
         <td><%= good.serv_title %></td>
         <td><%= good.serv_detail %></td>
-        <td style='width:18% !important;'><image class="media-object" src="<%= good.serv_imges %>"/></td>
+        <td><image class="media-object" src="<%= good.serv_imges %>"/></td>
         <td><%= good.serv_catagory %></td>
         <td><%= good.user_id %></td>
         <td><%=l good.created_at %></td>
@@ -42,6 +42,7 @@
   </tbody>
 </table>
 <%= paginate @goods %>
+<br/>
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_good_path,
             :class => 'btn btn-primary' %>
