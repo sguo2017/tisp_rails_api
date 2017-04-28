@@ -23,7 +23,7 @@
         <td><%= sms_send.send_content %></td>
         <td><%= sms_send.state %></td>
         <td><%= sms_send.sms_type %></td>
-        <td><%= sms_send.user.name %></td>
+        <td><%= sms_send.user.name if sms_send.user %></td>
         <td><%=l sms_send.created_at %></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
@@ -42,7 +42,7 @@
 </table>
 
 <%= paginate @sms_sends %>
-
+<br/>
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_sms_send_path,
             :class => 'btn btn-primary' %>

@@ -19,7 +19,7 @@
         <td><%= user.email %></td>
         <td><%= user.name %></td>
         <td><%= user.admin %></td>
-        <td><%= user.avatar %></td>
+        <td><% if !user.avatar.blank? %><div class = 'avatars-warpper'><%= image_tag(user.avatar, :class => 'users-avatar') %></div><% end %></td>
         <td>
 		  <%= link_to t('.show', :default => t("helpers.links.show")),
                       admin_user_path(user), :class => 'btn btn-default btn-xs' %>
@@ -36,7 +36,7 @@
   </tbody>
 </table>
 <%= paginate @users %>
-<br>
+<br/>
 
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_admin_user_path,

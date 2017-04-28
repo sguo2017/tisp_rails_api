@@ -10,6 +10,8 @@
   <dd><%= @target_user.name %></dd>
   <dt><strong><%= model_class.human_attribute_name(:admin) %>:</strong></dt>
   <dd><%= @target_user.admin %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:avatar) %>:</strong></dt>
+  <dd><%= image_tag(@target_user.avatar) if !@target_user.avatar.blank? %></dd>
   <dt><strong><%= model_class.human_attribute_name(:created_at) %>:</strong></dt>
   <dd><%= @target_user.created_at %></dd>
   <dt><strong><%= model_class.human_attribute_name(:updated_at) %>:</strong></dt>

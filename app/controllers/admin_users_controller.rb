@@ -1,5 +1,7 @@
 class AdminUsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy]
+  
+  before_action :authorize_user
 
   # GET /users
   # GET /users.json
@@ -69,4 +71,10 @@ class AdminUsersController < ApplicationController
     def user_params
       params.require(:user).permit(:email, :name, :password, :admin, :avatar)
     end
+	
+	def authorize_user
+	  if !can? :manage,@user
+	    redirect_to goods_path,notice: '你无权访问该页面'
+	  end
+	end
 end
