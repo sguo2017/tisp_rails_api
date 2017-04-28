@@ -4,7 +4,7 @@ class SmsSendsController < ApplicationController
   # GET /sms_sends
   # GET /sms_sends.json
   def index
-    @sms_sends = SmsSend.all
+    @sms_sends = SmsSend.page(params[:page]).per(10)
   end
 
   # GET /sms_sends/1
