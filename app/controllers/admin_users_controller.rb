@@ -44,7 +44,7 @@ class AdminUsersController < ApplicationController
   # PATCH/PUT /users/1.json
   def update
     respond_to do |format|
-      if @target_user.update(user_params)
+      if update_user(user_params)
         format.html { redirect_to admin_user_path(@target_user), notice: '用户更新成功' }
       else
         format.html { render 'users_manager/edit' }
@@ -71,5 +71,14 @@ class AdminUsersController < ApplicationController
     def user_params
       params.require(:user).permit(:email, :name, :password,:password_confirmation, :admin, :avatar, :level)
     end
+	
+	def update_user(params)
+	    if params[:password].blank?
+		   params.delete(:password)
+		   params.delete(:password_confirmation)
+		end
+		return  @target_user.update(params)
+	  
+	end
 	
 end

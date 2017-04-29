@@ -24,11 +24,13 @@ function showDatePicker(){
 }
 function submitFormWithImage(form,fileFieldId,hiddenFieldId){
 	var input_file = document.getElementById(fileFieldId);
-	if(document.getElementById(form)){
-		var formObj=$('#'+form)
+	if($("#"+form).length > 0){
+		var formObj=$('#'+form);
 	}
-	else{
-		var formObj=$('form.'+form)
+	else if($("."+form).length > 0){
+		var formObj=$('form.'+form);
+	}else{
+		var formObj=$("form");
 	}
 	if(input_file.files.length!=1){
 		formObj.submit();

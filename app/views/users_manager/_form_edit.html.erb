@@ -34,7 +34,7 @@
    <div class="form-group">
     <%= f.label :password, :class => 'control-label col-lg-2'  %>
 	  <div class="col-lg-10">
-        <%= f.password_field :password, :class => 'form-control'  %>
+        <%= f.password_field :password, :class => 'form-control', :placeholder => "不想更改的话不需要填写" %>
 	  </div>
 	<%=f.error_span(:password) %>
   </div>
@@ -42,30 +42,31 @@
   <div class="form-group">
     <%= f.label :password_confirmation, :class => 'control-label col-lg-2'  %>
 	  <div class="col-lg-10">
-        <%= f.password_field :password_confirmation, :class => 'form-control'  %>
+        <%= f.password_field :password_confirmation, :class => 'form-control',:placeholder => "不想更改的话不需要填写" %>
 	  </div>
 	<%=f.error_span(:password) %>
   </div>
 
    <div class="form-group">
-    <%= f.label :admin, :class => 'control-label col-lg-2'  %>
-	  <div class="col-lg-10">
-        <%= f.check_box :admin %>
-	  </div>
-	<%=f.error_span(:admin) %>
+     <%= f.label :admin, :class => 'control-label col-lg-2'  %>
+	   <div class="col-lg-10">
+         <%= f.check_box :admin %>
+	   </div>
+	 <%=f.error_span(:admin) %>
   </div>
 
    <div class="form-group">
-    <%= f.label :avatar, :class => 'control-label col-lg-2'  %>
-	  <div class="col-lg-10">
-        <%= f.text_field :avatar, :class => 'form-control'  %>
-	  </div>
+     <%= f.label :avatar, :class => 'control-label col-lg-2'  %>
+	 <div class="col-lg-10">
+       <%= f.file_field :avatar_file, :class => 'form-control' %>
+	   <%= f.hidden_field :avatar %>
+	</div>
 	<%=f.error_span(:avatar) %>
   </div>
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
-      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= f.button nil, class: 'btn btn-primary' ,onclick: 'submitFormWithImage("user","user_avatar_file","user_avatar")' ,type: 'button' %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 admin_users_path, :class => 'btn btn-default' %>
     </div>
