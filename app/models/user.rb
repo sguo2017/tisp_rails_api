@@ -51,6 +51,33 @@ class User < ApplicationRecord
       break token unless User.where(authentication_token: token).first
     end
   end
-
-
+  
+  def add_lock
+	  if self.lock.blank? and self.lock < 0
+	     self.lock = 0
+	  else
+	     self.lock += 1 if !self.admin
+	  end
+	  self.save
+  end
+  
+  def lock_it
+      self.lock = Const::PASSWORD_ERROR_LIMIT
+	  self.save
+  end
+  
+  def unlock
+      self.lock = 0
+	  self.save
+  end
+  
+  def has_locked?
+    if !self.admin and self.updated_at >= Time.now.beginning_of_day and self.lock >= Const::PASSWORD_ERROR_LIMIT
+	  return true
+	else
+	  return false
+	end
+  end
+  
+  
 end

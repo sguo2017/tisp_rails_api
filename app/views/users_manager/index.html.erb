@@ -9,6 +9,8 @@
       <th><%= model_class.human_attribute_name(:email) %></th>
       <th><%= model_class.human_attribute_name(:name) %></th>
       <th><%= model_class.human_attribute_name(:admin) %></th>
+	  <th><%= model_class.human_attribute_name(:level) %></th>
+	  <th><%= model_class.human_attribute_name(:lock) %></th>
       <th><%= model_class.human_attribute_name(:avatar) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -19,17 +21,24 @@
         <td><%= user.email %></td>
         <td><%= user.name %></td>
         <td><%= user.admin %></td>
+		<td><%= user.level %></td>
+		<td><%= user.has_locked? %></td>
         <td><% if !user.avatar.blank? %><div class = 'avatars-warpper'><%= image_tag(user.avatar, :class => 'users-avatar') %></div><% end %></td>
         <td>
 		  <%= link_to t('.show', :default => t("helpers.links.show")),
                       admin_user_path(user), :class => 'btn btn-default btn-xs' %>
-           <%= link_to t('.edit', :default => t("helpers.links.edit")),
+          <%= link_to t('.edit', :default => t("helpers.links.edit")),
                       edit_admin_user_path(user), :class => 'btn btn-default btn-xs' %>
           <%= link_to t('.destroy', :default => t("helpers.links.destroy")),
                       admin_user_path(user),
                       :method => :delete,
                       :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                       :class => 'btn btn-xs btn-danger' %>
+		  <%= link_to t('.unlock', :default => t("helpers.links.unlock")),
+                      "/admin_users/lock_proc/#{user.id}", :class => 'btn btn-default btn-xs' if user.has_locked? %>
+					  
+		  <%= link_to t('.lock', :default => t("helpers.links.lock")),
+                      "/admin_users/lock_proc/#{user.id}", :class => 'btn btn-default btn-xs' if !user.has_locked? %>
 		</td>
       </tr>
     <% end %>

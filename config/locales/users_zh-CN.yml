@@ -9,6 +9,8 @@ zh-CN:
         email: "邮箱"
         name: "姓名"
         admin: "管理员"
+        level: "等级"
+        lock: "锁定"
         avatar: "头像"
         password: "密码"
         password_confirmation: "确认密码"
@@ -23,6 +25,8 @@ zh-CN:
       new: "新增"
       back: "返回"
       cancel: "取消"
+      lock: "锁定"
+      unlock: "解锁"
     actions: "操作"
     submit:
       user:

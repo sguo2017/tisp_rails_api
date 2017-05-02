@@ -1,7 +1,7 @@
 Rails.application.routes.draw do
 
   resources :sms_sends
-  resources :goods_catalogs
+  
   resources :favorites
   resources :favorites_searches
   
@@ -10,14 +10,14 @@ Rails.application.routes.draw do
   
   resources :goods
   resources :goods_searches
+  resources :goods_catalogs
   
   resources :chats
   resources :order_items
   resources :orders
+  
   resources :admin_users
-  resources :goods_searches
-  resources :sys_msgs_searches
-  resources :favorites_searches
+  match '/admin_users/lock_proc/:id' ,to: 'admin_users#lock_proc', via: [:get,:post]
  
   #devise_for :users
 

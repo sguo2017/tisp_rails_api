@@ -1,6 +1,6 @@
 class AdminUsersController < ApplicationController
 
-  before_action :set_user, only: [:show, :edit, :update, :destroy]
+  before_action :set_user, only: [:show, :edit, :update, :destroy, :lock_proc]
   load_and_authorize_resource :class => User
 
   # GET /users
@@ -19,11 +19,13 @@ class AdminUsersController < ApplicationController
   # GET /users/new
   def new
     @target_user = User.new
+	@level_list = Const::USER_LEVELS
 	render 'users_manager/new'
   end
 
   # GET /users/1/edit
   def edit
+    @level_list = Const::USER_LEVELS
     render 'users_manager/edit'
   end
 
@@ -59,6 +61,16 @@ class AdminUsersController < ApplicationController
     respond_to do |format|
       format.html { redirect_to admin_users_url, notice: '用户删除成功' }
     end
+  end
+  
+  #GET/POST 
+  def lock_proc
+    if @target_user.has_locked?
+	  @target_user.unlock
+	else
+	  @target_user.lock_it
+	end
+	redirect_to admin_users_path
   end
 
   private

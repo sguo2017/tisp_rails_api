@@ -3,9 +3,21 @@ class Users::SessionsController < Devise::SessionsController
   layout '_user'
   
   def create
-	super {
-	  config_session(self.resource)
-	}
+	user = User.find_for_database_authentication(:email => params[:user][:email])
+	if user.blank?
+	  redirect_to new_user_session_path, :notice => "用户名不存在！"
+	elsif user.has_locked?
+	  redirect_to new_user_session_path, :notice => "您的账号已被锁定，请明天再试！"
+	elsif !user.valid_password?(params[:user][:password])
+	  user.add_lock if !user.admin
+	  redirect_to new_user_session_path, :notice => "密码错误！您还有#{Const::PASSWORD_ERROR_LIMIT-user.lock}次机会！" if !user.admin
+	  redirect_to new_user_session_path, :notice => "密码错误！" if user.admin
+	else
+	  user.unlock
+      sign_in("user", user)
+	  config_session(user)
+      redirect_to root_path
+	end
   end
 
   def destroy
