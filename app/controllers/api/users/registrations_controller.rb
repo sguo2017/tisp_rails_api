@@ -1,17 +1,12 @@
-class Api::Session::UsersController < ApplicationController
+class Api::Users::RegistrationsController < ApplicationController
 
   respond_to :json
 
-  before_filter :authenticate_user_from_token!,only: [:show,:edit,:update]
+  before_filter :authenticate_user_from_token!,only: [:update]
 
-  before_action :set_user, only: [:show,:edit,:update]
-
-  # GET /user/1
-  # GET /user/1.json
-  def show
-  end
+  before_action :set_user, only: [:update]
   
-  # POST /user    
+  # POST /api/users/registrations/  
   # 注册
   def create
     @user = User.new(user_params)
@@ -24,13 +19,8 @@ class Api::Session::UsersController < ApplicationController
     end
   end
 
-  # GET /user/1/edit
-  def edit
-  end
-
-  # PATCH/PUT /user/1
-  # PATCH/PUT /user/1.json
-  # 更新头像
+  # PATCH/PUT /api/users/registrations/:id/ 
+  # 更新
   def update
     respond_to do |format|
       if @user.update(user_params)
@@ -41,11 +31,12 @@ class Api::Session::UsersController < ApplicationController
     end
   end
   
+  #POST/GET /api/users/avatar_server_url
   def avatar_server_url
     respond_to do |format|
-	    format.json {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/servlet/imageUploadServlet"}}
-		format.js {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/servlet/imageUploadServlet"}}
-		format.html {render json: {"server_url":"http://123.56.157.233:9090/FastDFSWeb/servlet/imageUploadServlet"}}
+	    format.json {render json: {"server_url":Const::IMAGE_UPLOAD_SERVLET_ADDRESS}}
+		format.js {render json:  {"server_url":Const::IMAGE_UPLOAD_SERVLET_ADDRESS}}
+		format.html {render json:  {"server_url":Const::IMAGE_UPLOAD_SERVLET_ADDRESS}}
 	end
   end
 

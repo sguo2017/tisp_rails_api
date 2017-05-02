@@ -4,7 +4,7 @@ class Ability
   def initialize(user)
     user ||= User.new # guest user (not logged in)
 	#超级管理员,无限制
-	if user.admin and user.id < 10
+	if user.admin and Const::SUPER_ADMIN_ID.include?(user.id)
 	   can :manage, :all
 	end
 	#普通管理员，只能查看所有东西
