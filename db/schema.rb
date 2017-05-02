@@ -49,6 +49,12 @@ ActiveRecord::Schema.define(version: 20170502015053) do
     t.integer  "user_id"
     t.string   "catalog"
     t.integer  "goods_catalog_id"
+    t.string   "district"
+    t.string   "city"
+    t.string   "province"
+    t.string   "country"
+    t.string   "latitude"
+    t.string   "longitude"
   end
 
   create_table "goods_catalogs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

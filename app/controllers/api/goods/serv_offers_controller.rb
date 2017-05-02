@@ -140,6 +140,6 @@ class Api::Goods::ServOffersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def serv_offer_params
-      params.require(:serv_offer).permit(:serv_title, :serv_detail, :serv_imges, :serv_catagory, :user_id)
+      params.require(:serv_offer).permit(:serv_title, :serv_detail, :serv_imges, :serv_catagory, :user_id, :district, :city, :province, :country, :latitude, :longitude)
     end
 end
