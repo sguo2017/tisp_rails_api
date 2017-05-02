@@ -36,7 +36,7 @@ function submitFormWithImage(form,fileFieldId,hiddenFieldId){
 		formObj.submit();
 		return;
 	}else{
-		fetch("/api/session/users/avatar/server_url")
+		fetch("/api/users/image_server_url")
 		.then(response => response.text())
 		.then(text=>JSON.parse(text)['server_url'])
 		.then(server_url =>uploadAndSubmit(server_url))

@@ -31,8 +31,8 @@ class Api::Users::RegistrationsController < ApplicationController
     end
   end
   
-  #POST/GET /api/users/avatar_server_url
-  def avatar_server_url
+  #POST/GET /api/users/image_server_url
+  def image_server_url
     respond_to do |format|
 	    format.json {render json: {"server_url":Const::IMAGE_UPLOAD_SERVLET_ADDRESS}}
 		format.js {render json:  {"server_url":Const::IMAGE_UPLOAD_SERVLET_ADDRESS}}

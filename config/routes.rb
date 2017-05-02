@@ -34,7 +34,7 @@ Rails.application.routes.draw do
     namespace :users do
       resources :registrations, only: [:update, :create]
 	  resources :sessions, only: [:create, :destroy]
-	  match '/avatar_server_url' ,to: 'registrations#avatar_server_url', via: [:get,:post]
+	  match '/image_server_url' ,to: 'registrations#image_server_url', via: [:get,:post]
     end
     namespace :me do
       resources :favorites, only: [:index, :create, :show, :update, :destroy]
