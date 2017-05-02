@@ -13,21 +13,23 @@ class Api::Me::FavoritesController < ApplicationController
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
     user_id = user.id
-    @favorites = Favorite.where(user_id: user_id)
-    @favorites = Favorite.order("created_at DESC").page(params[:page]).per(5)
+    @favorites = Favorite.where(user_id: user_id).order("created_at DESC").page(params[:page]).per(5)
+    #@favorites = Favorite.order("created_at DESC").page(params[:page]).per(5)
     
     @offers = []
     @favorites.each do |favorite|
          offer = Good.find(favorite.obj_id)
          s = offer.attributes.clone
-         logger.debug "s:#{s.to_s}"
+        logger.debug "s:#{s.to_s}"
 	 begin
             u = User.find(offer.user_id)
             u.authentication_token = "***"
             s["user"]=u
 	 rescue ActiveRecord::RecordNotFound => e
-
+         
 	 end
+         s["isFavorited"] = true
+         s["favorite_id"] = favorite.id.to_s
          @offers.push(s)
     end
 
