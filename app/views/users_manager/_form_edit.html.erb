@@ -58,7 +58,7 @@
    <div class="form-group">
      <%= f.label :level, :class => 'control-label col-lg-2'  %>
 	   <div class="col-lg-10">
-         <%= select_tag "user[level]", options_for_select(@level_list, selected=@target_user.level),{:class => "form-control"} %>
+         <%= select_tag "user[level]", options_for_select(Const::USER_LEVELS, selected=@target_user.level),{:class => "form-control"} %>
 	   </div>
 	 <%=f.error_span(:admin) %>
    </div>

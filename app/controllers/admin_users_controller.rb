@@ -1,7 +1,8 @@
 class AdminUsersController < ApplicationController
 
   before_action :set_user, only: [:show, :edit, :update, :destroy, :lock_proc]
-  load_and_authorize_resource :class => User
+  #这里不要使用 load_and_authorize_resource，否则更新会出错，原因未明
+  before_action :authorize_user 
 
   # GET /users
   # GET /users.json
@@ -19,19 +20,18 @@ class AdminUsersController < ApplicationController
   # GET /users/new
   def new
     @target_user = User.new
-	@level_list = Const::USER_LEVELS
 	render 'users_manager/new'
   end
 
   # GET /users/1/edit
   def edit
-    @level_list = Const::USER_LEVELS
     render 'users_manager/edit'
   end
 
   # POST /users
   # POST /users.json
   def create
+    authorize! :create, User
     @target_user = User.new(user_params)
     respond_to do |format|
       if @target_user.save
@@ -81,7 +81,7 @@ class AdminUsersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:email, :name, :password,:password_confirmation, :admin, :avatar, :level)
+      params.require(:user).permit(:email, :name, :password, :password_confirmation, :admin, :avatar, :level)
     end
 	
 	def update_user(params)
@@ -90,7 +90,11 @@ class AdminUsersController < ApplicationController
 		   params.delete(:password_confirmation)
 		end
 		return  @target_user.update(params)
-	  
+	end
+	
+	#验证用户权限
+	def authorize_user
+       authorize!(params[:action].to_sym, @target_user || User)
 	end
 	
 end

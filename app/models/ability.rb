@@ -8,12 +8,12 @@ class Ability
 	   can :manage, :all
 	end
 	#普通管理员，只能查看所有东西
-    if user.admin?
+    if user.admin
       can :read, :all
     end
 	#限制用户添加商品的数量
-	if avaliable_goods_to_add(user) < 0
-	  cannot :create, :Good
+	if avaliable_goods_to_add(user) > 0
+	  can :create, Good
 	end
     
   end
