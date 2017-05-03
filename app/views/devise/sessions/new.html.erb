@@ -12,6 +12,11 @@
         <%= f.label :password %>
         <%= f.password_field :password, autocomplete: 'off', class: 'form-control' %>
       </div>
+	  <div class="form-group">
+      <div class="form-group">
+        <%= rucaptcha_input_tag(class: 'form-control', placeholder: '请输入下面的验证码') %>
+        <%= rucaptcha_image_tag(alt: '验证码') %>
+      </div>
       <% if devise_mapping.rememberable? %>
         <div class="checkbox">
           <%= f.label :remember_me do %>
