@@ -1,5 +1,6 @@
 class Users::PasswordsController < Devise::PasswordsController
   layout '_user'
+  prepend_before_action :valify_captcha!, only: [:create]
   # GET /resource/password/new
   # def new
   #   super
@@ -30,4 +31,12 @@ class Users::PasswordsController < Devise::PasswordsController
   # def after_sending_reset_password_instructions_path_for(resource_name)
   #   super(resource_name)
   # end
+  private
+    def valify_captcha!
+      unless verify_rucaptcha?
+        redirect_to new_user_password_path, alert: t('rucaptcha.invalid')
+        return
+      end
+      true
+    end
 end

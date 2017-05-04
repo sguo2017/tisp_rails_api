@@ -2,6 +2,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
   layout '_user' ,only: [:new]
+  prepend_before_action :valify_captcha!, only: [:create]
   def current_user
       if @user.nil?
                 build_global_user_from_session
@@ -101,6 +102,14 @@ class Users::RegistrationsController < Devise::RegistrationsController
   private
   def user_params
     params.require(:user).permit(:name, :email, :password, :password_confirmation, :current_password, :avatar)
+  end
+  
+  def valify_captcha!
+      unless verify_rucaptcha?
+        redirect_to new_user_registration_path, alert: t('rucaptcha.invalid')
+        return
+      end
+      true
   end
 
 end
