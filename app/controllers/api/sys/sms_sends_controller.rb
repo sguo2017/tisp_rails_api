@@ -37,27 +37,31 @@ class Api::Sys::SmsSendsController < ApplicationController
   # POST /sms_sends.json
   def create
     ret_status = -1
-    ret_msg = "fails"
+    ret_msg = "fail"
     @sms_send = SmsSend.new()
     
-    recv_num = params[:recv_num].presence
-    user = token && User.find_by_num(recv_num.to_s)
-    if !user
-      ret_msg = "´ËºÅÂëÃ»ÓÐ×¢²áÓÃ»§"
-      render json: {status:"#{ret_status}", msg:"#{ret_msg}"}
+    recv_num = params[:sms_send][:recv_num].presence
+    user = recv_num && User.find_by_num(recv_num.to_s)
+    if user.blank?
+      ret_msg = "æ­¤å·ç æ²¡æœ‰æ³¨å†Œç”¨æˆ·"
+      respond_to do |format|
+		    format.json {
+	      	render json: {status:"#{ret_status}", msg:"æ­¤å·ç æ²¡æœ‰æ³¨å†Œç”¨æˆ·"}
+	      }
+    	end
     end
     
     @sms_send.user_id = user.id
 
     @sms_send.recv_num = recv_num
     
-    sms_type = params[:sms_type].presence
+    sms_type = params[:sms_send][:sms_type].presence
     send_content = ""
-    #code¶ÌÐÅÑéÖ¤Âë
+    #codeçŸ­ä¿¡éªŒè¯ç 
     if "code" == sms_type
     	send_content = rand(999999)
     else
-    
+      send_content = rand(999999)
     end       
 
     @sms_send.send_content = send_content
