@@ -26,6 +26,7 @@ Rails.application.routes.draw do
   namespace :api do
     namespace :goods do
       resources :serv_offers, only: [:index, :create, :show, :update, :destroy] 
+      resources :goods_catalogs, only: [:index]
     end
     namespace :sys do
       resources :sys_msgs, only: [:index, :create, :show, :update, :destroy]
@@ -47,9 +48,9 @@ Rails.application.routes.draw do
     namespace :chats do
       resources :chats, only: [:index, :create, :show, :update, :destroy]
     end
-	namespace :goods_catalogs do
+		namespace :goods_catalogs do
       resources :goods_catalogs, only: [:index, :create, :show, :update, :destroy]
-	  match '/json' ,to: 'goods_catalogs#catalogs_json', via: [:get,:post]
+	  	match '/json' ,to: 'goods_catalogs#catalogs_json', via: [:get,:post]
     end
   end
   
