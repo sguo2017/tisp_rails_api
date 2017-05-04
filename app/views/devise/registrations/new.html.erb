@@ -17,6 +17,7 @@
         <%= f.label :password_confirmation %>
         <%= f.password_field :password_confirmation, class: 'form-control' %>
       </div>
+	  <%= render 'devise/shared/rucaptcha' %>
       <%= f.submit t('.sign_up', default: 'Sign up'), class: 'btn btn-primary' %>
     <% end %>
   </div>

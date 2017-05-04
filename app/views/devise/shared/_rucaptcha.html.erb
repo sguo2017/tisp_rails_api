@@ -1,0 +1,12 @@
+<div class="form-group">
+	<div class="col-sm-12 col-md-4 rucaptcha-input-warpper">
+		<%= rucaptcha_input_tag(class: 'form-control', placeholder: '请输入验证码') %>
+	</div>
+	<div class="col-sm-12 col-md-4 rucaptcha-image-warpper">
+		<%= rucaptcha_image_tag(alt: '验证码') %>
+	</div>
+	<div class="col-sm-12 col-md-3 rucaptcha-refresh-warpper">
+		<a class="rucaptcha-refresh" href="">看不清，换一张</a>
+	</div>
+	<div class="clearfix"></div>
+</div>

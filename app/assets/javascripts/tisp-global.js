@@ -2,7 +2,17 @@
 
 //Rails中JQuery的ready事件只会在网站第一次被打开时加触发，在链接跳转时不会触发
 //所以这里使用了'turbolinks:load'事件
-$(document).on('turbolinks:load', showDatePicker); 
+$(document).on('turbolinks:load', function(){
+	showDatePicker();
+	
+	$(".rucaptcha-refresh").click(function(){
+	    var src=$(".rucaptcha-image").attr('src');
+	    $(".rucaptcha-image").attr('src',src.split("?")[0]+"?timestamp="+(new Date().getTime()));
+		return false;
+	});
+	
+	
+}); 
 function showDatePicker(){
 	$.fn.datepicker.dates['cn'] = {
 		days: ["周日", "周一", "周二", "周三", "周四", "周五", "周六"],
