@@ -10,19 +10,25 @@ class Api::Goods::GoodsCatalogsController < ApplicationController
   # GET /goods_catalogs.json
   def index
     level = params[:level].presence
-    logger.debug "13:#{level}"
     unless level.blank?
     	@goods_catalogs = GoodsCatalog.where("level=?",params[:level]).order("created_at ASC")
     end
-    logger.debug "15:#{@goods_catalogs.to_json}"
-    parent_id = params[:parent_id].presence
-    logger.debug "17:#{parent_id}"
-    unless parent_id.blank? 
-    	@goods_catalogs = GoodsCatalog.where("parent_id=?",params[:parent_id]).order("created_at ASC")
+		goods_catalogs_arr = []
+    @goods_catalogs.each do |catalog|    
+    	c = catalog.attributes.clone
+    	parent_id = catalog.id
+    	goods_catalogs_II =  GoodsCatalog.where("ancestry=?","1/#{parent_id}").order("created_at ASC")
+    	if goods_catalogs_II.blank?    	
+    		c["goods_catalogs_II"] = "[]"
+    	else   		
+    		c["goods_catalogs_II"] = goods_catalogs_II.to_json 
+      end
+    	goods_catalogs_arr.push(c)
     end
-    logger.debug "20:#{@goods_catalogs.to_json}"
+    
+    
     respond_to do |format|
-        format.json {render json: {feeds: @goods_catalogs.to_json}}
+        format.json {render json: {feeds: goods_catalogs_arr.to_json}}
     end
 
   end
