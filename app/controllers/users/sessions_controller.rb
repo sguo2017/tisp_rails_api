@@ -1,6 +1,6 @@
 class Users::SessionsController < Devise::SessionsController
 
-  layout '_user'
+  layout 'unauthorized'
   prepend_before_action :valify_captcha!, only: [:create]
   
   def create

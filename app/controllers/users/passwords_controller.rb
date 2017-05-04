@@ -1,5 +1,5 @@
 class Users::PasswordsController < Devise::PasswordsController
-  layout '_user'
+  layout 'unauthorized'
   prepend_before_action :valify_captcha!, only: [:create]
   # GET /resource/password/new
   # def new

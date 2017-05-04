@@ -19,3 +19,4 @@ zh-CN:
       user: "您没有权限删除用户！"
       goods_catalog: "您没有权限删除商品分类！"
       sms_send: "您没有权限删除短信！"
+    remember_me: "记住我"

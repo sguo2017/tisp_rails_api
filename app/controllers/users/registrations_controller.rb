@@ -1,7 +1,7 @@
 class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
-  layout '_user' ,only: [:new]
+  layout 'unauthorized' ,only: [:new]
   prepend_before_action :valify_captcha!, only: [:create]
   def current_user
       if @user.nil?

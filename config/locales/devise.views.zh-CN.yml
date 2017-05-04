@@ -1,0 +1,5 @@
+zh-CN:
+  devise:
+    sessions:
+      new:
+        remember_me: "记住我"
