@@ -1,0 +1,2 @@
+class UsersBehavior < ApplicationRecord
+end

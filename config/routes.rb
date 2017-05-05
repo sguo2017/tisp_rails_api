@@ -17,6 +17,7 @@ Rails.application.routes.draw do
   resources :orders
   
   resources :admin_users
+  resources :users_behaviors
   match '/admin_users/lock_proc/:id' ,to: 'admin_users#lock_proc', via: [:get,:post]
  
   #devise_for :users
@@ -34,9 +35,11 @@ Rails.application.routes.draw do
     end
     namespace :users do
       resources :registrations, only: [:update, :create]
-	  	resources :sessions, only: [:create, :destroy, :smslogin]
-	  	match '/image_server_url' ,to: 'registrations#image_server_url', via: [:get,:post]
-	  	match '/sms_login' ,to: 'sessions#sms_login', via: [:post]
+	  resources :sessions, only: [:create, :destroy, :smslogin]
+	  resources :users_behaviors, only: [:index, :show, :create, :update, :destroy, :client_ip]
+	  match '/image_server_url' ,to: 'registrations#image_server_url', via: [:get,:post]
+	  match '/sms_login' ,to: 'sessions#sms_login', via: [:post]
+	  match '/client_ip' ,to: 'users_behaviors#client_ip', via: [:get, :post]
     end
     namespace :me do
       resources :favorites, only: [:index, :create, :show, :update, :destroy]
@@ -48,9 +51,9 @@ Rails.application.routes.draw do
     namespace :chats do
       resources :chats, only: [:index, :create, :show, :update, :destroy]
     end
-		namespace :goods_catalogs do
+	namespace :goods_catalogs do
       resources :goods_catalogs, only: [:index, :create, :show, :update, :destroy]
-	  	match '/json' ,to: 'goods_catalogs#catalogs_json', via: [:get,:post]
+	  match '/json' ,to: 'goods_catalogs#catalogs_json', via: [:get,:post]
     end
   end
   

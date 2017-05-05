@@ -1,0 +1,23 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  from_url: MyString
+  request_url: MyString
+  os: MyString
+  broswer: MyString
+  ip: MyString
+  geo_position: MyString
+  click_positions: MyString
+  requested_at: 2017-05-05 10:13:16
+  left_at: 2017-05-05 10:13:16
+
+two:
+  from_url: MyString
+  request_url: MyString
+  os: MyString
+  broswer: MyString
+  ip: MyString
+  geo_position: MyString
+  click_positions: MyString
+  requested_at: 2017-05-05 10:13:16
+  left_at: 2017-05-05 10:13:16

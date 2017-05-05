@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170502015053) do
+ActiveRecord::Schema.define(version: 20170505021316) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -162,6 +162,33 @@ ActiveRecord::Schema.define(version: 20170502015053) do
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
+  end
+
+  create_table "users_behaviors", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "from_url"
+    t.string   "request_url"
+    t.string   "os"
+    t.string   "broswer"
+    t.string   "ip"
+    t.string   "geo_position"
+    t.string   "click_positions"
+    t.datetime "requested_at"
+    t.datetime "left_at"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
+  create_table "users_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "user_id"
+    t.string   "user_email"
+    t.string   "user_name"
+    t.boolean  "is_admin"
+    t.integer  "user_level"
+    t.boolean  "has_locked"
+    t.string   "user_created"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
 end
