@@ -37,7 +37,7 @@ class Api::Sys::SmsSendsController < ApplicationController
   # POST /sms_sends.json
   def create
     ret_status = -1
-    ret_msg = "fail"
+    ret_msg = "失败"
     @sms_send = SmsSend.new()
     
     recv_num = params[:sms_send][:recv_num].presence
@@ -56,35 +56,42 @@ class Api::Sys::SmsSendsController < ApplicationController
     @sms_send.recv_num = recv_num
     
     sms_type = params[:sms_send][:sms_type].presence
+    
+    #10分钟内不允许重复发送
+    sms = SmsSend.where("TIMESTAMPDIFF(MINUTE,created_at ,now())<#{Const::SMS_TIME_LIMIT} and sms_type=? and recv_num =?", sms_type, recv_num).first
+    if sms
+        format.json {
+           render json: {status:"-1", msg:"10分钟内容不允许重新发送"}
+        } 
+    end
+
     send_content = ""
     #code短信验证码
     if "code" == sms_type
-    	send_content = rand(999999)
-    else
-      send_content = rand(999999)
-    end       
-
-    @sms_send.send_content = send_content
+	    	send_content = rand(9999)    	
+	    	@sms_send.send_content = send_content
+	    	@sms_send.sms_type = sms_type
+    end 
     
     respond_to do |format| 	
       if @sms_send.save       
-      begin
-      	uri = URI.parse("http://123.56.157.233:9090/FastDFSWeb/servlet/smsSendServlet?num=#{recv_num}&param=#{send_content}")
-      	http = Net::HTTP.new(uri.host, uri.port)
-      	request = Net::HTTP::Post.new(uri.request_uri)
-        #request['Content-Type'] = 'application/json;charset=utf-8'
-        #request['User-Agent'] = 'Mozilla/5.0 (Windows NT 5.1; rv:29.0) Gecko/20100101 Firefox/29.0'
-        #request.body = params.to_json
-        response = http.start { |http| http.request(request) }
-        puts response.body.inspect
-        puts JSON.parse response.body
-        ret_status = 0
-    		ret_msg = "success"
-      rescue =>err
-        #return nil
-		    ret_status = -1
-		    ret_msg = "fails"        
-      end           
+	      begin
+	      	uri = URI.parse("http://123.56.157.233:9090/FastDFSWeb/servlet/smsSendServlet?num=#{recv_num}&param=#{send_content}")
+	      	http = Net::HTTP.new(uri.host, uri.port)
+	      	request = Net::HTTP::Post.new(uri.request_uri)
+	        #request['Content-Type'] = 'application/json;charset=utf-8'
+	        #request['User-Agent'] = 'Mozilla/5.0 (Windows NT 5.1; rv:29.0) Gecko/20100101 Firefox/29.0'
+	        #request.body = params.to_json
+	        response = http.start { |http| http.request(request) }
+	        puts response.body.inspect
+	        puts JSON.parse response.body
+	        ret_status = 0
+	    		ret_msg = "success"
+	      rescue =>err
+	        #return nil
+			    ret_status = -1
+			    ret_msg = "fails"        
+	      end           
         format.json {
            render json: {status:"#{ret_status}", msg:"#{ret_msg}"}
         }

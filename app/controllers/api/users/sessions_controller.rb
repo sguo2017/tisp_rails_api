@@ -24,15 +24,14 @@ class Api::Users::SessionsController < ApplicationController
 	#POST /api/users/sms_login/
   # 
 	def sms_login  
-    sms_code = params[:user][:code].presence 
-    sms = SmsSend.find_by_send_content(sms_code)
+    sms_code = params[:user][:code].presence
+    num = params[:user][:num].presence   
+    sms = SmsSend.where("TIMESTAMPDIFF(MINUTE,created_at ,now())<#{Const::SMS_TIME_LIMIT} and sms_type='code' and send_content=? and recv_num =?", sms_code, num).first
     return render json: {error: {status:-1}} unless sms    
     user_id = sms.user_id    
-    num = params[:user][:num].presence  
     user = User.find(user_id)
     return render json: {error: {status:-1}} unless user
     respond_to do |format|
-      if num == user.num
         sign_in("user", user)        
         if !@current_user 
            @current_user = user
@@ -42,20 +41,10 @@ class Api::Users::SessionsController < ApplicationController
         if user.avatar
             session[:user_avatar]=user.avatar
         end   
-
-        logger.debug "user info: #{user.to_json}"        
+               
         format.json { 
           render json: {token:user.authentication_token, user: user.to_json}
         }
-        format.js {
-          #render :js => "alert('hello')"    
-          redirect_to "/"   
-        }
-      else
-        format.json {
-          render json: {error: {status:-1}}
-        }
-      end
     end
   end
 
