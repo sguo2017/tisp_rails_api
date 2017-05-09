@@ -18,6 +18,7 @@ Rails.application.routes.draw do
   
   resources :admin_users
   resources :users_behaviors
+  resources :users_searches
   match '/admin_users/lock_proc/:id' ,to: 'admin_users#lock_proc', via: [:get,:post]
  
   #devise_for :users

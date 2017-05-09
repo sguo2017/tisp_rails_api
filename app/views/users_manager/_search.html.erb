@@ -1,0 +1,19 @@
+<%= form_for(@users_search,html: {:class=>'form-inline',:role=>'form' }) do |f| %>
+  <div class="form-group">
+	<%= f.label :'ID：'%>
+	<%= f.text_field :user_id, class: 'form-control',:size=>1%>
+	<%= f.label :'邮箱：'%>
+	<%= f.text_field :user_email, class: 'form-control',:size=>10%>
+	<%= f.label :'姓名：'%>
+	<%= f.text_field :user_name, class: 'form-control',:size=>4%>
+	<%= f.label :'管理员：'%>
+	<%= select_tag "users_search[is_admin]", options_for_select(Const::BOOLEAN_LIST, selected=@selected_admin),{:class => "form-control", :size => 1, :prompt => ''} %>
+	<%= f.label :'等级：'%>
+	<%= select_tag "users_search[user_level]", options_for_select(Const::USER_LEVELS, selected=@selected_level),{:class => "form-control", :size => 1, :prompt => ''} %>
+	<%= f.label :'锁定：'%>
+    <%= select_tag "users_search[has_locked]", options_for_select(Const::BOOLEAN_LIST, selected=@selected_locked),{:class => "form-control", :size => 1, :prompt => ''} %>
+	<%= f.label :'创建时间：'%>
+	<%= f.text_field :user_created, class: 'form-control date-picker', :size=>10%>
+  </div>
+  <%= f.submit :'查找', :class => 'btn btn-primary' %>
+<% end %>

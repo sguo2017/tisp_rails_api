@@ -3,6 +3,7 @@ class AdminUsersController < ApplicationController
   before_action :set_user, only: [:show, :edit, :update, :destroy, :lock_proc]
   #这里不要使用 load_and_authorize_resource，否则更新会出错，原因未明
   before_action :authorize_user 
+  before_action :set_users_search
 
   # GET /users
   # GET /users.json
@@ -65,7 +66,9 @@ class AdminUsersController < ApplicationController
   
   #GET/POST 
   def lock_proc
-    if @target_user.has_locked?
+    if @target_user.admin
+	  false
+    elsif @target_user.has_locked?
 	  @target_user.unlock
 	else
 	  @target_user.lock_it
@@ -95,6 +98,12 @@ class AdminUsersController < ApplicationController
 	#验证用户权限
 	def authorize_user
        authorize!(params[:action].to_sym, @target_user || User)
+	end
+	
+	def set_users_search
+	    if !@users_search
+            @users_search=UsersSearch.new
+        end
 	end
 	
 end
