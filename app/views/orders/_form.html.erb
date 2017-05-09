@@ -43,13 +43,15 @@
     </div>
     <%=f.error_span(:request_user_id) %>
   </div>
-  <div class="form-group">
-    <%= f.label :status, :class => 'control-label col-lg-2' %>
-    <div class="col-lg-10">
-      <%= f.text_field :status, :class => 'form-control' %>
+  <% if !@is_editing %>
+    <div class="form-group">
+      <%= f.label :status, :class => 'control-label col-lg-2' %>
+      <div class="col-lg-10">
+        <%= f.text_field :status, :class => 'form-control' %>
+      </div>
+      <%=f.error_span(:status) %>
     </div>
-    <%=f.error_span(:status) %>
-  </div>
+  <% end %>
   <div class="form-group">
     <%= f.label :bidder, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">

@@ -19,12 +19,13 @@ class OrdersController < ApplicationController
 
   # GET /orders/1/edit
   def edit
+    @is_editing = true
   end
 
   # POST /orders
   # POST /orders.json
   def create
-    @order = Order.new(order_params)
+    @order = Order.new(new_order_params)
 
     respond_to do |format|
       if @order.save
@@ -41,7 +42,7 @@ class OrdersController < ApplicationController
   # PATCH/PUT /orders/1.json
   def update
     respond_to do |format|
-      if @order.update(order_params)
+      if @order.update(update_order_params)
         format.html { redirect_to @order, notice: '成功更新订单！' }
         format.json { render :show, status: :ok, location: @order }
       else
@@ -68,7 +69,12 @@ class OrdersController < ApplicationController
     end
 
     # Never trust parameters from the scary internet, only allow the white list through.
-    def order_params
-      params.require(:order).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :status, :connect_time, :bidder, :signature)
+    def new_order_params
+	  params.require(:order).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :status, :connect_time, :bidder, :signature)
     end
+	
+	def update_order_params
+	  params.require(:order).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :connect_time, :bidder, :signature)
+	end
+	
 end
