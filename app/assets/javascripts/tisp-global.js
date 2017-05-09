@@ -62,7 +62,10 @@ function submitFormWithImage(form, fileFieldId, hiddenFieldId) {
 	.then(response =>response.text())
 	.then(text =>JSON.parse(text)['server_url'])
 	.then(server_url =>uploadAndSubmit(server_url))
-	.catch(e =>console.log("error:", e));
+	.catch(e =>{
+	  alert("服务器连接失败，请重试！");
+	  console.log("error:", e);
+	});
     var uploadAndSubmit = function(avatar_server_url) {
       let formData = new FormData();
       let url = avatar_server_url; 
@@ -79,6 +82,7 @@ function submitFormWithImage(form, fileFieldId, hiddenFieldId) {
         formObj.submit();
       }).
       catch((error) =>{
+		alert("服务器连接失败，请重试！");
         console.error('error', error);
       });
     };
