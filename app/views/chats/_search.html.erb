@@ -1,0 +1,17 @@
+<%= form_for(@chats_search,html: {:class=>'form-inline',:role=>'form' }) do |f| %>
+  <div class="form-group">
+	<%= f.label :'id：'%>
+	<%= f.text_field :chat_id, class: 'form-control',:size=>1%>
+	<%= f.label :'订单id：'%>
+	<%= f.text_field :order_id, class: 'form-control',:size=>1%>
+	<%= f.label :'会话内容：'%>
+	<%= f.text_field :chat_content, class: 'form-control',:size=>10%>
+	<%= f.label :'用户id：'%>
+	<%= f.text_field :user_id, class: 'form-control',:size=>1%>
+	<%= f.label :'目录：'%>
+	<%= f.text_field :chat_catalog,class: 'form-control',:size=>8%>
+	<%= f.label :'创建时间：'%>
+	<%= f.text_field :chat_created, class: 'form-control date-picker', :size=>10%>
+  </div>
+  <%= f.submit :'查找', :class => 'btn btn-primary' %>
+<% end %>

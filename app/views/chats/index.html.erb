@@ -1,5 +1,6 @@
 <%- model_class = Chat -%>
 <div class="page-header">
+  <%= render 'chats/search' %>
   <h1><%=t '.title', :default => model_class.model_name.human.pluralize.titleize %></h1>
 </div>
 <table class="table table-striped">

@@ -1,10 +1,11 @@
 class ChatsController < ApplicationController
   before_action :set_chat, only: [:show, :edit, :update, :destroy]
+  before_action :set_chats_search
 
   # GET /chats
   # GET /chats.json
   def index
-    @chats = Chat.page(params[:page]).per(5)
+    @chats = Chat.order("created_at DESC").page(params[:page]).per(10)
   end
 
   # GET /chats/1
@@ -71,4 +72,10 @@ class ChatsController < ApplicationController
     def chat_params
       params.require(:chat).permit(:deal_id, :chat_content, :user_id, :catalog)
     end
+	
+	def set_chats_search
+	   if !@chats_search
+	      @chats_search=ChatsSearch.new
+	   end
+	end
 end

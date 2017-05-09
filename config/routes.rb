@@ -13,6 +13,8 @@ Rails.application.routes.draw do
   resources :goods_catalogs
   
   resources :chats
+  resources :chats_searches
+  
   resources :order_items
   resources :orders
   resources :orders_searches
