@@ -15,6 +15,7 @@ Rails.application.routes.draw do
   resources :chats
   resources :order_items
   resources :orders
+  resources :orders_searches
   
   resources :admin_users
   resources :users_behaviors

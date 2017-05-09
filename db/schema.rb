@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170509054652) do
+ActiveRecord::Schema.define(version: 20170509073500) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -105,6 +105,21 @@ ActiveRecord::Schema.define(version: 20170509054652) do
     t.string   "lately_chat_content"
     t.integer  "bidder"
     t.integer  "signature"
+  end
+
+  create_table "orders_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "order_id"
+    t.string   "serv_offer_title"
+    t.integer  "serv_offer_id"
+    t.integer  "offer_user_id"
+    t.integer  "request_user_id"
+    t.string   "status"
+    t.string   "connect_time"
+    t.integer  "bidder"
+    t.integer  "signature"
+    t.string   "order_created"
+    t.datetime "created_at",       null: false
+    t.datetime "updated_at",       null: false
   end
 
   create_table "sms_sends", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

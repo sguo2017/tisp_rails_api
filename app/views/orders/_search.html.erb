@@ -1,0 +1,57 @@
+<%- model_class = Order -%>
+  <table class="table table-condensed">
+  <thead>
+    <tr>
+      <th><%= model_class.human_attribute_name(:id) %></th>
+      <th><%= model_class.human_attribute_name(:serv_offer_title) %></th>
+      <th><%= model_class.human_attribute_name(:serv_offer_id) %></th>
+      <th><%= model_class.human_attribute_name(:offer_user_id) %></th>
+      <th><%= model_class.human_attribute_name(:request_user_id) %></th>
+      <th><%= model_class.human_attribute_name(:status) %></th>
+      <th><%= model_class.human_attribute_name(:connect_time) %></th>
+      <th><%= model_class.human_attribute_name(:bidder) %></th>
+      <th><%= model_class.human_attribute_name(:signature) %></th>
+      <th><%= model_class.human_attribute_name(:created_at) %></th>
+	  <th></th>
+    </tr>
+  </thead>
+  <tbody>
+    <%= form_for(@orders_search,html: {:class=>'form',:role=>'form' }) do |f| %>
+    <tr>
+	  <td>
+	    <%= f.text_field :order_id, class: 'form-control'%> 
+	  </td>
+	  <td>
+	    <%= f.text_field :serv_offer_title, class: 'form-control'%> 
+	  </td>
+	  <td>
+	    <%= f.text_field :serv_offer_id, class: 'form-control'%> 
+	  </td>
+	  <td>
+	    <%= f.text_field :offer_user_id, class: 'form-control'%> 
+	  </td>
+	  <td>
+	    <%= f.text_field :request_user_id, class: 'form-control'%> 
+	  </td>
+	  <td>
+	    <%= select_tag "orders_search[status]", options_for_select(Const::ORDER_STATUS, selected=@selected_status),{:class => "form-control", :prompt => '', :style => 'padding:0;min-width:70px;'} %>
+	  </td>
+	  <td>
+	    <%= f.text_field :connect_time, class: 'form-control date-picker'%> 
+	  </td>
+	  <td>
+	    <%= f.text_field :bidder, class: 'form-control'%> 
+	  </td>
+	  <td>
+	    <%= f.text_field :signature, class: 'form-control'%> 
+	  </td>
+	  <td>
+	    <%= f.text_field :order_created, class: 'form-control date-picker'%>
+	  </td>
+	  <td>
+	    <%= f.submit :'查找', :class => 'btn btn-primary' %>
+	  </td>
+	</tr>
+	<% end %>
+  </tbody>
+  </table>

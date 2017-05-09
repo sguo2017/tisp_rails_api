@@ -1,0 +1,25 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  order_id: 1
+  serv_offer_title: MyString
+  serv_offer_id: 1
+  offer_user_id: 1
+  request_user_id: 1
+  status: MyString
+  connect_time: MyString
+  bidder: 1
+  signature: 1
+  order_created: MyString
+
+two:
+  order_id: 1
+  serv_offer_title: MyString
+  serv_offer_id: 1
+  offer_user_id: 1
+  request_user_id: 1
+  status: MyString
+  connect_time: MyString
+  bidder: 1
+  signature: 1
+  order_created: MyString
