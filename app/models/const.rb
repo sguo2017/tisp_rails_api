@@ -8,4 +8,5 @@ class Const
   BOOLEAN_LIST=[['是', true], ['否', false]]
   #手机端短信验证码10分钟有效
   SMS_TIME_LIMIT=10
+  TOKEN_TIME_LIMIT=1
 end

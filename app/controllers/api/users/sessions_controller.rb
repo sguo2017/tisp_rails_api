@@ -47,6 +47,30 @@ class Api::Users::SessionsController < ApplicationController
         }
     end
   end
+  
+  #POST /api/users/token_login/
+	def token_login
+		token = params[:token].presence
+		return render json: {error: {status:-1}} unless token
+		user = User.where("TIMESTAMPDIFF(DAY,updated_at ,now())<#{Const::TOKEN_TIME_LIMIT} and authentication_token=?", token.to_s).first
+		return render json: {error: {status:-1}} unless user
+		logger.debug "user info: #{user.to_json}"
+		respond_to do |format|
+			sign_in("user", user)
+			if !@current_user
+				@current_user = user
+				Thread.current[:tispr_user] = user
+				session[:current_tispr_user] = user
+			end
+			if user.avatar
+				session[:user_avatar]=user.avatar
+			end
+		
+        format.json {
+          render json: {token:user.authentication_token, user: user.to_json}
+        }
+		end
+	end
 
 	#DELETE /api/users/sessions/:id/
 	#注销，这里进行更换token操作，使token失效
