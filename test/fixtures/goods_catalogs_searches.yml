@@ -1,0 +1,17 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  catalog_id: 1
+  catalog_name: MyString
+  catalog_level: 1
+  catalog_parent: MyString
+  goods_count: 1
+  catalog_created: MyString
+
+two:
+  catalog_id: 1
+  catalog_name: MyString
+  catalog_level: 1
+  catalog_parent: MyString
+  goods_count: 1
+  catalog_created: MyString

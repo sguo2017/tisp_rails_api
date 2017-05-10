@@ -1,6 +1,7 @@
 Rails.application.routes.draw do
 
   resources :sms_sends
+  resources :sms_sends_searches
   
   resources :favorites
   resources :favorites_searches
@@ -11,6 +12,7 @@ Rails.application.routes.draw do
   resources :goods
   resources :goods_searches
   resources :goods_catalogs
+  resources :goods_catalogs_searches
   
   resources :chats
   resources :chats_searches

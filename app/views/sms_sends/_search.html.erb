@@ -1,0 +1,20 @@
+<%= form_for(@sms_sends_search,html: {:class=>'form-inline',:role=>'form' }) do |f| %>
+  <div class="form-group">
+	<%= f.label :'id：'%>
+	<%= f.text_field :sms_id, class: 'form-control',:size=>1%>
+	<%= f.label :'接受号码：'%>
+	<%= f.text_field :recv_num, class: 'form-control',:size=>10%>
+	<%= f.label :'短信内容：'%>
+	<%= f.text_field :send_content, class: 'form-control',:size=>10%>
+	<%= f.label :'状态：'%>
+	<%= f.text_field :state,class: 'form-control',:size=>4%>
+	<%= f.label :'短信类型：'%>
+	<%= f.text_field :sms_type, class: 'form-control',:size=>4%>
+	<%= f.label :'用户：'%>
+	<%= f.text_field :user_name, class: 'form-control',:size=>4%>
+	<%= f.label :'创建时间：'%>
+	<%= f.text_field :sms_created, class: 'form-control date-picker', :size=>10%>
+  </div>
+  <%= f.submit :'查找', :class => 'btn btn-primary btn-overflow' %>
+  <div class='clearfix'></div>
+<% end %>
