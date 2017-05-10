@@ -1,11 +1,12 @@
 class SmsSendsController < ApplicationController
   before_action :set_sms_send, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
+  before_action :set_sms_sends_search
 
   # GET /sms_sends
   # GET /sms_sends.json
   def index
-    @sms_sends = SmsSend.page(params[:page]).per(10)
+    @sms_sends = SmsSend.order("created_at DESC").page(params[:page]).per(10)
   end
 
   # GET /sms_sends/1
@@ -71,5 +72,11 @@ class SmsSendsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def sms_send_params
       params.require(:sms_send).permit(:recv_num, :send_content, :state, :sms_type, :user_id)
+    end
+	
+	def set_sms_sends_search
+      if !@sms_sends_search
+        @sms_sends_search=SmsSendsSearch.new
+      end
     end
 end

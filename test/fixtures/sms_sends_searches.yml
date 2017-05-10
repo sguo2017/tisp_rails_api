@@ -1,0 +1,19 @@
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sms_id: 1
+  recv_num: MyString
+  send_content: MyString
+  state: MyString
+  sms_type: MyString
+  user_name: MyString
+  sms_created: MyString
+
+two:
+  sms_id: 1
+  recv_num: MyString
+  send_content: MyString
+  state: MyString
+  sms_type: MyString
+  user_name: MyString
+  sms_created: MyString

@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170509085334) do
+ActiveRecord::Schema.define(version: 20170510023452) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -79,6 +79,17 @@ ActiveRecord::Schema.define(version: 20170509085334) do
     t.index ["ancestry"], name: "index_goods_catalogs_on_ancestry", using: :btree
   end
 
+  create_table "goods_catalogs_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "catalog_id"
+    t.string   "catalog_name"
+    t.integer  "catalog_level"
+    t.string   "catalog_parent"
+    t.integer  "goods_count"
+    t.string   "catalog_created"
+    t.datetime "created_at",      null: false
+    t.datetime "updated_at",      null: false
+  end
+
   create_table "goods_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "serv_id"
     t.integer  "user_id"
@@ -141,6 +152,18 @@ ActiveRecord::Schema.define(version: 20170509085334) do
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
     t.integer  "user_id"
+  end
+
+  create_table "sms_sends_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "sms_id"
+    t.string   "recv_num"
+    t.string   "send_content"
+    t.string   "state"
+    t.string   "sms_type"
+    t.string   "user_name"
+    t.string   "sms_created"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
   end
 
   create_table "sys_msgs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

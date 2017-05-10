@@ -2,6 +2,7 @@ class GoodsCatalogsController < ApplicationController
   before_action :set_goods_catalog, only: [:show, :edit, :update, :destroy]
   before_action :set_root_id
   load_and_authorize_resource
+  before_action :set_goods_catalogs_search
 
   # GET /goods_catalogs
   # GET /goods_catalogs.json
@@ -81,6 +82,12 @@ class GoodsCatalogsController < ApplicationController
     end
 	
 	def set_root_id
-	  @root_id = 1
+	  @root_id = Const::GOODS_CATALOG_ROOT_ID
 	end
+	
+	def set_goods_catalogs_search
+      if !@goods_catalogs_search
+        @goods_catalogs_search=GoodsCatalogsSearch.new
+      end
+    end
 end

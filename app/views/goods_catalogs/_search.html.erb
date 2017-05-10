@@ -1,0 +1,17 @@
+<%= form_for(@goods_catalogs_search,html: {:class=>'form-inline',:role=>'form' }) do |f| %>
+  <div class="form-group">
+	<%= f.label :'id：'%>
+	<%= f.text_field :catalog_id, class: 'form-control',:size=>2%>
+	<%= f.label :'名称：'%>
+	<%= f.text_field :catalog_name, class: 'form-control',:size=>10%>
+	<%= f.label :'层级：'%>
+	<%= f.text_field :catalog_level, class: 'form-control',:size=>2%>
+	<%= f.label :'父节点：'%>
+	<%= f.text_field :catalog_parent,class: 'form-control',:size=>10%>
+	<%= f.label :'商品数：'%>
+	<%= f.text_field :goods_count, class: 'form-control',:size=>4%>
+	<%= f.label :'创建时间：'%>
+	<%= f.text_field :catalog_created, class: 'form-control date-picker', :size=>10%>
+  </div>
+  <%= f.submit :'查找', :class => 'btn btn-primary' %>
+<% end %>
