@@ -2,15 +2,22 @@
 #
 # Table name: goods
 #
-#  id            :integer          not null, primary key
-#  serv_title    :string(255)
-#  serv_detail   :string(255)
-#  serv_imges    :string(255)
-#  serv_catagory :string(255)
-#  created_at    :datetime         not null
-#  updated_at    :datetime         not null
-#  user_id       :integer
-#  catalog       :string(255)
+#  id               :integer          not null, primary key
+#  serv_title       :string(255)
+#  serv_detail      :string(255)
+#  serv_imges       :string(255)
+#  serv_catagory    :string(255)
+#  created_at       :datetime         not null
+#  updated_at       :datetime         not null
+#  user_id          :integer
+#  catalog          :string(255)
+#  goods_catalog_id :integer
+#  district         :string(255)
+#  city             :string(255)
+#  province         :string(255)
+#  country          :string(255)
+#  latitude         :string(255)
+#  longitude        :string(255)
 #
 
 class Good < ApplicationRecord
