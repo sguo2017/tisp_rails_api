@@ -19,6 +19,9 @@
 #  name                   :string(255)
 #  avatar                 :string(255)
 #  admin                  :boolean          default(FALSE)
+#  num                    :string(255)
+#  level                  :integer          default(1)
+#  lock                   :integer          default(0)
 #
 
 require 'test_helper'
