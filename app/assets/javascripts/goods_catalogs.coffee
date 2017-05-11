@@ -3,6 +3,8 @@
 # You can use CoffeeScript in this file: http://coffeescript.org/
 
 $(document).on 'turbolinks:load', ->
+  if !document.getElementById('jsoneditor')
+    return
   $.post '/api/goods_catalogs/json', (data) ->
     container = undefined
     editor = undefined
