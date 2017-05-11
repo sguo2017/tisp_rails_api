@@ -7,6 +7,8 @@ class Const
   DEFAULT_USER_LEVEL = 1
   ORDER_STATUS=[['已询价', '00A'], ['已报价', '00B'], ['已确定', '00C']]
   BOOLEAN_LIST=[['是', true], ['否', false]]
+  #清理搜索记录的时间周期 1s 1m 1h 1d 
+  CLEAN_SEARCH_INTERVAL = '1h'
   #手机端短信验证码10分钟有效
   SMS_TIME_LIMIT=10
   TOKEN_TIME_LIMIT=1

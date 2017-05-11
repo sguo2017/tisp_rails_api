@@ -67,6 +67,7 @@ gem 'i18n_scaffold_generator'
 gem 'translations_sync'
 gem 'cancancan', '~> 1.10'
 gem 'rucaptcha'
+gem 'rufus-scheduler'
 
 
 
