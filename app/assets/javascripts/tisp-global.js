@@ -1,10 +1,13 @@
 //整个网站使用到的一些全局的js,会被引入application.js当中，全站有效
 //Rails中JQuery的ready事件只会在网站第一次被打开时加触发，在链接跳转时不会触发
 //所以这里使用了'turbolinks:load'事件
+var lazyInfo={}; //全局变量
 $(document).on('turbolinks:load',
 function() {
+  lazyInfo = {};
   showDatePicker();
-  collectUserInformation();
+  collectSimpleInfos();
+  askForGeoInfos();
   $(".rucaptcha-refresh").click(function() {
     var src = $(".rucaptcha-image").attr('src');
     $(".rucaptcha-image").attr('src', src.split("?")[0] + "?timestamp=" + (new Date().getTime()));
@@ -14,13 +17,13 @@ function() {
 });
 Date.prototype.format = function(fmt) {
   var o = {
-    "M+": this.getMonth() + 1,//月份 
-    "d+": this.getDate(),//日 
-    "h+": this.getHours(),//小时 
-    "m+": this.getMinutes(),//分 
-    "s+": this.getSeconds(),//秒 
-    "q+": Math.floor((this.getMonth() + 3) / 3),//季度 
-    "S": this.getMilliseconds() //毫秒 
+    "M+": this.getMonth() + 1,//月份
+    "d+": this.getDate(),//日
+    "h+": this.getHours(),//小时
+    "m+": this.getMinutes(),//分
+    "s+": this.getSeconds(),//秒
+    "q+": Math.floor((this.getMonth() + 3) / 3),//季度
+    "S": this.getMilliseconds() //毫秒
   };
   if (/(y+)/.test(fmt)) fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
   for (var k in o) if (new RegExp("(" + k + ")").test(fmt)) fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
@@ -68,7 +71,7 @@ function submitFormWithImage(form, fileFieldId, hiddenFieldId) {
 	});
     var uploadAndSubmit = function(avatar_server_url) {
       let formData = new FormData();
-      let url = avatar_server_url; 
+      let url = avatar_server_url;
 	  formData.append("image", input_file.files[0]);
       fetch(url, {
         method: 'POST',
@@ -89,17 +92,14 @@ function submitFormWithImage(form, fileFieldId, hiddenFieldId) {
   }
 }
 
-function collectUserInformation() {
+function collectSimpleInfos() {
   let formData = new FormData();
   formData.append('users_behavior[requested_at]', new Date().format('yyyy-MM-dd hh:mm:ss'));
-  $.post("/api/users/client_ip").done(function(json) {
+  $.post("/api/users/client_ip")
+  .done(json => {
     formData.append('users_behavior[ip]', json.ip);
-  }).always(function(json) {
-    true;
-    //navigator.geolocation.getCurrentPosition(function(position){
-    //console.log("POS-SUCC");},function(position){
-    //console.log("POS-ERR");})
-  }).always(function(obj) {
+  })
+  .always(obj=> {
     formData.append('users_behavior[from_url]', document.referrer);
     formData.append('users_behavior[request_url]', document.URL);
     formData.append('users_behavior[os]', platform.os.toString());
@@ -107,7 +107,45 @@ function collectUserInformation() {
     fetch('/api/users/users_behaviors', {
       body: formData,
       method: 'POST'
-    });
-
+    })
+    .then(response =>response.text())
+    .then(text => JSON.parse(text))
+    .then(json => lazyInfo.row_id = json.id);
   });
 }
+
+function askForGeoInfos(){
+  if (navigator.geolocation){
+      navigator.geolocation.getCurrentPosition(
+      function (position){
+        let lat = position.coords.latitude; //纬度
+        let lag = position.coords.longitude; //经度
+        lazyInfo.geo_position = lag+','+lat;
+      } ,
+      function (error){
+        console.log(error.code);
+     });
+  }
+  else{
+    console.log("Broswer Don't Support GeoLocation!");
+  }
+}
+
+function collectLazyInfos(){
+  if(lazyInfo.row_id){
+    let formData = new FormData();
+    formData.append('users_behavior[left_at]', lazyInfo.left_at);
+    formData.append('users_behavior[geo_position]', lazyInfo.geo_position);
+    formData.append('users_behavior[click_positions]', lazyInfo.click_positions);
+    fetch('/api/users/users_behaviors/'+row_id, {
+      body: formData,
+      method: 'PATCH'
+    });
+  }
+}
+
+$(document).on('page:before-change',function(){
+   lazyInfo.left_at = new Date().format('yyyy-MM-dd hh:mm:ss');
+   collectLazyInfos();
+
+});

@@ -52,7 +52,7 @@ class Api::Users::UsersBehaviorsController < ApplicationController
       format.json { render json:{sattus:1, id:@users_behavior.id}}
     end
   end
-  
+
   def client_ip
     render json: {ip:request.remote_ip}
   end
