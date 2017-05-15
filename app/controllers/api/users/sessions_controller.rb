@@ -6,6 +6,7 @@ class Api::Users::SessionsController < ApplicationController
 		return render json: {error: {status:-1}} unless user
 		respond_to do |format|
 		  if user.valid_password?(params[:user][:password])
+		    sign_in("user", user)
 			logger.debug "user info: #{user.to_json}"        
 			format.json { 
 			  render json: {token:user.authentication_token, user: user.to_json}
