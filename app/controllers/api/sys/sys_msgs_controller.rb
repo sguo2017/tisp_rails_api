@@ -14,9 +14,10 @@ class Api::Sys::SysMsgsController < ApplicationController
     @sys_msgs = SysMsg.all.order("created_at desc").page(params[:page]).per(7)
     @msgs = []
     @sys_msgs.each do |msg|
+         set_interval(msg)
          m = msg.attributes.clone
          begin
-             s = Good.find(msg.serv_id)    
+             s = Good.find(msg.serv_id)
              m["serv_offer"] = s
              f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, s.id, "serv_offer").first
              #是否收藏
@@ -27,25 +28,25 @@ class Api::Sys::SysMsgsController < ApplicationController
 		           m["favorite_id"] = f["id"].to_s
 		         end
          rescue ActiveRecord::RecordNotFound => e
-             
-         end      
-           
+
+         end
+
          u = User.find(msg.user_id)
          u.authentication_token = "***"
          m["user"]=u
-         
+
          @msgs.push(m)
          #logger.debug "m:#{m}"
-    end 
-    
-    logger.debug "msgs:#{@msgs.to_json}"
-    
-    respond_to do |format| 
-      format.json { 
-        render json: {page: @sys_msgs.current_page,total_pages: @sys_msgs.total_pages, feeds: @msgs.to_json}
-      }  
     end
-   
+
+    logger.debug "msgs:#{@msgs.to_json}"
+
+    respond_to do |format|
+      format.json {
+        render json: {page: @sys_msgs.current_page,total_pages: @sys_msgs.total_pages, feeds: @msgs.to_json}
+      }
+    end
+
   end
 
 
@@ -67,6 +68,7 @@ class Api::Sys::SysMsgsController < ApplicationController
   # POST /sys_msgs.json
   def create
     @sys_msg = SysMsg.new(sys_msg_params)
+    set_interval(@sys_msg)
 
     respond_to do |format|
       if @sys_msg.save
@@ -109,6 +111,16 @@ class Api::Sys::SysMsgsController < ApplicationController
       params.require(:sys_msg).permit(:user_name, :action_title, :action_desc, :user_id, :serv_id)
     end
 
+    def set_interval(instance)
+      return if instance.blank?
+      interval = Time.now - instance.created_at
+      if(interval/1.day) >= 1
+        interval = (interval/1.day).ceil.to_s + "d"
+      else
+        interval = (interval/1.hour).ceil.to_s + "h"
+      end
+      instance.update_attributes(:interval => interval)
+    end
 
 
 
