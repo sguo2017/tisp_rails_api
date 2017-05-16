@@ -5,7 +5,7 @@ zh-CN:
       user: "用户"
     attributes:
       user:
-        id: "ID" 
+        id: "ID"
         email: "邮箱"
         name: "姓名"
         admin: "管理员"
@@ -14,6 +14,7 @@ zh-CN:
         avatar: "头像"
         password: "密码"
         password_confirmation: "确认密码"
+        profile: "简介"
         created_at: "创建时间"
         updated_at: "更新时间"
         actions: "操作"

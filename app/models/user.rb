@@ -34,16 +34,18 @@ class User < ApplicationRecord
   devise :database_authenticatable, :registerable,
          :recoverable, :rememberable, :trackable, :validatable
 
+  after_create :after_created_callback
+
 
   #token为空时自动生成新的token
   #通过登录修改登录次数来触发token更新，避免token是静态。后面可以改判断时间周期：一天前登录就失效
-  def ensure_authentication_token    
-     if authentication_token.blank?      		
-         #self.authentication_token = generate_authentication_token    	
-     end  
+  def ensure_authentication_token
+     if authentication_token.blank?
+         #self.authentication_token = generate_authentication_token
+     end
 
-     self.authentication_token = generate_authentication_token    	
-     
+     self.authentication_token = generate_authentication_token
+
     logger.debug "authentication_token:#{authentication_token}"
   end
 
@@ -54,7 +56,7 @@ class User < ApplicationRecord
       break token unless User.where(authentication_token: token).first
     end
   end
-  
+
   def add_lock
 	  if self.lock.blank? and self.lock < 0
 	     self.lock = 0
@@ -63,24 +65,41 @@ class User < ApplicationRecord
 	  end
 	  self.save
   end
-  
+
   def lock_it
       self.lock = Const::PASSWORD_ERROR_LIMIT
 	  self.save
   end
-  
+
   def unlock
       self.lock = 0
 	  self.save
   end
-  
+
   def has_locked?
     if !self.admin and self.updated_at >= Time.now.beginning_of_day and self.lock >= Const::PASSWORD_ERROR_LIMIT
-	  return true
-	else
-	  return false
-	end
+	    return true
+	  else
+	    return false
+	  end
   end
-  
-  
+
+  protected
+    def after_created_callback
+      if User.all.size > 0
+        params_hash={
+          :action_title => Const::SysMsg::ACTION_TITLE_OF_REGISTRATION,
+          :action_desc => self.profile,
+          :user_id => self.id,
+          :user_name =>  self.name,
+          :accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:all], 
+          :msg_catalog => Const::SysMsg::CATALOG[:public],
+          :status => Const::SysMsg::STATUS[:created]
+        }
+        SysMsg.create!(params_hash)
+        logger.debug "User created callback has been executed!"
+      end
+    end
+
+
 end

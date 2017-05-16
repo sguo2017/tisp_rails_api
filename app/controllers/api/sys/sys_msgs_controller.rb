@@ -6,6 +6,7 @@ class Api::Sys::SysMsgsController < ApplicationController
   before_action :set_sys_msg, only: [:show, :edit, :update, :destroy]
 
 
+
   # GET /sys_msgs
   # GET /sys_msgs.json
   def index
@@ -108,7 +109,7 @@ class Api::Sys::SysMsgsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sys_msg_params
-      params.require(:sys_msg).permit(:user_name, :action_title, :action_desc, :user_id, :serv_id)
+      params.require(:sys_msg).permit(:user_name, :action_title, :action_desc, :user_id, :msg_catalog, :accept_users_type, :accept_users, :status)
     end
 
     def set_interval(instance)

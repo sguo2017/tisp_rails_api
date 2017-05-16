@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170515031021) do
+ActiveRecord::Schema.define(version: 20170515185230) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -171,10 +171,14 @@ ActiveRecord::Schema.define(version: 20170515031021) do
     t.string   "action_title"
     t.string   "action_desc"
     t.integer  "user_id"
-    t.datetime "created_at",   null: false
-    t.datetime "updated_at",   null: false
+    t.datetime "created_at",        null: false
+    t.datetime "updated_at",        null: false
     t.integer  "serv_id"
     t.string   "interval"
+    t.string   "msg_catalog"
+    t.string   "accept_users_type"
+    t.string   "accept_users"
+    t.string   "status"
   end
 
   create_table "sys_msgs_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -215,6 +219,7 @@ ActiveRecord::Schema.define(version: 20170515031021) do
     t.string   "country"
     t.string   "latitude"
     t.string   "longitude"
+    t.string   "profile"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree

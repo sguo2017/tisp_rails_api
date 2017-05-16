@@ -5,13 +5,17 @@ zh-CN:
       sys_msg: "系统消息"
     attributes:
       sys_msg:
-        id: "ID" 
+        id: "ID"
         user_name: "用户名称"
         action_title: "操作名称"
         action_desc: "操作描述"
         user_id: "用户ID"
         created_at: "创建时间"
         serv_id: "商品ID"
+        msg_catalog: "消息类型"
+        accept_users_type: "接收目标"
+        accept_users: 接收者
+        status: "状态"
         actions: "操作"
   helpers:
     links:
