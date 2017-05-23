@@ -12,6 +12,8 @@ class Const
   #手机端短信验证码10分钟有效
   SMS_TIME_LIMIT=10
   TOKEN_TIME_LIMIT=1
+  MAILER_ACCOUNT = "qike2018qike@163.com"
+  MAILER_PASSWORD = "cc111111"
 
   module SysMsg
     SYSTEM_USER_ID = 1
