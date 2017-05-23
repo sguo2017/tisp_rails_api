@@ -42,6 +42,7 @@ Rails.application.routes.draw do
     namespace :users do
       resources :registrations, only: [:update, :create]
 	  resources :sessions, only: [:create, :destroy, :smslogin, :tokenlogin]
+	  resources :passwords, only: [:create]
 	  resources :users_behaviors, only: [:index, :show, :create, :update, :destroy, :client_ip]
 	  match '/image_server_url' ,to: 'registrations#image_server_url', via: [:get,:post]
 	  match '/sms_login' ,to: 'sessions#sms_login', via: [:post]

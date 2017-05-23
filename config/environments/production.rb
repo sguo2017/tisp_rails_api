@@ -83,4 +83,17 @@ Rails.application.configure do
 
   # Do not dump schema after migrations.
   config.active_record.dump_schema_after_migration = false
+  
+  #host：本web应用服务器地址；port：本web应用运行端口
+  config.action_mailer.default_url_options = { host: Utils::ServerUtils.get_server_ip, port: Rack::Server.new.options[:Port] }
+  #邮件协议以及相关参数、账号配置
+  config.action_mailer.delivery_method =:smtp
+  config.action_mailer.smtp_settings = {
+      :address=> "smtp.163.com",
+      :port=> 25,
+      :domain=> "163.com",
+      :authentication=> :login,
+      :user_name=> Const::MAILER_ACCOUNT,#你的邮箱
+      :password=> Const::MAILER_PASSWORD      #你的密码
+  }
 end
