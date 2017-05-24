@@ -1,0 +1,20 @@
+# == Schema Information
+#
+# Table name: sys_msgs_timelines
+#
+#  id         :integer          not null, primary key
+#  sys_msg_id :integer
+#  user_id    :integer
+#  created_at :datetime         not null
+#  updated_at :datetime         not null
+#
+
+# Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  sys_msg_id: 1
+  user_id: 1
+
+two:
+  sys_msg_id: 1
+  user_id: 1

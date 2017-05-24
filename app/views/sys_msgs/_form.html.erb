@@ -46,14 +46,14 @@
   <div class="form-group">
     <%= f.label :msg_catalog, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= select_tag "sys_msg[msg_catalog]", options_for_select(@catalog_list, selected=@catalog_selected),{:class => "form-control"} %>
+      <%= select_tag "sys_msg[msg_catalog]", options_for_select(@catalog_list, selected=@catalog_selected),{:class => "form-control", :disabled => "disabled"} %>
     </div>
     <%=f.error_span(:msg_catalog) %>
   </div>
   <div class="form-group">
     <%= f.label :status, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= select_tag "sys_msg[status]", options_for_select(@status_list, selected=@status_selected),{:class => "form-control"} %>
+      <%= select_tag "sys_msg[status]", options_for_select(@status_list, selected=@status_selected),{:class => "form-control", :disabled => "disabled"} %>
     </div>
     <%=f.error_span(:status) %>
   </div>
@@ -64,12 +64,17 @@
     </div>
     <%=f.error_span(:accept_users_type) %>
   </div>
-  <div class="form-group">
-    <%= f.label :accept_users, :class => 'control-label col-lg-2' %>
+  <div class="form-group hidden" id = "sys_msg_users_div">
+    <%= label_tag '','指定用户', :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= f.text_field :accept_users, :class => 'form-control' %>
+      <%= text_field_tag('[sys_msg]accept_users', '', {:class => 'form-control', :placeholder => "输入用户id,用','分隔"}) %>
     </div>
-    <%=f.error_span(:accept_users) %>
+  </div>
+  <div class="form-group hidden" id = "sys_msg_cities_div">
+    <%= label_tag '','指定城市', :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= text_field_tag('[sys_msg]accept_cities', '', {:class => 'form-control', :placeholder => "输入城市名,用','分隔"}) %>
+    </div>
   </div>
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">

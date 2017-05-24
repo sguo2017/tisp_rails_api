@@ -69,6 +69,7 @@ class Api::Sys::SysMsgsController < ApplicationController
   # POST /sys_msgs.json
   def create
     @sys_msg = SysMsg.new(sys_msg_params)
+    set_accept_users
     set_interval(@sys_msg)
 
     respond_to do |format|
@@ -121,6 +122,18 @@ class Api::Sys::SysMsgsController < ApplicationController
         interval = (interval/1.hour).ceil.to_s + "h"
       end
       instance.update_attributes(:interval => interval)
+    end
+
+    def set_accept_users
+      cities_param = params[:sys_msg][:accept_cities]
+      cities = cities_param.split(',') if cities_param.present?
+      users_param = params[:sys_msg][:accept_users]
+      users = users_param.split(',')
+      params_hash = {
+        :cities => cities,
+        :users => users
+      }
+      @sys_msg.set_accept_users(params_hash)
     end
 
 

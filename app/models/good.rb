@@ -36,7 +36,9 @@ class Good < ApplicationRecord
           :msg_catalog => Const::SysMsg::CATALOG[:private],
           :status => Const::SysMsg::STATUS[:created]
         }
-        SysMsg.create!(params_hash)
+        sys_msg = SysMsg.new(params_hash)
+        sys_msg.set_accept_users
+        sys_msg.save
         logger.debug "Good created callback has been executed!"
       elsif self.serv_catagory == Const::SysMsg::GOODS_TYPE[:offer]
         params_hash={
@@ -49,7 +51,9 @@ class Good < ApplicationRecord
           :msg_catalog => Const::SysMsg::CATALOG[:public],
           :status => Const::SysMsg::STATUS[:created]
         }
-        SysMsg.create!(params_hash)
+        SysMsg.new(params_hash)
+        sys_msg.set_accept_users
+        sys_msg.save
         logger.debug "Good created callback has been executed!"
       end
     end

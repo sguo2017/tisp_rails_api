@@ -22,12 +22,20 @@
 #  num                    :string(255)
 #  level                  :integer          default(1)
 #  lock                   :integer          default(0)
+#  district               :string(255)
+#  city                   :string(255)
+#  province               :string(255)
+#  country                :string(255)
+#  latitude               :string(255)
+#  longitude              :string(255)
+#  profile                :string(255)
 #
 
 class User < ApplicationRecord
   has_many :goods
-  has_many :sys_msgs
   has_many :sms_sends
+  has_many :sys_msgs_timelines, dependent: :delete_all
+  has_many :sys_msgs, through: :sys_msgs_timelines
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   before_save :ensure_authentication_token
@@ -92,7 +100,7 @@ class User < ApplicationRecord
           :action_desc => self.profile,
           :user_id => self.id,
           :user_name =>  self.name,
-          :accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:all], 
+          :accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:all],
           :msg_catalog => Const::SysMsg::CATALOG[:public],
           :status => Const::SysMsg::STATUS[:created]
         }

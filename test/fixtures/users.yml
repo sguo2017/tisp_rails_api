@@ -22,6 +22,13 @@
 #  num                    :string(255)
 #  level                  :integer          default(1)
 #  lock                   :integer          default(0)
+#  district               :string(255)
+#  city                   :string(255)
+#  province               :string(255)
+#  country                :string(255)
+#  latitude               :string(255)
+#  longitude              :string(255)
+#  profile                :string(255)
 #
 
 # Read about fixtures at http://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html

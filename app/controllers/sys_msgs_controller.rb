@@ -31,7 +31,7 @@ class SysMsgsController < ApplicationController
   # POST /sys_msgs.json
   def create
     @sys_msg = SysMsg.new(sys_msg_params)
-
+    set_accept_users
     respond_to do |format|
       if @sys_msg.save
         format.html { redirect_to @sys_msg, notice: '成功创建系统消息！' }
@@ -75,7 +75,7 @@ class SysMsgsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sys_msg_params
-      params.require(:sys_msg).permit(:user_name, :action_title, :action_desc, :user_id, :msg_catalog, :accept_users_type, :accept_users, :status)
+      params.require(:sys_msg).permit(:user_name, :action_title, :action_desc, :user_id, :msg_catalog, :accept_users_type, :status)
     end
 
 	  def set_sys_msgs_search
@@ -87,15 +87,27 @@ class SysMsgsController < ApplicationController
     def config_select
       @catalog_list = Const::SysMsg::CATALOG.values.map { |v| [v, v] }
       @catalog_list = @catalog_list.map { |e| [Const::SysMsg::CATALOG_TRANSLATE[e[0].to_sym],e[1]] } if Const::SysMsg::CATALOG_TRANSLATE
-      @catalog_list_selected = []
+      @catalog_selected = @catalog_list[1]
 
       @status_list = Const::SysMsg::STATUS.values.map { |v| [v, v] }
       @status_list = @status_list.map { |e| [Const::SysMsg::STATUS_TRANSLATE[e[0].to_sym],e[1]] } if Const::SysMsg::STATUS_TRANSLATE
-      @status_list_selected = []
+      @status_selected = @status_list[0]
 
       @accept_users_type_list = Const::SysMsg::ACCEPT_USERS_TYPE.values.map { |v| [v, v] }
       @accept_users_type_list = @accept_users_type_list.map { |e| [Const::SysMsg::ACCEPT_USERS_TYPE_TRANSLATE[e[0].to_sym],e[1]] } if Const::SysMsg::ACCEPT_USERS_TYPE_TRANSLATE
       @accept_users_type_list_selected = []
 
+    end
+
+    def set_accept_users
+      cities_param = params[:sys_msg][:accept_cities]
+      cities = cities_param.split(',') if cities_param.present?
+      users_param = params[:sys_msg][:accept_users]
+      users = users_param.split(',')
+      params_hash = {
+        :cities => cities,
+        :users => users
+      }
+      @sys_msg.set_accept_users(params_hash)
     end
 end
