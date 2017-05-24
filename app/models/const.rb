@@ -13,7 +13,7 @@ class Const
   SMS_TIME_LIMIT=10
   TOKEN_TIME_LIMIT=1
   MAILER_ACCOUNT = "qike2018qike@163.com"
-  MAILER_PASSWORD = "cc111111"
+  MAILER_PASSWORD = "tispr2017" # 如果是开了邮箱授权码，要用授权码代替密码
 
   module SysMsg
     SYSTEM_USER_ID = 1
