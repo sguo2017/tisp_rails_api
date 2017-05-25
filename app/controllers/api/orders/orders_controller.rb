@@ -1,8 +1,8 @@
 class Api::Orders::OrdersController < ApplicationController
   respond_to :json
 
-  before_filter :authenticate_user_from_token!
- 
+  before_action :authenticate_user_from_token!
+
   before_action :set_order, only: [:show, :edit, :update, :destroy]
 
   # GET /orders
@@ -20,8 +20,8 @@ class Api::Orders::OrdersController < ApplicationController
          logger.debug "order #{@order}"
          #@serv = ServOffer.find(order.serv_offer_id) rescue nil
          begin
-              @serv = Good.find(order.serv_offer_id)     
-              o["serv_offer_titile"]=@serv.serv_title 
+              @serv = Good.find(order.serv_offer_id)
+              o["serv_offer_titile"]=@serv.serv_title
               o["serv"]=@serv.serv_title
          rescue ActiveRecord::RecordNotFound => e
               o["serv_offer_titile"]=""
@@ -78,7 +78,7 @@ class Api::Orders::OrdersController < ApplicationController
       if @order.save
         @order_chat = OrderItem.new()
         @order_chat.deal_id = @order.id
-        @order_chat.serv_offer_id = @order.serv_offer_id        
+        @order_chat.serv_offer_id = @order.serv_offer_id
         @order_chat.offer_user_id = @order.offer_user_id
         @order_chat.request_user_id = @order.request_user_id
         @order_chat.lately_chat_content = "your offer is awesome"
@@ -91,7 +91,7 @@ class Api::Orders::OrdersController < ApplicationController
         #format.json { render json: @order.errors, status: :unprocessable_entity }
          format.json {
            render json: {status:-1, msg:"fail"}
-        }               
+        }
       end
     end
   end
@@ -108,7 +108,7 @@ class Api::Orders::OrdersController < ApplicationController
         @order_item.request_user_id = @order.request_user_id
         @order_item.lately_chat_content = @order.lately_chat_content
         @order_item.bidder = @order.bidder
-        @order_item.signature = @order.signature   
+        @order_item.signature = @order.signature
         @order_item.save
         #format.json { render :show, status: :ok, location: @order }
         format.json {

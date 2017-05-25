@@ -1,10 +1,12 @@
 class OrderItemsController < ApplicationController
+
+  before_action :authenticate_user!
   before_action :set_order_item, only: [:show, :edit, :update, :destroy]
 
   # GET /order_items
   # GET /order_items.json
   def index
-     @order_items = OrderItem.where(deal_id: params[:deal_id]).order("created_at DESC").page(params[:page]).per(5) 
+     @order_items = OrderItem.where(deal_id: params[:deal_id]).order("created_at DESC").page(params[:page]).per(5)
   end
 
   # GET /order_items/1

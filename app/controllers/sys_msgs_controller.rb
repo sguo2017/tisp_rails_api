@@ -1,10 +1,8 @@
 class SysMsgsController < ApplicationController
+
+  before_action :authenticate_user!
   before_action :set_sys_msg, only: [:show, :edit, :update, :destroy]
-
-  before_filter :authenticate_user!
-
   before_action :set_sys_msgs_search
-
   before_action :config_select, only: [:edit, :new]
 
   # GET /sys_msgs

@@ -2,7 +2,7 @@ class Api::Me::FavoritesController < ApplicationController
 
   respond_to :json
 
-  before_filter :authenticate_user_from_token!
+  before_action :authenticate_user_from_token!
 
   before_action :set_favorite, only: [:show, :edit, :update, :destroy]
 
@@ -15,7 +15,7 @@ class Api::Me::FavoritesController < ApplicationController
     user_id = user.id
     @favorites = Favorite.where(user_id: user_id).order("created_at DESC").page(params[:page]).per(5)
     #@favorites = Favorite.order("created_at DESC").page(params[:page]).per(5)
-    
+
     @offers = []
     @favorites.each do |favorite|
          offer = Good.find(favorite.obj_id)
@@ -26,7 +26,7 @@ class Api::Me::FavoritesController < ApplicationController
             u.authentication_token = "***"
             s["user"]=u
 	 rescue ActiveRecord::RecordNotFound => e
-         
+
 	 end
          s["isFavorited"] = true
          s["favorite_id"] = favorite.id.to_s

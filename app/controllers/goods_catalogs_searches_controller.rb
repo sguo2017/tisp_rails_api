@@ -1,4 +1,7 @@
 class GoodsCatalogsSearchesController < ApplicationController
+  
+  before_action :authenticate_user!
+
  # 创建搜索
    # 创建完成后重定向到#show
    # POST => /goods_catalogs_search
@@ -23,7 +26,7 @@ class GoodsCatalogsSearchesController < ApplicationController
       @goods_catalogs_search=GoodsCatalogsSearch.create!(permit_params)
       redirect_to @goods_catalogs_search
    end
-   
+
    private
      def permit_params
 	   params.require(:goods_catalogs_search).permit(:catalog_id, :catalog_name, :catalog_level, :catalog_parent, :goods_count, :catalog_created, :id)

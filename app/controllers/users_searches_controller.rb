@@ -1,4 +1,5 @@
 class UsersSearchesController < ApplicationController
+  
    before_action :authenticate_user!
 
    # 创建搜索
@@ -28,7 +29,7 @@ class UsersSearchesController < ApplicationController
       @users_search=UsersSearch.create!(permit_params)
       redirect_to @users_search
    end
-   
+
    private
      def permit_params
 	   params.require(:users_search).permit(:user_id, :user_email, :user_name, :is_admin, :user_level, :has_locked, :user_created, :id)

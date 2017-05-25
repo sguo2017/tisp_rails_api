@@ -1,4 +1,6 @@
 class OrdersController < ApplicationController
+
+  before_action :authenticate_user!
   before_action :set_order, only: [:show, :edit, :update, :destroy]
   before_action :set_orders_search
 
@@ -74,15 +76,15 @@ class OrdersController < ApplicationController
     def new_order_params
 	  params.require(:order).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :status, :connect_time, :bidder, :signature)
     end
-	
+
 	def update_order_params
 	  params.require(:order).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :connect_time, :bidder, :signature)
 	end
-	
+
 	def set_orders_search
 	  if !@orders_search
 	    @orders_search=OrdersSearch.new
 	  end
 	end
-	
+
 end

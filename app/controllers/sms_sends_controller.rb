@@ -1,4 +1,6 @@
 class SmsSendsController < ApplicationController
+
+  before_action :authenticate_user!
   before_action :set_sms_send, only: [:show, :edit, :update, :destroy]
   load_and_authorize_resource
   before_action :set_sms_sends_search
@@ -73,7 +75,7 @@ class SmsSendsController < ApplicationController
     def sms_send_params
       params.require(:sms_send).permit(:recv_num, :send_content, :state, :sms_type, :user_id)
     end
-	
+
 	def set_sms_sends_search
       if !@sms_sends_search
         @sms_sends_search=SmsSendsSearch.new

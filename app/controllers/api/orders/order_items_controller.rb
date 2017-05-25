@@ -2,8 +2,8 @@ class Api::Orders::OrderItemsController < ApplicationController
 
   respond_to :json
 
-  before_filter :authenticate_user_from_token!
-  
+  before_action :authenticate_user_from_token!
+
   before_action :set_order_item, only: [:show, :edit, :update, :destroy]
 
   def index
@@ -32,7 +32,7 @@ class Api::Orders::OrderItemsController < ApplicationController
     logger.debug "chats:#{@chats.to_json}"
 
     respond_to do |format|
-      format.json {      
+      format.json {
         render json: {page: @order_items.current_page, total_pages: @order_items.total_pages, feeds: @chats.to_json}
       }
     end
@@ -57,12 +57,12 @@ class Api::Orders::OrderItemsController < ApplicationController
         #format.json { render :show, status: :created, location: @order_item }
         format.json {
            render json: {status:0, msg:"success"}
-        }        
+        }
       else
         #format.json { render json: @order_item.errors, status: :unprocessable_entity }
         format.json {
            render json: {status:-1, msg:"fail"}
-        }        
+        }
       end
     end
   end
@@ -73,12 +73,12 @@ class Api::Orders::OrderItemsController < ApplicationController
         #format.json { render :show, status: :ok, location: @order_item }
         format.json {
            render json: {status:0, msg:"success"}
-        }        
+        }
       else
         #format.json { render json: @order_item.errors, status: :unprocessable_entity }
         format.json {
            render json: {status:0, msg:"fail"}
-        }        
+        }
       end
     end
   end

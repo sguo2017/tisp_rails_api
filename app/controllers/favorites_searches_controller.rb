@@ -1,4 +1,5 @@
 class FavoritesSearchesController < ApplicationController
+  
  before_action :authenticate_user!
 
    # 创建搜索
@@ -25,7 +26,7 @@ class FavoritesSearchesController < ApplicationController
       @favorites_search=FavoritesSearch.create!(permit_params)
       redirect_to @favorites_search
    end
-   
+
    private
      def permit_params
 	   params.require(:favorites_search).permit(:favor_id,:obj_id,:obj_type,:user_id,:favor_created,:id)

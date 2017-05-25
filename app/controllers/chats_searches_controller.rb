@@ -1,4 +1,5 @@
 class ChatsSearchesController < ApplicationController
+  
    before_action :authenticate_user!
 
    # 创建搜索
@@ -25,7 +26,7 @@ class ChatsSearchesController < ApplicationController
       @chats_search=ChatsSearch.create!(permit_params)
       redirect_to @chats_search
    end
-   
+
    private
      def permit_params
 	   params.require(:chats_search).permit(:chat_id, :order_id, :chat_content, :user_id, :chat_catalog, :chat_created, :id)

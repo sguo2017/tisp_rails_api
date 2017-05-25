@@ -1,7 +1,7 @@
 class Api::Sys::SysMsgsController < ApplicationController
   respond_to :json
 
-  before_filter :authenticate_user_from_token!
+  before_action :authenticate_user_from_token!
 
   before_action :set_sys_msg, only: [:show, :edit, :update, :destroy]
 

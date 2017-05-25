@@ -1,8 +1,9 @@
 class AdminUsersController < ApplicationController
-
+  
+  before_action :authenticate_user!
   before_action :set_user, only: [:show, :edit, :update, :destroy, :lock_proc]
   #这里不要使用 load_and_authorize_resource，否则更新会出错，原因未明
-  before_action :authorize_user 
+  before_action :authorize_user
   before_action :set_users_search
 
   # GET /users
@@ -63,8 +64,8 @@ class AdminUsersController < ApplicationController
       format.html { redirect_to admin_users_url, notice: '用户删除成功' }
     end
   end
-  
-  #GET/POST 
+
+  #GET/POST
   def lock_proc
     if @target_user.admin
 	  false
@@ -86,7 +87,7 @@ class AdminUsersController < ApplicationController
     def user_params
       params.require(:user).permit(:email, :name, :password, :password_confirmation, :admin, :avatar, :level)
     end
-	
+
 	def update_user(params)
 	    if params[:password].blank?
 		   params.delete(:password)
@@ -94,16 +95,16 @@ class AdminUsersController < ApplicationController
 		end
 		return  @target_user.update(params)
 	end
-	
+
 	#验证用户权限
 	def authorize_user
        authorize!(params[:action].to_sym, @target_user || User)
 	end
-	
+
 	def set_users_search
 	    if !@users_search
             @users_search=UsersSearch.new
         end
 	end
-	
+
 end

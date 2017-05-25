@@ -1,4 +1,6 @@
 class GoodsCatalogsController < ApplicationController
+
+  before_action :authenticate_user!
   before_action :set_goods_catalog, only: [:show, :edit, :update, :destroy]
   before_action :set_root_id
   load_and_authorize_resource
@@ -80,11 +82,11 @@ class GoodsCatalogsController < ApplicationController
     def goods_catalog_params
       params.require(:goods_catalog).permit(:name, :image, :level, :parent_id)
     end
-	
+
 	def set_root_id
 	  @root_id = Const::GOODS_CATALOG_ROOT_ID
 	end
-	
+
 	def set_goods_catalogs_search
       if !@goods_catalogs_search
         @goods_catalogs_search=GoodsCatalogsSearch.new

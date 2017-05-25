@@ -10,6 +10,6 @@
 #
 
 class SysMsgsTimeline < ApplicationRecord
-  belongs_to :sys_msg, dependent: :delete
-  belongs_to :user, dependent: :delete
+  belongs_to :sys_msg
+  belongs_to :user
 end

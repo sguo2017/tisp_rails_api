@@ -1,0 +1,44 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      sys_msgs_timeline: "用户-系统消息"
+    attributes:
+      sys_msgs_timeline:
+        id: "id"
+        user_id: "用户id"
+        sys_msg_id: "系统消息id"
+        created_at: "创建时间"
+        actions: "操作"
+  helpers:
+    links:
+      show: "查看"
+      edit: "编辑"
+      destroy: "删除"
+      new: "新增"
+      back: "返回"
+      cancel: "取消"
+    actions: "操作"
+    submit:
+      sys_msgs_timeline:
+        create: "创建用户-系统消息"
+        update: "更新用户-系统消息"
+  sys_msgs_timelines:
+    edit:
+      title: "编辑用户-系统消息"
+    form:
+      sys_msgs_timeline: "用户-系统消息"
+    index:
+      confirm: "你确定要删除这个用户-系统消息用户-系统消息吗?"
+      empty: "没有记录"
+      new_sys_msg: "创建用户-系统消息"
+      title: "用户-系统消息列表"
+    new:
+      title: "创建用户-系统消息"
+    show:
+      title: "用户-系统消息详情"
+      confirm: "你确定要删除这个用户-系统消息吗?"
+      empty: "没有记录"
+    was_created: "用户-系统消息成功创建"
+    was_deleted: "用户-系统消息成功删除"
+    was_updated: "用户-系统消息成功更新"

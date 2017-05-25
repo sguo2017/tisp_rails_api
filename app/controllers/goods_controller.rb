@@ -1,17 +1,17 @@
 class GoodsController < ApplicationController
 
-  #before_filter :authenticate_user_from_token!  
+  #before_filter :authenticate_user_from_token!
 
   #before_action :authenticate_user!
 
-  before_filter :authenticate_user!
+  before_action :authenticate_user!
 
   before_action :set_good, only: [:show, :edit, :update, :destroy]
-  
+
   before_action :set_goods_search
-  
+
   before_action :set_list_for_select, only: [:new, :edit]
-  
+
   load_and_authorize_resource :only => [:new, :create]
 
   #skip_before_filter :verify_authenticity_token
@@ -22,12 +22,12 @@ class GoodsController < ApplicationController
     @goods = Good.order("created_at DESC").page(params[:page]).per(10)
     logger.debug "good all!!! current_user:#{@current_user} #{current_user}"
 
-    if @current_user 
+    if @current_user
        logger.debug 'come on'
     else
        logger.debug 'nil'
     end
- 
+
     if user_signed_in?
       logger.debug 'siged_id!!!!!!'
     else
@@ -35,7 +35,7 @@ class GoodsController < ApplicationController
     end
 
     user = session[:current_tispr_user]
-    logger.debug "good all!!! session.tispr_user.email: #{user['email']} session.tispr_user.id: #{user['id']}"    
+    logger.debug "good all!!! session.tispr_user.email: #{user['email']} session.tispr_user.id: #{user['id']}"
 
   end
 
@@ -64,7 +64,7 @@ class GoodsController < ApplicationController
   # POST /goods.json
   def create
     @good = Good.new(good_params)
-    @good.user_id = current_user.id 
+    @good.user_id = current_user.id
 
     respond_to do |format|
       if @good.save
@@ -111,13 +111,13 @@ class GoodsController < ApplicationController
     def good_params
       params.require(:good).permit(:serv_title, :serv_detail, :serv_imges, :serv_catagory, :user_id, :goods_catalog_id)
     end
-	
+
 	def set_goods_search
 	   if !@goods_search
 	      @goods_search=GoodsSearch.new
 	   end
 	end
-	
+
 	def set_list_for_select
 	  @select_list = [['无', nil]]+GoodsCatalog.all.map{ |c| [c.name,c.id]}
 	end

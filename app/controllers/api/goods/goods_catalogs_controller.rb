@@ -1,11 +1,11 @@
 class Api::Goods::GoodsCatalogsController < ApplicationController
   respond_to :json
 
-  before_filter :authenticate_user_from_token!
+  before_action :authenticate_user_from_token!
 
   #before_action :set_goods_catalog, only: [:show, :edit, :update, :destroy]
-  
-  
+
+
   # GET /goods_catalogs
   # GET /goods_catalogs.json
   def index
@@ -14,19 +14,19 @@ class Api::Goods::GoodsCatalogsController < ApplicationController
     	@goods_catalogs = GoodsCatalog.where("level=?",params[:level]).order("created_at ASC")
     end
 		goods_catalogs_arr = []
-    @goods_catalogs.each do |catalog|    
+    @goods_catalogs.each do |catalog|
     	c = catalog.attributes.clone
     	parent_id = catalog.id
     	goods_catalogs_II =  GoodsCatalog.where("ancestry=?","1/#{parent_id}").order("created_at ASC")
-    	if goods_catalogs_II.blank?    	
+    	if goods_catalogs_II.blank?
     		c["goods_catalogs_II"] = "[]"
-    	else   		
-    		c["goods_catalogs_II"] = goods_catalogs_II.to_json 
+    	else
+    		c["goods_catalogs_II"] = goods_catalogs_II.to_json
       end
     	goods_catalogs_arr.push(c)
     end
-    
-    
+
+
     respond_to do |format|
         format.json {render json: {feeds: goods_catalogs_arr.to_json}}
     end
@@ -47,6 +47,5 @@ class Api::Goods::GoodsCatalogsController < ApplicationController
     def set_root_id
       @root_id = 1
     end
-        
+
 end
-        

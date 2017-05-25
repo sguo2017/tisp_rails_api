@@ -1,4 +1,6 @@
 class ChatsController < ApplicationController
+
+  before_action :authenticate_user!
   before_action :set_chat, only: [:show, :edit, :update, :destroy]
   before_action :set_chats_search
 
@@ -72,7 +74,7 @@ class ChatsController < ApplicationController
     def chat_params
       params.require(:chat).permit(:deal_id, :chat_content, :user_id, :catalog)
     end
-	
+
 	def set_chats_search
 	   if !@chats_search
 	      @chats_search=ChatsSearch.new

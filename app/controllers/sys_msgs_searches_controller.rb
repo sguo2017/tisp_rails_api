@@ -1,4 +1,5 @@
 class SysMsgsSearchesController < ApplicationController
+  
    before_action :authenticate_user!
 
    # 创建搜索
@@ -25,7 +26,7 @@ class SysMsgsSearchesController < ApplicationController
       @sys_msgs_search=SysMsgsSearch.create!(permit_params)
       redirect_to @sys_msgs_search
    end
-   
+
    private
      def permit_params
 	   params.require(:sys_msgs_search).permit(:sys_id,:user_name,:action_title,:action_desc,:user_id,:serv_id,:sys_created,:id)

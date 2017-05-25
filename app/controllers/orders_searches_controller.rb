@@ -1,4 +1,5 @@
 class OrdersSearchesController < ApplicationController
+  
    before_action :authenticate_user!
 
    # 创建搜索
@@ -26,7 +27,7 @@ class OrdersSearchesController < ApplicationController
       @orders_search=OrdersSearch.create!(permit_params)
       redirect_to @orders_search
    end
-   
+
    private
      def permit_params
 	   params.require(:orders_search).permit(:order_id, :serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :status, :connect_time, :bidder, :signature, :order_created, :id)

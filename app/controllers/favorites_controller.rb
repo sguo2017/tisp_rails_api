@@ -1,4 +1,6 @@
 class FavoritesController < ApplicationController
+
+  before_action :authenticate_user!
   before_action :set_favorite, only: [:show, :edit, :update, :destroy]
   before_action :set_favorites_search
 
@@ -72,7 +74,7 @@ class FavoritesController < ApplicationController
     def favorite_params
       params.require(:favorite).permit(:obj_id, :obj_type, :user_id)
     end
-	
+
 	def set_favorites_search
 	  if !@favorites_search
 	    @favorites_search=FavoritesSearch.new

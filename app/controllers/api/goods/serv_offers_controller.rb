@@ -1,7 +1,7 @@
 class Api::Goods::ServOffersController < ApplicationController
   respond_to :json
 
-  before_filter :authenticate_user_from_token!
+  before_action :authenticate_user_from_token!
 
   before_action :set_serv_offer, only: [:show, :edit, :update, :destroy]
 
@@ -11,7 +11,7 @@ class Api::Goods::ServOffersController < ApplicationController
   def index
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
-    @serv_offers 
+    @serv_offers
     user_id = params[:user_id].presence
 	extra_parm_s = params[:exploreparams]
 	#场景一：模糊查询
@@ -22,25 +22,25 @@ class Api::Goods::ServOffersController < ApplicationController
 		@serv_offers = @serv_offers.where("goods_catalog_id in (?)",extra_parm_h['goods_catalog_I']).order("created_at DESC").page(params[:page]).per(5) if extra_parm_h.include?("goods_catalog_I")
 	#场景二：全部查询
 	elsif user_id.nil?
-		@serv_offers = Good.order("created_at DESC").page(params[:page]).per(5)	
+		@serv_offers = Good.order("created_at DESC").page(params[:page]).per(5)
 	#场景三：个人查询
     else
         @serv_offers = Good.where("user_id = ?", user_id).order("created_at DESC").page(params[:page]).per(5)
     end
 
-	
-	
+
+
     @offers = []
     @serv_offers.each do |offer|
          s = offer.attributes.clone
-         begin 
+         begin
             u = User.find(offer.user_id)
             u.authentication_token = "***"
             s["user"]=u
          rescue ActiveRecord::RecordNotFound => e
 
          end
-         
+
          #是否收藏
          f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "serv_offer").first
          if f.blank?
@@ -62,7 +62,7 @@ class Api::Goods::ServOffersController < ApplicationController
         render json: {page: @serv_offers.current_page, total_pages: @serv_offers.total_pages, feeds: @offers.to_json}
       }
     end
-    
+
   end
 
   # GET /serv_offers/1
@@ -83,25 +83,25 @@ class Api::Goods::ServOffersController < ApplicationController
   # POST /serv_offers.json
   def create
     @serv_offer = Good.new(serv_offer_params)
-    
+
     token = params[:token].presence
 
     user = token && User.find_by_authentication_token(token.to_s)
 
 
-    logger.debug "current_user:#{user.email}"   
+    logger.debug "current_user:#{user.email}"
 
 		action_title = ""
-		if params[:serv_catagory] == "serv_offer" 
+		if params[:serv_catagory] == "serv_offer"
 			action_title =  'created an offer'
 		else
 			action_title =  'requested an offer'
 	  end
 
     @sys_msg = SysMsg.new(:user_name=>user.name, :action_title=>action_title, :action_desc=>@serv_offer.serv_title, :user_id=>user.id)
-    @sys_msg.user = user 
-    
-    @serv_offer.user_id = user.id    
+    @sys_msg.user = user
+
+    @serv_offer.user_id = user.id
 
     respond_to do |format|
       if @serv_offer.save
