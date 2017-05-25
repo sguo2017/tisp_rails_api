@@ -66,6 +66,7 @@ Rails.application.routes.draw do
     end
     namespace :sys_msgs_timelines do
       resources :sys_msgs_timelines
+      resources :sys_msgs_queries
     end
   end
 

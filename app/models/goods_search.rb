@@ -18,7 +18,7 @@ class GoodsSearch < ApplicationRecord
   def goods
     @goods ||= find_goods
   end
-  
+
   private
     # 条件搜索
     def find_goods
