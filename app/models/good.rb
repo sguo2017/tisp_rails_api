@@ -37,7 +37,7 @@ class Good < ApplicationRecord
           :status => Const::SysMsg::STATUS[:created]
         }
         sys_msg = SysMsg.new(params_hash)
-        sys_msg.set_accept_users
+        sys_msg.set_accept_users #设置接受用户为同城人，插入中间表
         sys_msg.save
         logger.debug "Good created callback has been executed!"
       elsif self.serv_catagory == Const::SysMsg::GOODS_TYPE[:offer]
@@ -51,9 +51,7 @@ class Good < ApplicationRecord
           :msg_catalog => Const::SysMsg::CATALOG[:public],
           :status => Const::SysMsg::STATUS[:created]
         }
-        SysMsg.new(params_hash)
-        sys_msg.set_accept_users
-        sys_msg.save
+        sys_msg = SysMsg.create!(params_hash) #公共消息，不需要指定接收人，直接保存
         logger.debug "Good created callback has been executed!"
       end
     end

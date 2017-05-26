@@ -31,8 +31,8 @@ class SysMsg < ApplicationRecord
       @accept_users_ids = User.all.where(city:  params_hash[:cities]).map{|u| u.id}
     when Const::SysMsg::ACCEPT_USERS_TYPE[:specify_users]
       @accept_users_ids = User.all.where(id:  params_hash[:users]).map{|u| u.id}
-    when Const::SysMsg::ACCEPT_USERS_TYPE[:all]
-      true
+    else
+      @accept_users_ids = []
     end
   end
 

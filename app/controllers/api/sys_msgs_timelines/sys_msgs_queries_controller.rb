@@ -18,20 +18,22 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
     # inner join users U2 on U2.city = users.city WHERE `U2`.`id` = '2' ) T
     # on user_id = T.id WHERE `sys_msgs`.`msg_catalog` = 'private'
     # 这里使用的是rails的joins方法而不是find_by_sql，因为后者得到的对象是Array不能进行分页
+    # 以上注释已过期
     case query_type
     when 'A','a','1'
-      @result = SysMsg.where(:msg_catalog => "private").joins(" inner join ( " + User.joins("inner join users U2 on U2.city = users.city").where('U2.id' => user_id).to_sql + " ) T on user_id = T.id")
+      # @result = SysMsg.where(:msg_catalog => "private").joins(" inner join ( " + User.joins("inner join users U2 on U2.city = users.city").where('U2.id' => user_id).to_sql + " ) T on user_id = T.id")
+      @result = User.find(user_id).sys_msgs.where(:msg_catalog => Const::SysMsg::CATALOG[:private])
     when 'B','b','2'
-      @result = User.find(user_id).sys_msgs
+      @result = User.find(user_id).sys_msgs.where(:msg_catalog => Const::SysMsg::CATALOG[:system])
     when 'C','c','3'
-      @result = SysMsg.where(:msg_catalog => "public")
+      @result = SysMsg.where(:msg_catalog => Const::SysMsg::CATALOG[:public])
     when 'ALL',"all",'0'
-      part1 = SysMsg.where(:msg_catalog => "private").joins(" inner join ( " + User.joins("inner join users U2 on U2.city = users.city").where('U2.id' => user_id).to_sql + " ) T on user_id = T.id")
-      part2 = User.find(user_id).sys_msgs
-      part3 = SysMsg.where(:msg_catalog => "public")
+      part1 = User.find(user_id).sys_msgs.where(:msg_catalog => Const::SysMsg::CATALOG[:private])
+      part2 = User.find(user_id).sys_msgs.where(:msg_catalog => Const::SysMsg::CATALOG[:system])
+      part3 = SysMsg.where(:msg_catalog => Const::SysMsg::CATALOG[:public])
       @result = SysMsg.where(:id => (part1 + part2 + part3).map{|x| x.id})
     else
-      return render json: {status: :failed,reason: :parameters_error} 
+      return render json: {status: :failed,reason: :parameters_error}
     end
     @result = @result.order("created_at DESC").page(params[:page]).per(10)
     respond_to do |format|
