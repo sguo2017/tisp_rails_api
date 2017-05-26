@@ -41,7 +41,7 @@ class SysMsg < ApplicationRecord
       return if @accept_users_ids.blank?
       SysMsgsTimeline.transaction do
         @accept_users_ids.each do |id|
-          SysMsgsTimeline.create!(:user_id => id, :sys_msg_id => self.id)
+          SysMsgsTimeline.create!(:user_id => id, :sys_msg_id => self.id, :status => Const::SysMsg::STATUS[:created])
         end
       end
     end

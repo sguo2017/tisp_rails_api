@@ -8,6 +8,7 @@
       <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:sys_msg_id) %></th>
       <th><%= model_class.human_attribute_name(:user_id) %></th>
+      <th><%= model_class.human_attribute_name(:status) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
@@ -18,7 +19,8 @@
         <td><%= link_to sys_msgs_timeline.id, sys_msgs_timeline_path(sys_msgs_timeline) %></td>
         <td><%= link_to sys_msgs_timeline.sys_msg_id, sys_msgs_timeline.sys_msg %></td>
         <td><%= link_to sys_msgs_timeline.user_id, admin_user_path(sys_msgs_timeline.user) %></td>
-        <td><%=l sys_msgs_timeline.created_at %></td>
+        <td><%= sys_msgs_timeline.status %></td>
+        <td><%= l sys_msgs_timeline.created_at %></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
                       sys_msgs_timeline_path(sys_msgs_timeline), :class => 'btn btn-default btn-xs' %>
@@ -35,6 +37,7 @@
   </tbody>
 </table>
 <%= paginate @sys_msgs_timelines %>
+<br/>
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_sys_msgs_timeline_path,
             :class => 'btn btn-primary' %>

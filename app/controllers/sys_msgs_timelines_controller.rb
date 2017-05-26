@@ -3,6 +3,7 @@ class SysMsgsTimelinesController < ApplicationController
   before_action :authenticate_user!
   load_and_authorize_resource
   before_action :set_sys_msgs_timeline, only: [:show, :edit, :update, :destroy]
+  before_action :config_select, only: [:new, :edit]
 
   # GET /sys_msgs_timelines
   # GET /sys_msgs_timelines.json
@@ -72,6 +73,12 @@ class SysMsgsTimelinesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sys_msgs_timeline_params
-      params.require(:sys_msgs_timeline).permit(:user_id, :sys_msg_id)
+      params.require(:sys_msgs_timeline).permit(:user_id, :sys_msg_id, :status)
+    end
+
+    def config_select
+      @status_list = Const::SysMsg::STATUS.values.map { |v| [v, v] }
+      @status_list = @status_list.map { |e| [Const::SysMsg::STATUS_TRANSLATE[e[0].to_sym],e[1]] } if Const::SysMsg::STATUS_TRANSLATE
+      @status_selected = @status_list[0]
     end
 end

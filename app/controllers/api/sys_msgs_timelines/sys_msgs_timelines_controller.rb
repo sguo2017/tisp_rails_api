@@ -75,6 +75,6 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def sys_msgs_timeline_params
-      params.require(:sys_msgs_timeline).permit(:user_id, :sys_msg_id)
+      params.require(:sys_msgs_timeline).permit(:user_id, :sys_msg_id, :status)
     end
 end
