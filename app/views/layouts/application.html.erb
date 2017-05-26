@@ -83,6 +83,7 @@
 	    <li><% if can? :read,SmsSend%><%= link_to "短信",sms_sends_path %><% end %></li>
             <li class='menu-right'><%= link_to "退出",destroy_user_session_path,:method=>:delete%></li>
             <li class='menu-right'><%=link_to "个人信息修改", edit_user_registration_path(current_user)%><li>
+            <li><% if can? :read,SysMsgsTimeline%><%= link_to "用户消息",sys_msgs_timelines_path %><% end %></li>
           </ul>
         </div>
       </div>

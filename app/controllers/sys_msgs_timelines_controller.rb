@@ -1,6 +1,7 @@
 class SysMsgsTimelinesController < ApplicationController
 
   before_action :authenticate_user!
+  load_and_authorize_resource
   before_action :set_sys_msgs_timeline, only: [:show, :edit, :update, :destroy]
 
   # GET /sys_msgs_timelines

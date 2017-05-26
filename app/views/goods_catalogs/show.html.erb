@@ -7,7 +7,7 @@
   <dt><strong><%= model_class.human_attribute_name(:name) %>:</strong></dt>
   <dd><%= @goods_catalog.name %></dd>
   <dt><strong><%= model_class.human_attribute_name(:image) %>:</strong></dt>
-  <dd><%= image_tag(@goods_catalog.image) %></dd>
+  <dd><%= image_tag(@goods_catalog.image) if @goods_catalog.image %></dd>
   <dt><strong><%= model_class.human_attribute_name(:level) %>:</strong></dt>
   <dd><%= @goods_catalog.level %></dd>
   <dt><strong><%= model_class.human_attribute_name(:parent) %>:</strong></dt>

@@ -28,7 +28,7 @@
 			<td><%= goods_catalog.parent.name if goods_catalog.parent %></td>
 			<td><%= goods_catalog.ancestry %></td>
 			<td><%= goods_catalog.goods.size%></td>
-			<td><%=l goods_catalog.created_at %></td>
+			<td><%= goods_catalog.created_at %></td>
 			<td>
 			  <%= link_to t('.show', :default => t("helpers.links.show")),
 						  goods_catalog_path(goods_catalog), :class => 'btn btn-default btn-xs' %>

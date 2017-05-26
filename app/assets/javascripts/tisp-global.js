@@ -2,8 +2,16 @@
 //Rails中JQuery的ready事件只会在网站第一次被打开时加触发，在链接跳转时不会触发
 //所以这里使用了'turbolinks:load'事件
 var lazyInfo={}; //全局变量
-$(document).on('turbolinks:load',
-function() {
+$(document).bind('turbolinks:before-visit',function(){
+  lazyInfo.left_at = new Date().format('yyyy-MM-dd hh:mm:ss');
+  collectLazyInfos();
+});
+$(window).bind('beforeunload',function(){
+  lazyInfo.left_at = new Date().format('yyyy-MM-dd hh:mm:ss');
+  collectLazyInfos();
+  return;
+});
+$(document).bind('turbolinks:load',function() {
   lazyInfo = {};
   showDatePicker();
   collectSimpleInfos();
@@ -137,15 +145,9 @@ function collectLazyInfos(){
     formData.append('users_behavior[left_at]', lazyInfo.left_at);
     formData.append('users_behavior[geo_position]', lazyInfo.geo_position);
     formData.append('users_behavior[click_positions]', lazyInfo.click_positions);
-    fetch('/api/users/users_behaviors/'+row_id, {
+    fetch('/api/users/users_behaviors/'+lazyInfo.row_id, {
       body: formData,
       method: 'PATCH'
     });
   }
 }
-
-$(document).on('page:before-change',function(){
-   lazyInfo.left_at = new Date().format('yyyy-MM-dd hh:mm:ss');
-   collectLazyInfos();
-
-});

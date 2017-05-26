@@ -15,9 +15,9 @@ class Ability
 	if avaliable_goods_to_add(user) > 0
 	  can :create, Good
 	end
-    
+
   end
-  
+
   def avaliable_goods_to_add(user)
     has_added = user.goods.where("created_at >= ?", Time.now.beginning_of_day).size
 	limit = 0
@@ -28,5 +28,5 @@ class Ability
 	avaliable=limit - has_added
 	return avaliable
   end
-  
+
 end

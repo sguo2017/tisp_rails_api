@@ -38,11 +38,11 @@ class SysMsg < ApplicationRecord
 
   protected
     def after_created_callback
-      logger.info('xxxxxxxxxxxx')
-      logger.info(@accept_users_ids)
       return if @accept_users_ids.blank?
-      @accept_users_ids.each do |id|
-        SysMsgsTimeline.create!(:user_id => id, :sys_msg_id => self.id)
+      SysMsgsTimeline.transaction do
+        @accept_users_ids.each do |id|
+          SysMsgsTimeline.create!(:user_id => id, :sys_msg_id => self.id)
+        end
       end
     end
 
