@@ -56,8 +56,8 @@ class Api::Users::SessionsController < ApplicationController
 		token = params[:token].presence
 		return render json: {error: {status:-1}} unless token
 		@user = User.where("TIMESTAMPDIFF(DAY,updated_at ,now())<#{Const::TOKEN_TIME_LIMIT} and authentication_token=?", token.to_s).first
+		@user = User.find(@user.id)
 		return render json: {error: {status:-1}} unless @user
-		logger.debug "user info: #{@user.to_json}"
 		respond_to do |format|
 			sign_in("user", @user)
 			set_geo_infos
