@@ -47,7 +47,7 @@
     <div class="form-group">
       <%= f.label :status, :class => 'control-label col-lg-2' %>
       <div class="col-lg-10">
-        <%= select_tag "order[status]", options_for_select(@order_status), {:class =>"form-control"} %>
+        <%= select_tag "order[status]", options_for_select(tcl(@order_status,'Const::ORDER_STATUS')), {:class =>"form-control"} %>
       </div>
       <%=f.error_span(:status) %>
     </div>
@@ -73,7 +73,7 @@
     </div>
     <%=f.error_span(:connect_time) %>
   </div>
- 
+
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">

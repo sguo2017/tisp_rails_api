@@ -5,7 +5,8 @@ class Const
   PASSWORD_ERROR_LIMIT = 3
   USER_LEVELS = (1..3)
   DEFAULT_USER_LEVEL = 1
-  ORDER_STATUS=[['已询价', 'inquiried'], ['已报价', 'offered'], ['已确定', 'confirmed']]
+  ORDER_STATUS={:inquiried => 'inquiried', :offered => 'offered', :confirmed => 'confirmed'}
+  ORDER_STATUS_TRANSLATE={:inquiried => '已询价', :offered => '已报价', :confirmed => '已确定'}
   BOOLEAN_LIST=[['是', true], ['否', false]]
   #清理搜索记录的时间周期 1s 1m 1h 1d
   CLEAN_SEARCH_INTERVAL = '1h'

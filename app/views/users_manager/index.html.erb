@@ -21,9 +21,9 @@
       <tr>
         <td><%= user.email %></td>
         <td><%= user.name %></td>
-        <td><%= user.admin %></td>
+        <td><%= tb(user.admin) %></td>
 		<td><%= user.level %></td>
-		<td><%= user.has_locked? %></td>
+		<td><%= tb(user.has_locked?) %></td>
         <td><% if !user.avatar.blank? %><div class = 'avatars-warpper'><%= image_tag(user.avatar, :class => 'users-avatar') %></div><% end %></td>
         <td>
 		  <%= link_to t('.show', :default => t("helpers.links.show")),
@@ -44,7 +44,7 @@
 		  %>
 		  <%= link_to t('.unlock', :default => t("helpers.links.unlock")),
                       "/admin_users/lock_proc/#{user.id}", btn_options if user.has_locked? %>
-					  
+
 		  <%= link_to t('.lock', :default => t("helpers.links.lock")),
                       "/admin_users/lock_proc/#{user.id}", btn_options if !user.has_locked? %>
 		</td>

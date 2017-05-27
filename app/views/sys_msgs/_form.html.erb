@@ -46,21 +46,30 @@
   <div class="form-group">
     <%= f.label :msg_catalog, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= select_tag "sys_msg[msg_catalog]", options_for_select(@catalog_list, selected=@catalog_selected),{:class => "form-control", :disabled => "disabled"} %>
+      <%= select_tag "sys_msg[msg_catalog]",
+      options_for_select(tcl(@catalog_list,'Const::SysMsg::CATALOG'),
+      selected=tcl(@catalog_selected,'Const::SysMsg::CATALOG')),
+      {:class => "form-control", :disabled => "disabled"} %>
     </div>
     <%=f.error_span(:msg_catalog) %>
   </div>
   <div class="form-group">
     <%= f.label :status, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= select_tag "sys_msg[status]", options_for_select(@status_list, selected=@status_selected),{:class => "form-control", :disabled => "disabled"} %>
+      <%= select_tag "sys_msg[status]",
+      options_for_select(tcl(@status_list,'Const::SysMsg::STATUS'),
+      selected=tcl(@status_selected,'Const::SysMsg::STATUS')),
+      {:class => "form-control", :disabled => "disabled"} %>
     </div>
     <%=f.error_span(:status) %>
   </div>
   <div class="form-group">
     <%= f.label :accept_users_type, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= select_tag "sys_msg[accept_users_type]", options_for_select(@accept_users_type_list, selected=@accept_users_type_selected),{:class => "form-control"} %>
+      <%= select_tag "sys_msg[accept_users_type]",
+      options_for_select(tcl(@accept_users_type_list,'Const::SysMsg::ACCEPT_USERS_TYPE'),
+      selected=tcl(@accept_users_type_selected,'Const::SysMsg::ACCEPT_USERS_TYPE')),
+      {:class => "form-control"} %>
     </div>
     <%=f.error_span(:accept_users_type) %>
   </div>

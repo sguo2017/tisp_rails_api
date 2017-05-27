@@ -19,7 +19,7 @@
         <td><%= link_to sys_msgs_timeline.id, sys_msgs_timeline_path(sys_msgs_timeline) %></td>
         <td><%= link_to sys_msgs_timeline.sys_msg_id, sys_msgs_timeline.sys_msg %></td>
         <td><%= link_to sys_msgs_timeline.user_id, admin_user_path(sys_msgs_timeline.user) %></td>
-        <td><%= sys_msgs_timeline.status %></td>
+        <td><%= tc(sys_msgs_timeline.status,'Const::SysMsg::STATUS') %></td>
         <td><%= l sys_msgs_timeline.created_at %></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),

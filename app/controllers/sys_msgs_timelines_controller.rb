@@ -78,7 +78,6 @@ class SysMsgsTimelinesController < ApplicationController
 
     def config_select
       @status_list = Const::SysMsg::STATUS.values.map { |v| [v, v] }
-      @status_list = @status_list.map { |e| [Const::SysMsg::STATUS_TRANSLATE[e[0].to_sym],e[1]] } if Const::SysMsg::STATUS_TRANSLATE
       @status_selected = @status_list[0]
     end
 end

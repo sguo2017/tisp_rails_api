@@ -32,7 +32,9 @@
   <div class="form-group">
     <%= f.label :status, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= select_tag "sys_msgs_timeline[status]", options_for_select(@status_list, selected=@status_selected),{:class => "form-control"} %>
+      <%= select_tag "sys_msgs_timeline[status]",
+      options_for_select(tcl(@status_list,'Const::SysMsg::STATUS'),
+      selected=tcl(@status_selected,'Const::SysMsg::STATUS')),{:class => "form-control"} %>
     </div>
     <%=f.error_span(:status) %>
   </div>

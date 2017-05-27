@@ -28,9 +28,9 @@
         <td><%= sys_msg.action_desc %></td>
         <td><%= sys_msg.user_id %></td>
         <td><%= sys_msg.serv_id %></td>
-        <td><%= Const::SysMsg::CATALOG_TRANSLATE[sys_msg.msg_catalog.to_sym] if sys_msg.msg_catalog %></td>
-        <td><%= Const::SysMsg::STATUS_TRANSLATE[sys_msg.status.to_sym] if sys_msg.status %></td>
-        <td><%= Const::SysMsg::ACCEPT_USERS_TYPE_TRANSLATE[sys_msg.accept_users_type.to_sym] if sys_msg.accept_users_type %></td>
+        <td><%= tc(sys_msg.msg_catalog,'Const::SysMsg::CATALOG')  %></td>
+        <td><%= tc(sys_msg.status,'Const::SysMsg::STATUS') %></td>
+        <td><%= tc(sys_msg.accept_users_type,'Const::SysMsg::ACCEPT_USERS_TYPE') %></td>
         <td><%=l sys_msg.created_at %></td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),

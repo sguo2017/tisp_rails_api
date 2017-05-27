@@ -18,7 +18,7 @@ class OrdersController < ApplicationController
   # GET /orders/new
   def new
     @order = Order.new
-	@order_status=Const::ORDER_STATUS
+	  @order_status=Const::ORDER_STATUS
   end
 
   # GET /orders/1/edit

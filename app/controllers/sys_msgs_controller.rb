@@ -84,15 +84,12 @@ class SysMsgsController < ApplicationController
 
     def config_select
       @catalog_list = Const::SysMsg::CATALOG.values.map { |v| [v, v] }
-      @catalog_list = @catalog_list.map { |e| [Const::SysMsg::CATALOG_TRANSLATE[e[0].to_sym],e[1]] } if Const::SysMsg::CATALOG_TRANSLATE
       @catalog_selected = @catalog_list[1]
 
       @status_list = Const::SysMsg::STATUS.values.map { |v| [v, v] }
-      @status_list = @status_list.map { |e| [Const::SysMsg::STATUS_TRANSLATE[e[0].to_sym],e[1]] } if Const::SysMsg::STATUS_TRANSLATE
       @status_selected = @status_list[0]
 
       @accept_users_type_list = Const::SysMsg::ACCEPT_USERS_TYPE.values.map { |v| [v, v] }
-      @accept_users_type_list = @accept_users_type_list.map { |e| [Const::SysMsg::ACCEPT_USERS_TYPE_TRANSLATE[e[0].to_sym],e[1]] } if Const::SysMsg::ACCEPT_USERS_TYPE_TRANSLATE
       @accept_users_type_list_selected = []
 
     end

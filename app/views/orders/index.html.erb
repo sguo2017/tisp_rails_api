@@ -27,7 +27,7 @@
         <td><%= order.serv_offer_id %></td>
         <td><%= order.offer_user_id %></td>
         <td><%= order.request_user_id %></td>
-        <td><%= link_to order.status,{:controller => "order_items", :action => "index", :deal_id => order.id},{:deal_id => order.id} %></td>
+        <td><%= link_to tc(order.status, 'Const::ORDER_STATUS'),{:controller => "order_items", :action => "index", :deal_id => order.id},{:deal_id => order.id} %></td>
         <td><%= order.connect_time %></td>
         <td><%= order.bidder %></td>
         <td><%= order.signature %></td>

@@ -13,7 +13,7 @@
   <dt><strong><%= model_class.human_attribute_name(:request_user_id) %>:</strong></dt>
   <dd><%= @order.request_user_id %></dd>
   <dt><strong><%= model_class.human_attribute_name(:status) %>:</strong></dt>
-  <dd><%= @order.status %></dd>
+  <dd><%= tc(@order.status,'Const::ORDER_STATUS') %></dd>
   <dt><strong><%= model_class.human_attribute_name(:connect_time) %>:</strong></dt>
   <dd><%= @order.connect_time %></dd>
   <dt><strong><%= model_class.human_attribute_name(:bidder) %>:</strong></dt>
