@@ -44,7 +44,6 @@ class User < ApplicationRecord
 
   after_create :after_created_callback
 
-
   #token为空时自动生成新的token
   #通过登录修改登录次数来触发token更新，避免token是静态。后面可以改判断时间周期：一天前登录就失效
   def ensure_authentication_token
@@ -92,6 +91,18 @@ class User < ApplicationRecord
 	  end
   end
 
+  # 转换成json的时候也屏蔽authentication_token字段
+  def as_json(options = {})
+    super(options.merge({ except: [:authentication_token] }))
+  end
+
+  # 重写 Devise::Models::Authenticatable::serializable_hash
+  def serializable_hash(options = nil)
+    # 调用 Devise::Models::Authenticatable::serializable_hash，
+    # 把需要屏蔽的字段加进白名单
+    super({:except => [:authentication_token]})
+  end
+
   protected
     def after_created_callback
       if User.all.size > 0
@@ -108,6 +119,5 @@ class User < ApplicationRecord
         logger.debug "User created callback has been executed!"
       end
     end
-
 
 end
