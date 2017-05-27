@@ -16,9 +16,16 @@
   <% end %>
 
   <div class="form-group">
+    <%= f.label :user_id, :class => 'control-label col-lg-2' %>
+    <div class="col-lg-10">
+      <%= text_field_tag 'sys_msg[user_id]', current_user.id, {:class => 'form-control', :readonly => 'readonly'} %>
+    </div>
+    <%=f.error_span(:user_id) %>
+  </div>
+  <div class="form-group">
     <%= f.label :user_name, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
-      <%= f.text_field :user_name, :class => 'form-control' %>
+      <%= text_field_tag 'sys_msg[user_name]', current_user.name, {:class => 'form-control', :readonly => 'readonly'} %>
     </div>
     <%=f.error_span(:user_name) %>
   </div>
@@ -35,13 +42,6 @@
       <%= f.text_field :action_desc, :class => 'form-control' %>
     </div>
     <%=f.error_span(:action_desc) %>
-  </div>
-  <div class="form-group">
-    <%= f.label :user_id, :class => 'control-label col-lg-2' %>
-    <div class="col-lg-10">
-      <%= f.text_field :user_id, :class => 'form-control' %>
-    </div>
-    <%=f.error_span(:user_id) %>
   </div>
   <div class="form-group">
     <%= f.label :msg_catalog, :class => 'control-label col-lg-2' %>

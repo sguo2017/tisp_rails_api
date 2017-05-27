@@ -4,6 +4,8 @@
 </div>
 
 <dl class="dl-horizontal">
+  <dt><strong><%= model_class.human_attribute_name(:id) %>:</strong></dt>
+  <dd><%= @sys_msg.id %></dd>
   <dt><strong><%= model_class.human_attribute_name(:user_name) %>:</strong></dt>
   <dd><%= @sys_msg.user_name %></dd>
   <dt><strong><%= model_class.human_attribute_name(:action_title) %>:</strong></dt>
@@ -12,6 +14,16 @@
   <dd><%= @sys_msg.action_desc %></dd>
   <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>
   <dd><%= @sys_msg.user_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:serv_id) %>:</strong></dt>
+  <dd><%= @sys_msg.serv_id %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:msg_catalog) %>:</strong></dt>
+  <dd><%= @sys_msg.msg_catalog %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:status) %>:</strong></dt>
+  <dd><%= tc(@sys_msg.status,'Const::SysMsg::STATUS') %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:accept_users_type) %>:</strong></dt>
+  <dd><%= tc(@sys_msg.accept_users_type,'Const::SysMsg::ACCEPT_USERS_TYPE') %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:created_at) %>:</strong></dt>
+  <dd><%= l @sys_msg.created_at %></dd>
 </dl>
 
 <%= link_to t('.back', :default => t("helpers.links.back")),

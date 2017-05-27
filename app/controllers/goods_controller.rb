@@ -6,7 +6,7 @@ class GoodsController < ApplicationController
 
   before_action :authenticate_user!
 
-  before_action :set_good, only: [:show, :edit, :update, :destroy]
+  before_action :set_good, only: [:edit, :update, :show, :destroy]
 
   before_action :set_goods_search
 
@@ -20,23 +20,6 @@ class GoodsController < ApplicationController
   # GET /goods.json
   def index
     @goods = Good.order("created_at DESC").page(params[:page]).per(10)
-    logger.debug "good all!!! current_user:#{@current_user} #{current_user}"
-
-    if @current_user
-       logger.debug 'come on'
-    else
-       logger.debug 'nil'
-    end
-
-    if user_signed_in?
-      logger.debug 'siged_id!!!!!!'
-    else
-      logger.debug 'why?'
-    end
-
-    user = session[:current_tispr_user]
-    logger.debug "good all!!! session.tispr_user.email: #{user['email']} session.tispr_user.id: #{user['id']}"
-
   end
 
 
@@ -48,16 +31,10 @@ class GoodsController < ApplicationController
   # GET /goods/new
   def new
     @good = Good.new
-	@selected=['无', nil]
   end
 
   # GET /goods/1/edit
   def edit
-    if @good.goods_catalog.nil?
-      @selected=['无', nil]
-	else
-	  @selected=[@good.goods_catalog.name, @good.goods_catalog.id]
-	end
   end
 
   # POST /goods
@@ -119,6 +96,18 @@ class GoodsController < ApplicationController
 	end
 
 	def set_list_for_select
-	  @select_list = [['无', nil]]+GoodsCatalog.all.map{ |c| [c.name,c.id]}
+	  @catalog_list = GoodsCatalog.all.map{ |c| [c.name,c.id]}
+    if @good.nil? or @good.goods_catalog.nil?
+      @catalog_selected=[]
+    else
+      @catalog_selected=[@good.goods_catalog.name, @good.goods_catalog.id]
+    end
+
+    @catagory_list = Const::GOODS_TYPE.values.map { |v| [v, v] }
+    if @good.nil? or @good.serv_catagory.nil?
+      @catagory_selected=[]
+    else
+      @catagory_selected=@catagory_list.select{|a| a[0] == @good.serv_catagory}.first
+    end
 	end
 end
