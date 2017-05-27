@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170526091611) do
+ActiveRecord::Schema.define(version: 20170527032746) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -177,7 +177,6 @@ ActiveRecord::Schema.define(version: 20170526091611) do
     t.string   "interval"
     t.string   "msg_catalog"
     t.string   "accept_users_type"
-    t.string   "accept_users"
     t.string   "status"
   end
 
