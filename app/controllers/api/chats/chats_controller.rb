@@ -11,26 +11,16 @@ class Api::Chats::ChatsController < ApplicationController
   def index
     @deal_id = params[:deal_id].presence
     @deal = Order.find(@deal_id)
-    logger.debug "deal #{@deal}"
-    begin
-         @serv = Good.find(@deal.serv_offer_id)
-
-    rescue ActiveRecord::RecordNotFound => e
-              
-    end    
-    @request_user = User.find(@deal.request_user_id)
-    @request_user.authentication_token = "***"
-    @offer_user = User.find(@deal.offer_user_id)
-    @offer_user.authentication_token = "***"
-    #@chats = Chat.find_by(deal_id: @deal_id.to_s)
+	
     @chats = Chat.where('deal_id ='+@deal_id.to_s).order("created_at DESC")
     logger.debug "chats1 :#{@chats.to_json}"
     @chat_list = []
     @chats.each do |chat|
-         c = chat.attributes.clone     
-         c["_id"]=@offer_user.id
-         c["name"]=@offer_user.name
-         c["avatar"]=@offer_user.avatar
+         c = chat.attributes.clone  		 
+         @chat_user = User.find(chat.user_id)
+         c["_id"]=@chat_user.id
+         c["name"]=@chat_user.name
+         c["avatar"]=@chat_user.avatar		 
          @chat_list.push(c)
     end
 
@@ -38,7 +28,7 @@ class Api::Chats::ChatsController < ApplicationController
 
     respond_to do |format|
       format.json {
-        logger.debug "Chat index json"
+        #logger.debug "Chat index json"
         render json: {messages: @chat_list.to_json}
       }
     end
