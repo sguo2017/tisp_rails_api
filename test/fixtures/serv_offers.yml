@@ -9,5 +9,5 @@ one:
 two:
   serv_title: MyString
   serv_detail: MyString
-  serv_imges: MyString
+  serv_images: MyString
   serv_catagory: MyString

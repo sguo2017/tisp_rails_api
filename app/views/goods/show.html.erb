@@ -8,8 +8,8 @@
   <dd><%= @good.serv_title %></dd>
   <dt><strong><%= model_class.human_attribute_name(:serv_detail) %>:</strong></dt>
   <dd><%= @good.serv_detail %></dd>
-  <dt><strong><%= model_class.human_attribute_name(:serv_imges) %>:</strong></dt>
-  <dd><%= @good.serv_imges %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:serv_images) %>:</strong></dt>
+  <dd><%= image_tag @good.serv_images || '' %></dd>
   <dt><strong><%= model_class.human_attribute_name(:serv_catagory) %>:</strong></dt>
   <dd><%= @good.serv_catagory %></dd>
   <dt><strong><%= model_class.human_attribute_name(:user_id) %>:</strong></dt>

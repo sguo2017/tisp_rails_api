@@ -30,13 +30,6 @@
     <%=f.error_span(:serv_detail) %>
   </div>
   <div class="form-group">
-    <%= f.label :serv_imges, :class => 'control-label col-lg-2' %>
-    <div class="col-lg-10">
-      <%= f.text_field :serv_imges, :class => 'form-control' %>
-    </div>
-    <%=f.error_span(:serv_imges) %>
-  </div>
-  <div class="form-group">
     <%= f.label :serv_catagory, :class => 'control-label col-lg-2' %>
     <div class="col-lg-10">
       <%= select_tag "good[serv_catagory]", options_for_select(@catagory_list,selected=@catagory_selected), {:class =>"form-control"} %>
@@ -50,10 +43,18 @@
     </div>
     <%=f.error_span(:goods_catalog_id) %>
   </div>
+  <div class="form-group">
+     <%= f.label :serv_images, :class => 'control-label col-lg-2'  %>
+	 <div class="col-lg-10">
+       <%= f.file_field :serv_images_file, :class => 'form-control' %>
+	   <%= f.hidden_field :serv_images %>
+	</div>
+	<%=f.error_span(:serv_images) %>
+  </div>
 
   <div class="form-group">
     <div class="col-lg-offset-2 col-lg-10">
-      <%= f.submit nil, :class => 'btn btn-primary' %>
+      <%= f.button nil, class: 'btn btn-primary' ,onclick: 'submitFormWithImage("good","good_serv_images_file","good_serv_images")' ,type: 'button' %>
       <%= link_to t('.cancel', :default => t("helpers.links.cancel")),
                 goods_path, :class => 'btn btn-default' %>
     </div>

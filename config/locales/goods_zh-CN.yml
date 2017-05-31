@@ -8,7 +8,7 @@ zh-CN:
         id: "ID" 
         serv_title: "商品名称"
         serv_detail: "商品详情"
-        serv_imges: "商品图片"
+        serv_images: "商品图片"
         serv_catagory: "商品类型"
         user_id: "用户ID"
         goods_catalog_id: "分类"

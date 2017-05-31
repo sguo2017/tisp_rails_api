@@ -17,7 +17,7 @@ class ServOffersControllerTest < ActionDispatch::IntegrationTest
 
   test "should create serv_offer" do
     assert_difference('ServOffer.count') do
-      post serv_offers_url, params: { serv_offer: { serv_catagory: @serv_offer.serv_catagory, serv_detail: @serv_offer.serv_detail, serv_imges: @serv_offer.serv_imges, serv_title: @serv_offer.serv_title } }
+      post serv_offers_url, params: { serv_offer: { serv_catagory: @serv_offer.serv_catagory, serv_detail: @serv_offer.serv_detail, serv_images: @serv_offer.serv_images, serv_title: @serv_offer.serv_title } }
     end
 
     assert_redirected_to serv_offer_url(ServOffer.last)
@@ -34,7 +34,7 @@ class ServOffersControllerTest < ActionDispatch::IntegrationTest
   end
 
   test "should update serv_offer" do
-    patch serv_offer_url(@serv_offer), params: { serv_offer: { serv_catagory: @serv_offer.serv_catagory, serv_detail: @serv_offer.serv_detail, serv_imges: @serv_offer.serv_imges, serv_title: @serv_offer.serv_title } }
+    patch serv_offer_url(@serv_offer), params: { serv_offer: { serv_catagory: @serv_offer.serv_catagory, serv_detail: @serv_offer.serv_detail, serv_images: @serv_offer.serv_images, serv_title: @serv_offer.serv_title } }
     assert_redirected_to serv_offer_url(@serv_offer)
   end
 

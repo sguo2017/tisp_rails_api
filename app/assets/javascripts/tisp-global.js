@@ -65,7 +65,11 @@ function submitFormWithImage(form, fileFieldId, hiddenFieldId) {
   } else {
     var formObj = $("form");
   }
-  if (input_file.files.length != 1) {
+  if (!formObj || formObj.length < 1){
+	  alert('参数错误！');
+	  return;
+  }
+  if (!input_file || !input_file.files || input_file.files.length != 1 || !hiddenFieldId) {
     formObj.submit();
     return;
   } else {
