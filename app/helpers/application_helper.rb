@@ -18,7 +18,7 @@ module ApplicationHelper
 
   def tcl(list,target_name)
     return '' if list.blank? or target_name.blank?
-    list.map{|to_translate,origin| tc(to_translate,target_name)}
+    list.map{|to_translate,origin| [tc(to_translate,target_name),origin]}
   end
 
   def tb(boolean_value)

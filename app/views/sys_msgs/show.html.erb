@@ -17,7 +17,7 @@
   <dt><strong><%= model_class.human_attribute_name(:serv_id) %>:</strong></dt>
   <dd><%= @sys_msg.serv_id %></dd>
   <dt><strong><%= model_class.human_attribute_name(:msg_catalog) %>:</strong></dt>
-  <dd><%= @sys_msg.msg_catalog %></dd>
+  <dd><%= tc(@sys_msg.msg_catalog,'Const::SysMsg::CATALOG') %></dd>
   <dt><strong><%= model_class.human_attribute_name(:status) %>:</strong></dt>
   <dd><%= tc(@sys_msg.status,'Const::SysMsg::STATUS') %></dd>
   <dt><strong><%= model_class.human_attribute_name(:accept_users_type) %>:</strong></dt>

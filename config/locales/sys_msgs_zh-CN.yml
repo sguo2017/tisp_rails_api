@@ -25,6 +25,7 @@ zh-CN:
       new: "新增"
       back: "返回"
       cancel: "取消"
+      select: "选择"
     actions: "操作"
     submit:
       sys_msg:

@@ -1,0 +1,36 @@
+<div class="modal fade" id="modal-users" tabindex="-1" role="dialog" aria-labelledby="modal-users-label" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h4 class="modal-title" id="modal-users-title">选择用户</h4>
+      </div>
+      <div class="modal-body">
+        <table class="table table-bordered">
+          <thead>
+          <tr>
+            <th>ID</th>
+            <th>姓名</th>
+            <th>操作</th>
+          </tr>
+          </thead>
+          <tbody>
+		    <% @users = User.all%>
+            <% @users.each do |user| %>
+            <tr class="select" data-user_id="<%= user.id %>" >
+              <td><%= user.id %></td>
+              <td><%= user.name %></td>
+              <td> <%= link_to t('.select', :default => t("helpers.links.select")),
+                      'javascript:void(0)', {:onclick =>'selectAcceptUsers(%s,this,false)'%user.id , :class => 'btn btn-primary btn-xs'} %></td>
+            </tr>
+            <% end %>
+          </tbody>
+        </table>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal" onclick = "clearValue('#_sys_msgaccept_users')">取消</button>
+        <button type="button" class="btn btn-primary" data-dismiss="modal">确定</button>
+      </div>
+    </div><!-- /.modal-content -->
+  </div><!-- /.modal-dialog -->
+</div><!-- /.modal -->
