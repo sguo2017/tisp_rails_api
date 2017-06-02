@@ -23,22 +23,41 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
     when 'A','a','1'
       # @result = SysMsg.where(:msg_catalog => "private").joins(" inner join ( " + User.joins("inner join users U2 on U2.city = users.city").where('U2.id' => user_id).to_sql + " ) T on user_id = T.id")
       @result = User.find(user_id).sys_msgs.where(:msg_catalog => Const::SysMsg::CATALOG[:private])
+     logger.debug "1"
     when 'B','b','2'
       @result = User.find(user_id).sys_msgs.where(:msg_catalog => Const::SysMsg::CATALOG[:system])
+   logger.debug "12"
     when 'C','c','3'
       @result = SysMsg.where(:msg_catalog => Const::SysMsg::CATALOG[:public])
+  logger.debug "123"
     when 'ALL',"all",'0'
       part1 = User.find(user_id).sys_msgs.where(:msg_catalog => Const::SysMsg::CATALOG[:private])
       part2 = User.find(user_id).sys_msgs.where(:msg_catalog => Const::SysMsg::CATALOG[:system])
       part3 = SysMsg.where(:msg_catalog => Const::SysMsg::CATALOG[:public])
       @result = SysMsg.where(:id => (part1 + part2 + part3).map{|x| x.id})
+  logger.debug "1234"
     else
       return render json: {status: :failed,reason: :parameters_error}
     end
     @result = @result.order("created_at DESC").page(params[:page]).per(10)
+    logger.debug "fff:#{@result.to_json}"
+    @sys_msgs = []
+    @result.each do |r|
+	s = r.attributes.clone
+        logger.debug "fdsff:#{s['id']}   ljlj:#{user_id}"
+        smt = SysMsgsTimeline.where("sys_msg_id = ? and user_id = ? ", s["id"], user_id).first
+        if smt.blank?
+           s["smt_id"]=""
+        else
+          s["smt_id"]=smt.id
+        end
+        @sys_msgs.push(s)
+    end        
+    logger.debug "fff:#{@sys_msgs.to_json}"
+
     respond_to do |format|
       format.any{
-          render json: {status: :success, page: @result.current_page,total_pages: @result.total_pages, feeds: @result}
+          render json: {status: :success, page: @result.current_page,total_pages: @result.total_pages, feeds: @sys_msgs}
       }
     end
   end
