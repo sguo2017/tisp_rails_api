@@ -51,6 +51,19 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
   def update
     respond_to do |format|
       if @sys_msgs_timeline.update(sys_msgs_timeline_params)
+         if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:finished]
+            @SysMsg = SysMsg.find(@sys_msgs_timeline.sys_msg_id)
+            @order = Order.new()
+            token = params[:token].presence
+            user = token && User.find_by_authentication_token(token.to_s)
+            @order.serv_offer_id = @SysMsg.serv_id
+            @order.request_user_id = @SysMsg.user_id
+            @order.lately_chat_content = params[:lately_chat_content].presence        
+            @order.offer_user_id = user.id
+            @order.status = '00A'
+            @order.connect_time = Time.new
+            @order.save 
+         end 
         format.json { render json:{status: :ok, location: @sys_msgs_timeline}}
       else
         format.json { render json: @sys_msgs_timeline.errors, status: :unprocessable_entity }

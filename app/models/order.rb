@@ -19,6 +19,7 @@
 class Order < ApplicationRecord
 	self.table_name="orders"
 	after_create :after_created_callback
+	after_save :after_saved_callback
 
 	protected
 	  def after_created_callback
@@ -47,5 +48,21 @@ class Order < ApplicationRecord
 				:status => Const::SysMsg::STATUS[:created]
 			}
 			SysMsg.create!(params_hash)
+
+
 		end
+
+	protected
+	  def after_saved_callback
+			order_item_params_hash = {
+				:deal_id => self.id,
+				:serv_offer_id => self.serv_offer_id,
+				:offer_user_id => self.offer_user_id,
+				:request_user_id => self.request_user_id,
+				:lately_chat_content => self.lately_chat_content,
+				:bidder => self.bidder,
+				:signature => self.signature
+			}
+			OrderItem.create!(order_item_params_hash)
+		end		
 end

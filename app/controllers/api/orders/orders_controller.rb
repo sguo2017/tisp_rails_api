@@ -71,25 +71,14 @@ class Api::Orders::OrdersController < ApplicationController
     user = token && User.find_by_authentication_token(token.to_s)
     @order.request_user_id = user.id
     @order.status = '00A'
-    @order.lately_chat_content = "your offer is awesome"
     @order.connect_time = Time.new
-    logger.debug "order:#{@order}"
     respond_to do |format|
       if @order.save
-        @order_chat = OrderItem.new()
-        @order_chat.deal_id = @order.id
-        @order_chat.serv_offer_id = @order.serv_offer_id
-        @order_chat.offer_user_id = @order.offer_user_id
-        @order_chat.request_user_id = @order.request_user_id
-        @order_chat.lately_chat_content = "your offer is awesome"
-        @order_chat.save
-        #format.json { render :show, status: :created, location: @order }
         format.json {
            render json: {status:0, msg:"success"}
         }
       else
-        #format.json { render json: @order.errors, status: :unprocessable_entity }
-         format.json {
+        format.json {
            render json: {status:-1, msg:"fail"}
         }
       end
@@ -101,16 +90,6 @@ class Api::Orders::OrdersController < ApplicationController
   def update
     respond_to do |format|
       if @order.update(order_params)
-        @order_item = OrderItem.new()
-        @order_item.deal_id = @order.id
-        @order_item.serv_offer_id = @order.serv_offer_id
-        @order_item.offer_user_id = @order.offer_user_id
-        @order_item.request_user_id = @order.request_user_id
-        @order_item.lately_chat_content = @order.lately_chat_content
-        @order_item.bidder = @order.bidder
-        @order_item.signature = @order.signature
-        @order_item.save
-        #format.json { render :show, status: :ok, location: @order }
         format.json {
            render json: {status:0, msg:"success"}
         }

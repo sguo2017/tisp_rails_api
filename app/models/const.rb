@@ -24,7 +24,7 @@ class Const
     GOODS_TYPE_TRANSLATE = {:serv_request => "正向商品", :serv_offer => "逆向商品"}
     CATALOG = {:private => "private", :system => "system", :public => "public"}
     CATALOG_TRANSLATE = {:private => "私有消息", :system => "系统消息", :public => "公共消息"}
-    STATUS = {:created => "created", :unread => "unread", :read => "read", :discarded => "discarded"}
+    STATUS = {:created => "created", :unread => "unread", :read => "read", :discarded => "discarded", :finished => "finished"}
     STATUS_TRANSLATE = {:created => "已创建", :unread => "未读", :read => "已读", :discarded => "已丢弃"}
     ORDER_STATUS = {:inquiried => "inquiried", :offered => "offered" ,:confirmed => "confirmed"}
     ORDER_STATUS_TRANSLATE = {:inquiried => "已询价", :offered => "已报价" ,:confirmed => "已确定"}

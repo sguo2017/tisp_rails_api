@@ -8,7 +8,6 @@ class Api::Users::SessionsController < ApplicationController
 		  if @user.valid_password?(params[:user][:password])
 		    sign_in("user", @user)
 			set_geo_infos
-			logger.debug "user info: #{@user.to_json}"
 			format.json {
 			  render json: {token:@user.authentication_token, user: @user.to_json}
 			}
