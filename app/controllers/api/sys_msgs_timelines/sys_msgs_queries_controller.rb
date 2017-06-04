@@ -51,7 +51,6 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
       s["avatar"] = @u.avatar
       @sys_msgs.push(s)
     end    
-    logger.debug "fff:#{@sys_msgs.to_json}"
     respond_to do |format|
       format.any{
           render json: {status: :success, page: @result.current_page,total_pages: @result.total_pages, feeds: @sys_msgs}

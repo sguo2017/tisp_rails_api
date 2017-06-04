@@ -40,8 +40,7 @@ class Api::Sys::SysMsgsController < ApplicationController
          #logger.debug "m:#{m}"
     end
 
-    logger.debug "msgs:#{@msgs.to_json}"
-
+    #logger.debug "msgs:#{@msgs.to_json}"
     respond_to do |format|
       format.json {
         render json: {page: @sys_msgs.current_page,total_pages: @sys_msgs.total_pages, feeds: @msgs.to_json}
