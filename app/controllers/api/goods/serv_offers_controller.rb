@@ -99,8 +99,7 @@ class Api::Goods::ServOffersController < ApplicationController
 	  end
 
     @sys_msg = SysMsg.new(:user_name=>user.name, :action_title=>action_title, :action_desc=>@serv_offer.serv_title, :user_id=>user.id)
-    @sys_msg.user = user
-
+    #@sys_msg.user = user
     @serv_offer.user_id = user.id
 
     respond_to do |format|
