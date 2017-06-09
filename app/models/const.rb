@@ -17,6 +17,7 @@ class Const
   MAILER_PASSWORD = "tispr2017" # 如果是开了邮箱授权码，要用授权码代替密码
   GOODS_TYPE = {:request => "serv_request", :offer => "serv_offer"}
   GOODS_TYPE_TRANSLATE = {:request => "正向商品", :offer => "逆向商品"}
+  SERV_QRY_TYPE = {:offer => "1", :request => "2"}  #good或offer查詢類型
 
   module SysMsg
     SYSTEM_USER_ID = 1

@@ -13,6 +13,7 @@ class Api::Goods::ServOffersController < ApplicationController
     user = token && User.find_by_authentication_token(token.to_s)
     @serv_offers
     user_id = params[:user_id].presence
+    qry_type = params[:qry_type].presence
 	extra_parm_s = params[:exploreparams]
 	#场景一：模糊查询
 	if user_id.nil? && !extra_parm_s.nil? && 'undefined' != extra_parm_s
@@ -22,10 +23,17 @@ class Api::Goods::ServOffersController < ApplicationController
 		@serv_offers = @serv_offers.where("goods_catalog_id in (?)",extra_parm_h['goods_catalog_I']).order("created_at DESC").page(params[:page]).per(5) if extra_parm_h.include?("goods_catalog_I")
 	#场景二：全部查询
 	elsif user_id.nil?
-		@serv_offers = Good.order("created_at DESC").page(params[:page]).per(5)
+    @serv_offers = Good.order("created_at DESC").page(params[:page]).per(5) 
+		
 	#场景三：个人查询
     else
-        @serv_offers = Good.where("user_id = ?", user_id).order("created_at DESC").page(params[:page]).per(5)
+        if(qry_type == Const::SERV_QRY_TYPE[:offer])#我的->服務
+          @serv_offers = Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).order("created_at DESC").page(params[:page]).per(5)
+        elsif(qry_type == Const::SERV_QRY_TYPE[:request])#我的->需求
+          @serv_offers = Good.where("serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:request], user_id).order("created_at DESC").page(params[:page]).per(5)  
+        else
+          @serv_offers = Good.where("user_id = ?", user_id).order("created_at DESC").page(params[:page]).per(5)
+        end
     end
 
 
@@ -53,12 +61,11 @@ class Api::Goods::ServOffersController < ApplicationController
          #logger.debug "m:#{s}"
     end
 
-    logger.debug "msgs:#{@offers.to_json}"
+    #logger.debug "msgs:#{@offers.to_json}"
 
 
     respond_to do |format|
       format.json {
-        logger.debug "sysMsg index json"
         render json: {page: @serv_offers.current_page, total_pages: @serv_offers.total_pages, feeds: @offers.to_json}
       }
     end
