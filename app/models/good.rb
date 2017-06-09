@@ -32,6 +32,7 @@ class Good < ApplicationRecord
           :user_id => self.user_id,
           :user_name => self.user.name,
           :serv_id => self.id,
+          :action_desc => self.serv_title,
           :accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:same_city],
           :msg_catalog => Const::SysMsg::CATALOG[:private],
           :status => Const::SysMsg::STATUS[:created]
@@ -43,7 +44,7 @@ class Good < ApplicationRecord
       elsif self.serv_catagory == Const::SysMsg::GOODS_TYPE[:offer]
         params_hash={
           :action_title => Const::SysMsg::ACTION_TITLE_OF_USER_CREATE_SERV_OFFER,
-          :action_desc => self.serv_detail,
+          :action_desc => self.serv_title,
           :user_id => self.user_id,
           :user_name => self.user.name,
           :serv_id => self.id,
