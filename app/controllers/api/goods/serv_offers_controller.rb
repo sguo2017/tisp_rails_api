@@ -91,22 +91,22 @@ class Api::Goods::ServOffersController < ApplicationController
 
     logger.debug "current_user:#{user.email}"
 
-		action_title = ""
-		if params[:serv_catagory] == "serv_offer"
-			action_title =  'created an offer'
-		else
-			action_title =  'requested an offer'
-	  end
+		#action_title = ""
+		#if params[:serv_catagory] == "serv_offer"
+			#action_title =  '发布了一项服务'
+		#else
+			#action_title =  '发布了一项需求'
+	  #end
 
-    @sys_msg = SysMsg.new(:user_name=>user.name, :action_title=>action_title, :action_desc=>@serv_offer.serv_title, :user_id=>user.id)
+    #@sys_msg = SysMsg.new(:user_name=>user.name, :action_title=>action_title, :action_desc=>@serv_offer.serv_title, :user_id=>user.id)
     #@sys_msg.user = user
     @serv_offer.user_id = user.id
 
     respond_to do |format|
       if @serv_offer.save
-        @sys_msg.serv_id = @serv_offer.id
-        logger.debug "serv_id:#{@sys_msg.serv_id} id:#{@serv_offer.id}"
-        @sys_msg.save
+        #@sys_msg.serv_id = @serv_offer.id
+        #logger.debug "serv_id:#{@sys_msg.serv_id} id:#{@serv_offer.id}"
+        #@sys_msg.save
         format.html { redirect_to @serv_offer, notice: 'Serv offer was successfully created.' }
         #format.json { render :show, status: :created, location: @serv_offer }
         format.json {
