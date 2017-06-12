@@ -12,7 +12,7 @@ class Api::Users::RegistrationsController < ApplicationController
     @user = User.new(user_params)
     respond_to do |format|
       if @user.save
-        format.json { render json: {"success": true, token:@user.authentication_token, user_id:@user.id }}
+        format.json { render json: {"success": true, token:@user.authentication_token, user_id:@user.id,user: @user.to_json }}
       else
         format.json {render json: {"success": false}}
       end
