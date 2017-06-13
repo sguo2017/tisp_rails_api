@@ -23,18 +23,23 @@ class Api::Goods::ServOffersController < ApplicationController
 		@serv_offers = @serv_offers.where("goods_catalog_id in (?)",extra_parm_h['goods_catalog_I']).order("created_at DESC").page(params[:page]).per(5) if extra_parm_h.include?("goods_catalog_I")
 	#场景二：全部查询
 	elsif user_id.nil?
-    @serv_offers = Good.order("created_at DESC").page(params[:page]).per(5) 
-		
-	#场景三：个人查询
+    if (qry_type == Const::SERV_QRY_TYPE[:offer])
+      @serv_offers = Good.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(5)
+    elsif (qry_type == Const::SERV_QRY_TYPE[:request])
+      @serv_offers = Good.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:request]).order("created_at DESC").page(params[:page]).per(5)
     else
-        if(qry_type == Const::SERV_QRY_TYPE[:offer])#我的->服務
-          @serv_offers = Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).order("created_at DESC").page(params[:page]).per(5)
-        elsif(qry_type == Const::SERV_QRY_TYPE[:request])#我的->需求
-          @serv_offers = Good.where("serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:request], user_id).order("created_at DESC").page(params[:page]).per(5)  
-        else
-          @serv_offers = Good.where("user_id = ?", user_id).order("created_at DESC").page(params[:page]).per(5)
-        end
-    end
+    @serv_offers = Good.order("created_at DESC").page(params[:page]).per(5) 
+		end
+	#场景三：个人查询
+  else
+      if(qry_type == Const::SERV_QRY_TYPE[:offer])#我的->服務
+        @serv_offers = Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).order("created_at DESC").page(params[:page]).per(5)
+      elsif(qry_type == Const::SERV_QRY_TYPE[:request])#我的->需求
+        @serv_offers = Good.where("serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:request], user_id).order("created_at DESC").page(params[:page]).per(5)  
+      else
+        @serv_offers = Good.where("user_id = ?", user_id).order("created_at DESC").page(params[:page]).per(5)
+      end
+  end
 
 
 
