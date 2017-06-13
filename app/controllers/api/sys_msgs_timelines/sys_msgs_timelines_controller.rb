@@ -53,6 +53,8 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
       if @sys_msgs_timeline.update(sys_msgs_timeline_params)
          if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:finished]
             @SysMsg = SysMsg.find(@sys_msgs_timeline.sys_msg_id)
+            @SysMsg.status = Const::SysMsg::STATUS[:finished]
+            @SysMsg.save
             @order = Order.new()
             token = params[:token].presence
             user = token && User.find_by_authentication_token(token.to_s)
@@ -64,6 +66,11 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
             @order.connect_time = Time.new
             @order.save 
          end 
+         if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:discarded]
+            @SysMsg = SysMsg.find(@sys_msgs_timeline.sys_msg_id)
+            @SysMsg.status = Const::SysMsg::STATUS[:discarded]
+            @SysMsg.save
+         end
         format.json { render json:{status: :ok, location: @sys_msgs_timeline}}
       else
         format.json { render json: @sys_msgs_timeline.errors, status: :unprocessable_entity }
