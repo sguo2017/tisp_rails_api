@@ -54,9 +54,11 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
       if good.blank?
         s["serv_catagory"]=""
         s["catalog"]=""
+        s["serv_detail"]=""
       else
         s["serv_catagory"]=good.serv_catagory
         s["catalog"]=good.catalog
+        s["serv_detail"]=good.serv_detail
       end
       request_u = User.find(s["user_id"])
       s["avatar"] = request_u.avatar
