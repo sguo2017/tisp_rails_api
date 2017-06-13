@@ -44,12 +44,25 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
       s = r.attributes.clone
       smt = SysMsgsTimeline.where("sys_msg_id = ? and user_id = ? ", s["id"], user_id).first
       if smt.blank?
-         s["smt_id"]=""
+        s["smt_id"]=""
+        
       else
         s["smt_id"]=smt.id
       end
-      s["avatar"] = @u.avatar
+
+      good = Good.find(s["serv_id"])
+      if good.blank?
+        s["serv_catagory"]=""
+        s["catalog"]=""
+      else
+        s["serv_catagory"]=good.serv_catagory
+        s["catalog"]=good.catalog
+      end
+      request_u = User.find(s["user_id"])
+      s["avatar"] = request_u.avatar
+
       @sys_msgs.push(s)
+
     end    
     respond_to do |format|
       format.any{
