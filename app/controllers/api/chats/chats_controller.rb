@@ -56,6 +56,10 @@ class Api::Chats::ChatsController < ApplicationController
 
     respond_to do |format|
       if @chat.save
+        order = Order.find(@chat.deal_id);
+        order.lately_chat_content = @chat.chat_content
+        order.save;
+
         format.html { redirect_to @chat, notice: 'Deal chat detail was successfully created.' }
         #format.json { render :show, status: :created, location: @chat }
         format.json {
