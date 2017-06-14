@@ -62,7 +62,8 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
       end
       request_u = User.find(s["user_id"])
       s["avatar"] = request_u.avatar
-
+      s["created_at"] = s["created_at"].strftime('%Y-%m-%d %H:%M:%S')
+      logger.debug("66:#{s['created_at']}")
       @sys_msgs.push(s)
 
     end    
