@@ -10,7 +10,7 @@ class Api::Orders::OrdersController < ApplicationController
   def index
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
-    @orders = Order.where('offer_user_id ='+user.id.to_s).or(Order.where('request_user_id ='+ user.id.to_s)).page(params[:page]).per(5).order("created_at DESC")
+    @orders = Order.where('offer_user_id ='+user.id.to_s).or(Order.where('request_user_id ='+ user.id.to_s)).page(params[:page]).per(5).order("updated_at DESC")
     #@orders = Order.page(params[:page]).per(5)
     logger.debug "orders:#{@orders.to_json}"
     @order_list = []
@@ -36,6 +36,7 @@ class Api::Orders::OrdersController < ApplicationController
          o["offer_user_avatar"]=@offer_user.avatar
          o["deal_id"]=order.id
          o["serv_offer_user_name"]=@offer_user.name
+         o["updated_at"]=o["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
          @order_list.push(o)
     end
 
