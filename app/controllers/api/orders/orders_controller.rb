@@ -76,7 +76,7 @@ class Api::Orders::OrdersController < ApplicationController
     respond_to do |format|
       if @order.save
         format.json {
-           render json: {status:0, msg:"success"}
+           render json: {status:0, msg:"success", id:@order.id}
         }
       else
         format.json {
