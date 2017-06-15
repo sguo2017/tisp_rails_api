@@ -104,37 +104,19 @@ class Api::Goods::ServOffersController < ApplicationController
   # POST /serv_offers.json
   def create
     @serv_offer = Good.new(serv_offer_params)
-
     token = params[:token].presence
-
     user = token && User.find_by_authentication_token(token.to_s)
-
-
-    logger.debug "current_user:#{user.email}"
-
-		#action_title = ""
-		#if params[:serv_catagory] == "serv_offer"
-			#action_title =  '发布了一项服务'
-		#else
-			#action_title =  '发布了一项需求'
-	  #end
-
-    #@sys_msg = SysMsg.new(:user_name=>user.name, :action_title=>action_title, :action_desc=>@serv_offer.serv_title, :user_id=>user.id)
-    #@sys_msg.user = user
     @serv_offer.user_id = user.id
-
     respond_to do |format|
-      if @serv_offer.save
-        #@sys_msg.serv_id = @serv_offer.id
-        #logger.debug "serv_id:#{@sys_msg.serv_id} id:#{@serv_offer.id}"
-        #@sys_msg.save
-        format.html { redirect_to @serv_offer, notice: 'Serv offer was successfully created.' }
-        #format.json { render :show, status: :created, location: @serv_offer }
+      if avaliable_goods_to_add(user, @serv_offer.serv_catagory) < 0
         format.json {
-           render json: {status:-1, msg:"success"}
+           render json: {status:-1, msg:"您今天创建数量已达上限！"}
+        }
+      elsif @serv_offer.save
+        format.json {
+           render json: {status:0, msg:"success"}
         }
       else
-        format.html { render :new }
         format.json { render json: @serv_offer.errors, status: :unprocessable_entity }
       end
     end
@@ -163,6 +145,18 @@ class Api::Goods::ServOffersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def avaliable_goods_to_add(user,serv_catagory)
+    has_added = user.goods.where("created_at >= ? and serv_catagory = ?", Time.now.beginning_of_day, serv_catagory).size 
+    limit = 0
+    limit = 5 if user.level == 1
+    limit = 20 if user.level == 2
+    limit = 30 if user.level == 3
+    limit = has_added + 1 if user.admin #管理员无限制
+    avaliable = limit - has_added
+    logger.debug "157:#{avaliable}"
+    return avaliable
+  end 
 
   private
     # Use callbacks to share common setup or constraints between actions.
