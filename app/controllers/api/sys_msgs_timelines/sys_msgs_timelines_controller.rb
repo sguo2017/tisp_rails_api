@@ -50,7 +50,11 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
   # PATCH/PUT /sys_msgs_timelines/1.json
   def update
     respond_to do |format|
-      if @sys_msgs_timeline.update(sys_msgs_timeline_params)
+      if avaliable_orders_to_add(user) < 0
+        format.json {
+           render json: {status: -1, msg:"您今天创建订单数量已达上限！"}
+        }
+      elsif @sys_msgs_timeline.update(sys_msgs_timeline_params)
          if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:finished]
             @SysMsg = SysMsg.find(@sys_msgs_timeline.sys_msg_id)
             @SysMsg.status = Const::SysMsg::STATUS[:finished]
@@ -65,13 +69,15 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
             @order.status = '00A'
             @order.connect_time = Time.new
             @order.save 
+            format.json { render json:{status: :ok, location: @sys_msgs_timeline, id:@order.id}}
          end 
          if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:discarded]
             @SysMsg = SysMsg.find(@sys_msgs_timeline.sys_msg_id)
             @SysMsg.status = Const::SysMsg::STATUS[:discarded]
             @SysMsg.save
+            format.json { render json:{status: :ok, location: @sys_msgs_timeline}}
          end
-        format.json { render json:{status: :ok, location: @sys_msgs_timeline}}
+        
       else
         format.json { render json: @sys_msgs_timeline.errors, status: :unprocessable_entity }
       end
@@ -86,6 +92,17 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def avaliable_orders_to_add(user)
+    has_added = Order.where("created_at >= ? and (bidder=? or signature=?)", Time.now.beginning_of_day, user.id, user.id).size    
+    limit = 0
+    limit = 2 if user.level == 1
+    limit = 20 if user.level == 2
+    limit = 30 if user.level == 3
+    limit = has_added + 1 if user.admin #管理员无限制
+    avaliable=limit - has_added
+    return avaliable
+  end  
 
   private
     # Use callbacks to share common setup or constraints between actions.
