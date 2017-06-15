@@ -10,7 +10,7 @@ class Api::Orders::OrdersController < ApplicationController
   def index
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
-    @orders = Order.where('offer_user_id ='+user.id.to_s).or(Order.where('request_user_id ='+ user.id.to_s)).page(params[:page]).per(5).order("updated_at DESC")
+    @orders = Order.where('offer_user_id ='+user.id.to_s).or(Order.where('request_user_id ='+ user.id.to_s)).page(params[:page]).per(5).order("created_at DESC")
     #@orders = Order.page(params[:page]).per(5)
     logger.debug "orders:#{@orders.to_json}"
     @order_list = []
@@ -36,7 +36,6 @@ class Api::Orders::OrdersController < ApplicationController
          o["offer_user_avatar"]=@offer_user.avatar
          o["deal_id"]=order.id
          o["serv_offer_user_name"]=@offer_user.name
-         o["updated_at"]=o["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
          @order_list.push(o)
     end
 
@@ -70,13 +69,18 @@ class Api::Orders::OrdersController < ApplicationController
     @order = Order.new(order_params)
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
+
     @order.request_user_id = user.id
     @order.status = '00A'
     @order.connect_time = Time.new
     respond_to do |format|
-      if @order.save
+      if avaliable_orders_to_add(user) < 0
         format.json {
-           render json: {status:0, msg:"success", id:@order.id}
+           render json: {status:-1, msg:"您今天创建订单数量已达上限！"}
+        }
+      elsif @order.save
+        format.json {
+           render json: {status:0, msg:"success"}
         }
       else
         format.json {
@@ -111,6 +115,17 @@ class Api::Orders::OrdersController < ApplicationController
       format.json { head :no_content }
     end
   end
+
+  def avaliable_orders_to_add(user)
+    has_added = Order.where("created_at >= ? and (bidder=? or signature=?)", Time.now.beginning_of_day, user.id, user.id).size    
+    limit = 0
+    limit = 2 if user.level == 1
+    limit = 20 if user.level == 2
+    limit = 30 if user.level == 3
+    limit = has_added + 1 if user.admin #管理员无限制
+    avaliable=limit - has_added
+    return avaliable
+  end  
 
   private
     # Use callbacks to share common setup or constraints between actions.
