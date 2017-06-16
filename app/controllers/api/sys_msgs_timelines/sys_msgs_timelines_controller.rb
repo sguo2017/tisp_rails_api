@@ -52,11 +52,12 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
     respond_to do |format|
-     if avaliable_orders_to_add(user) < 0
+      avaliable = avaliable_orders_to_add(user)
+      if  avaliable < 1
         format.json {
-           render json: {status: -1, msg:"您今天创建订单数量已达上限！"}
+           render json: {status: -2, msg:"您今天创建订单数量已达上限！"}
         }
-     elsif @sys_msgs_timeline.update(sys_msgs_timeline_params)
+      elsif @sys_msgs_timeline.update(sys_msgs_timeline_params)
          if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:finished]
             @SysMsg = SysMsg.find(@sys_msgs_timeline.sys_msg_id)
             @order = Order.new()
@@ -69,12 +70,11 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
             @order.status = '00A'
             @order.connect_time = Time.new
             @order.save 
-            format.json { render json:{status: :ok, location: @sys_msgs_timeline, id:@order.id}}
+            format.json { render json:{status: 0, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable}}
          end 
-         if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:discarded]
+        if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:discarded]
             format.json { render json:{status: :ok, location: @sys_msgs_timeline}}
-         end
-        
+        end       
       else
         format.json { render json: @sys_msgs_timeline.errors, status: :unprocessable_entity }
       end
@@ -91,13 +91,13 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
   end
 
   def avaliable_orders_to_add(user)
-    has_added = Order.where("created_at >= ? and (bidder=? or signature=?)", Time.now.beginning_of_day, user.id, user.id).size    
+    has_added = Order.where("created_at >= ? and (offer_user_id=?)", Time.now.beginning_of_day, user.id).size    
     limit = 0
     limit = 10 if user.level == 1
     limit = 20 if user.level == 2
     limit = 30 if user.level == 3
     limit = has_added + 1 if user.admin #管理员无限制
-    avaliable=limit - has_added
+    avaliable = limit - has_added
     return avaliable
   end  
 

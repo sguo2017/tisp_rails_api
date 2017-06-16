@@ -108,13 +108,14 @@ class Api::Goods::ServOffersController < ApplicationController
     user = token && User.find_by_authentication_token(token.to_s)
     @serv_offer.user_id = user.id
     respond_to do |format|
-      if avaliable_goods_to_add(user, @serv_offer.serv_catagory) < 0
+      avaliable = avaliable_goods_to_add(user, @serv_offer.serv_catagory)
+      if avaliable < 1
         format.json {
-           render json: {status:-1, msg:"您今天创建数量已达上限！"}
+           render json: {status:-2, msg:"您今天创建数量已达上限！"}
         }
       elsif @serv_offer.save
         format.json {
-           render json: {status:0, msg:"success"}
+           render json: {status:0, msg:"success", avaliable: avaliable}
         }
       else
         format.json { render json: @serv_offer.errors, status: :unprocessable_entity }

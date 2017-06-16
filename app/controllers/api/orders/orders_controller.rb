@@ -36,6 +36,7 @@ class Api::Orders::OrdersController < ApplicationController
          o["offer_user_avatar"]=@offer_user.avatar
          o["deal_id"]=order.id
          o["serv_offer_user_name"]=@offer_user.name
+         o["updated_at"]=o["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
          @order_list.push(o)
     end
 
@@ -74,13 +75,14 @@ class Api::Orders::OrdersController < ApplicationController
     @order.status = '00A'
     @order.connect_time = Time.new
     respond_to do |format|
-      if avaliable_orders_to_add(user) < 0
+      avaliable = avaliable_orders_to_add(user)
+      if avaliable < 1
         format.json {
-           render json: {status:-1, msg:"您今天创建订单数量已达上限！"}
+           render json: {status:-2, msg:"您今天创建订单数量已达上限！"}
         }
       elsif @order.save
         format.json {
-           render json: {status:0, msg:"success"}
+           render json: {status:0, msg:"success", avaliable:avaliable}
         }
       else
         format.json {
@@ -117,13 +119,13 @@ class Api::Orders::OrdersController < ApplicationController
   end
 
   def avaliable_orders_to_add(user)
-    has_added = Order.where("created_at >= ? and (bidder=? or signature=?)", Time.now.beginning_of_day, user.id, user.id).size    
+    has_added = Order.where("created_at >= ? and (request_user_id = ?)", Time.now.beginning_of_day, user.id,).size    
     limit = 0
     limit = 2 if user.level == 1
     limit = 20 if user.level == 2
     limit = 30 if user.level == 3
     limit = has_added + 1 if user.admin #管理员无限制
-    avaliable=limit - has_added
+    avaliable = limit - has_added
     return avaliable
   end  
 
