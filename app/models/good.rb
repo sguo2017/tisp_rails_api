@@ -24,6 +24,7 @@ class Good < ApplicationRecord
   belongs_to :user
   belongs_to :goods_catalog, counter_cache: true
   after_create :after_created_callback
+  has_many :favorites
 
   protected
     def after_created_callback

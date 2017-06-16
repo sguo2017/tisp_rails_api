@@ -62,6 +62,7 @@ class Api::Me::FavoritesController < ApplicationController
   # POST /favorites.json
   def create
     @favorite = Favorite.new(favorite_params)
+    @favorite.good_id = @favorite.obj_id
 
     respond_to do |format|
       if @favorite.save
@@ -109,6 +110,6 @@ class Api::Me::FavoritesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def favorite_params
-      params.require(:favorite).permit(:obj_id, :obj_type, :user_id)
+      params.require(:favorite).permit(:obj_id, :obj_type, :user_id, :goods_id)
     end
 end
