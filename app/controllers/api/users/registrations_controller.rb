@@ -7,11 +7,15 @@ class Api::Users::RegistrationsController < ApplicationController
   before_action :set_user, only: [:update]
   
   # POST /api/users/registrations/  
-  # ע��
+  # ×¢²á
   def create
     @user = User.new(user_params)
+    @pre_user = User.find_by_email(@user.email)
     respond_to do |format|
-      if @user.save
+      if @pre_user
+        format.json {render json: {"success": false, status: -2}}
+        logger.debug "邮箱已注册：#{@user.email}"
+      elsif @user.save
         format.json { render json: {"success": true, token:@user.authentication_token, user_id:@user.id,user: @user.to_json }}
       else
         format.json {render json: {"success": false}}
@@ -20,7 +24,7 @@ class Api::Users::RegistrationsController < ApplicationController
   end
 
   # PATCH/PUT /api/users/registrations/:id/ 
-  # ����
+  # ¸üÐÂ
   def update
     respond_to do |format|
       if @user.update(user_params)
