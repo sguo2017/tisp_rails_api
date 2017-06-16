@@ -63,9 +63,12 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
       request_u = User.find(s["user_id"])
       s["avatar"] = request_u.avatar
       s["created_at"] = s["created_at"].strftime('%Y-%m-%d %H:%M:%S')
-      logger.debug("66:#{s['created_at']}")
-      @sys_msgs.push(s)
-
+      logger.debug("66:#{s['created_at']} #{good.user_id} #{user_id}  #{good.user_id != user_id.to_i}")
+      logger.debug "商品的用户id:#{good.user_id}"
+      logger.debug "当前用户的id#{user_id}"
+      if(smt.status == Const::SysMsg::STATUS[:created] && good.user_id != user_id.to_i)
+        @sys_msgs.push(s)
+      end
     end    
     respond_to do |format|
       format.any{
