@@ -44,8 +44,10 @@ class Api::Goods::ServOffersController < ApplicationController
   else
       if(qry_type == Const::SERV_QRY_TYPE[:offer])#我的->服務
         @serv_offers = Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).order("created_at DESC").page(params[:page]).per(5)
+        @size = Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).size;
       elsif(qry_type == Const::SERV_QRY_TYPE[:request])#我的->需求
         @serv_offers = Good.where("serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:request], user_id).order("created_at DESC").page(params[:page]).per(5)  
+        @size = Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:request], user_id).size;
       else
         @serv_offers = Good.where("user_id = ?", user_id).order("created_at DESC").page(params[:page]).per(5)
       end
@@ -80,7 +82,7 @@ class Api::Goods::ServOffersController < ApplicationController
 
     respond_to do |format|
       format.json {
-        render json: {page: @serv_offers.current_page, total_pages: @serv_offers.total_pages, feeds: @offers.to_json}
+        render json: {page: @serv_offers.current_page, total_pages: @serv_offers.total_pages, feeds: @offers.to_json, count: @size ? @size : 0}
       }
     end
 

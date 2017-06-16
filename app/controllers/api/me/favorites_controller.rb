@@ -14,6 +14,7 @@ class Api::Me::FavoritesController < ApplicationController
     user = token && User.find_by_authentication_token(token.to_s)
     user_id = user.id
     @favorites = Favorite.where(user_id: user_id).order("created_at DESC").page(params[:page]).per(5)
+    @size = Favorite.where(user_id: user_id).order("created_at DESC").size
     #@favorites = Favorite.order("created_at DESC").page(params[:page]).per(5)
 
     @offers = []
@@ -38,7 +39,7 @@ class Api::Me::FavoritesController < ApplicationController
     respond_to do |format|
       format.json {
         logger.debug "sysMsg index json"
-        render json: {page: "1",total_pages: "7", feeds: @offers.to_json}
+        render json: {page: "1",total_pages: "7", feeds: @offers.to_json, count:@size}
       }
     end
   end
