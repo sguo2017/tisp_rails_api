@@ -82,7 +82,7 @@ class Api::Orders::OrdersController < ApplicationController
         }
       elsif @order.save
         format.json {
-           render json: {status:0, msg:"success", avaliable:avaliable-1}
+           render json: {status:0, msg:"success",id: @order.id, avaliable:avaliable-1}
         }
       else
         format.json {
