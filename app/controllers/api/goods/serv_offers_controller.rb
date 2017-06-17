@@ -117,7 +117,7 @@ class Api::Goods::ServOffersController < ApplicationController
         }
       elsif @serv_offer.save
         format.json {
-           render json: {status:0, msg:"success", avaliable: avaliable}
+           render json: {status:0, msg:"success", avaliable: avaliable - 1}
         }
       else
         format.json { render json: @serv_offer.errors, status: :unprocessable_entity }

@@ -82,7 +82,7 @@ class Api::Orders::OrdersController < ApplicationController
         }
       elsif @order.save
         format.json {
-           render json: {status:0, msg:"success", avaliable:avaliable}
+           render json: {status:0, msg:"success", avaliable:avaliable-1}
         }
       else
         format.json {
@@ -121,7 +121,7 @@ class Api::Orders::OrdersController < ApplicationController
   def avaliable_orders_to_add(user)
     has_added = Order.where("created_at >= ? and (request_user_id = ?)", Time.now.beginning_of_day, user.id,).size    
     limit = 0
-    limit = 2 if user.level == 1
+    limit = 10 if user.level == 1
     limit = 20 if user.level == 2
     limit = 30 if user.level == 3
     limit = has_added + 1 if user.admin #管理员无限制

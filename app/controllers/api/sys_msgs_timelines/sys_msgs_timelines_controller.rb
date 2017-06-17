@@ -70,7 +70,7 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
             @order.status = '00A'
             @order.connect_time = Time.new
             @order.save 
-            format.json { render json:{status: 0, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable}}
+            format.json { render json:{status: 0, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable-1}}
          end 
         if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:discarded]
             format.json { render json:{status: :ok, location: @sys_msgs_timeline}}
