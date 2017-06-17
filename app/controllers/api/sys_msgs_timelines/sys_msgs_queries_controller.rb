@@ -42,6 +42,13 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
     @u = User.find(user_id)
     @result.each do |r|
       s = r.attributes.clone
+
+      logger.debug "47:#{s["serv_id"]}"
+      
+      if s["serv_id"].blank?
+        next
+      end
+
       smt = SysMsgsTimeline.where("sys_msg_id = ? and user_id = ? ", s["id"], user_id).first
       if smt.blank?
         s["smt_id"]=""
@@ -51,6 +58,9 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
       end
 
       good = Good.find(s["serv_id"])
+
+
+
       if good.blank?
         s["serv_catagory"]=""
         s["catalog"]=""
