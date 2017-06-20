@@ -17,12 +17,21 @@ class Api::Goods::GoodsCatalogsController < ApplicationController
     @goods_catalogs.each do |catalog|
     	c = catalog.attributes.clone
     	parent_id = catalog.id
+      c["goods_count"] = 0
+      c["request_count"] = 0
     	goods_catalogs_II =  GoodsCatalog.where("ancestry=?","1/#{parent_id}").order("created_at ASC")
+      goods_catalogs_II.each do |catalog_II|
+        c_II = catalog_II.attributes.clone
+        c["goods_count"] = c["goods_count"] + c_II["goods_count"]
+        c["request_count"] = c["request_count"] +c_II["request_count"]
+      end
+
     	if goods_catalogs_II.blank?
     		c["goods_catalogs_II"] = "[]"
     	else
     		c["goods_catalogs_II"] = goods_catalogs_II.to_json
       end
+      logger.debug("需要#{c['name']}专业人士#{c['request_count']}")
     	goods_catalogs_arr.push(c)
     end
 
