@@ -18,6 +18,7 @@
 
 class Order < ApplicationRecord
 	self.table_name="orders"
+	belongs_to :good, counter_cache: true
 	after_create :after_created_callback
 	after_save :after_saved_callback
 

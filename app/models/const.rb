@@ -18,7 +18,10 @@ class Const
   GOODS_TYPE = {:request => "serv_request", :offer => "serv_offer"}
   GOODS_TYPE_TRANSLATE = {:request => "正向商品", :offer => "逆向商品"}
   SERV_QRY_TYPE = {:offer => "1", :request => "2"}  #good或offer查詢類型
+  SERV_VIA = {:local => "local", :remote => "remote", :all => "all"} #服务方式 本地|远程|全部
+  REQUEST_ORDERS_LIMIT = 40   #需求订单数限制
 
+  
   module SysMsg
     SYSTEM_USER_ID = 1
     GOODS_TYPE = {:request => "serv_request", :offer => "serv_offer"}

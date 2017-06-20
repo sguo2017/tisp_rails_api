@@ -25,6 +25,7 @@ class Good < ApplicationRecord
   belongs_to :goods_catalog, counter_cache: true
   after_create :after_created_callback
   has_many :favorites
+  has_many :orders
 
   protected
     def after_created_callback
@@ -36,7 +37,13 @@ class Good < ApplicationRecord
           :action_desc => self.serv_title,
           :accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:same_city],
           :msg_catalog => Const::SysMsg::CATALOG[:private],
-          :status => Const::SysMsg::STATUS[:created]
+          :status => Const::SysMsg::STATUS[:created],
+          :via => self.via,
+          :district => self.district,
+          :city => self.city,
+          :province => self.province,
+          :country => self.country,
+          :goods_catalog_id => self.goods_catalog_id
         }
         sys_msg = SysMsg.new(params_hash)
         sys_msg.set_accept_users #设置接受用户为同城人，插入中间表
@@ -51,7 +58,8 @@ class Good < ApplicationRecord
           :serv_id => self.id,
           :accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:all],
           :msg_catalog => Const::SysMsg::CATALOG[:public],
-          :status => Const::SysMsg::STATUS[:created]
+          :status => Const::SysMsg::STATUS[:created],
+          :via => self.via
         }
         sys_msg = SysMsg.create!(params_hash) #公共消息，不需要指定接收人，直接保存
         logger.debug "Good created callback has been executed!"
