@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170616102158) do
+ActiveRecord::Schema.define(version: 20170620024738) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -74,10 +74,11 @@ ActiveRecord::Schema.define(version: 20170616102158) do
     t.string   "name"
     t.string   "image"
     t.integer  "level"
-    t.datetime "created_at",              null: false
-    t.datetime "updated_at",              null: false
+    t.datetime "created_at",                null: false
+    t.datetime "updated_at",                null: false
     t.string   "ancestry"
-    t.integer  "goods_count", default: 0
+    t.integer  "goods_count",   default: 0
+    t.integer  "request_count", default: 0
     t.index ["ancestry"], name: "index_goods_catalogs_on_ancestry", using: :btree
   end
 

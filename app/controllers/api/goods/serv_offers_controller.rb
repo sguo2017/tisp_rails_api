@@ -116,6 +116,20 @@ class Api::Goods::ServOffersController < ApplicationController
            render json: {status:-2, msg:"您今天创建数量已达上限！"}
         }
       elsif @serv_offer.save
+        if @serv_offer.serv_catagory == Const::SysMsg::GOODS_TYPE[:offer]
+          @catalog =GoodsCatalog.where("id = ?", @serv_offer.goods_catalog_id).first
+          @catalog.goods_count = @catalog.goods_count + 1
+          @catalog.save
+        elsif @serv_offer.serv_catagory == Const::SysMsg::GOODS_TYPE[:request]
+          @catalog =GoodsCatalog.where("id = ?", @serv_offer.goods_catalog_id).first
+          if @catalog.request_count 
+            @catalog.request_count = @catalog.request_count + 1
+          else
+            @catalog.request_count = 1
+          end
+          @catalog.save
+        end
+        
         format.json {
            render json: {status:0, msg:"success", avaliable: avaliable - 1}
         }
