@@ -24,7 +24,7 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
       # @result = SysMsg.where(:msg_catalog => "private").joins(" inner join ( " + User.joins("inner join users U2 on U2.city = users.city").where('U2.id' => user_id).to_sql + " ) T on user_id = T.id")
       @result = User.find(user_id).sys_msgs.where(:msg_catalog => Const::SysMsg::CATALOG[:private],:status => Const::SysMsg::STATUS[:created])
     when 'B','b','2'
-      @result = User.find(user_id).sys_msgs.where(:msg_catalog => Const::SysMsg::CATALOG[:system])
+      @result = SysMsg.where(:msg_catalog => Const::SysMsg::CATALOG[:system])
     when 'C','c','3'
       @result = SysMsg.where(:msg_catalog => Const::SysMsg::CATALOG[:public])
     when 'ALL',"all",'0'
@@ -40,43 +40,45 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
     @sys_msgs = []
     #返回推送消息的id
     @u = User.find(user_id)
-    @result.each do |r|
-      s = r.attributes.clone
+    if query_type != '2'
+      @result.each do |r|
+        s = r.attributes.clone        
+        if s["serv_id"].blank?
+          next
+        end
 
-      logger.debug "47:#{s["serv_id"]}"
+        smt = SysMsgsTimeline.where("sys_msg_id = ? and user_id = ? ", s["id"], user_id).first
+        if smt.blank?
+          s["smt_id"]=""
+          
+        else
+          s["smt_id"]=smt.id
+        end
+
+        good = Good.find(s["serv_id"])
+
+
+
+        if good.blank?
+          s["serv_catagory"]=""
+          s["catalog"]=""
+          s["serv_detail"]=""
+        else
+          s["serv_catagory"]=good.serv_catagory
+          s["catalog"]=good.catalog
+          s["serv_detail"]=good.serv_detail
+        end
+        request_u = User.find(s["user_id"])
+        s["avatar"] = request_u.avatar
+        s["created_at"] = s["created_at"].strftime('%Y-%m-%d %H:%M:%S')
+        if(smt.status == Const::SysMsg::STATUS[:created] && good.user_id != user_id.to_i)
+          @sys_msgs.push(s)
+        end
+      end
+    elsif query_type == '2'
+      @sys_msgs.replace(@result)
+    end
       
-      if s["serv_id"].blank?
-        next
-      end
-
-      smt = SysMsgsTimeline.where("sys_msg_id = ? and user_id = ? ", s["id"], user_id).first
-      if smt.blank?
-        s["smt_id"]=""
-        
-      else
-        s["smt_id"]=smt.id
-      end
-
-      good = Good.find(s["serv_id"])
-
-
-
-      if good.blank?
-        s["serv_catagory"]=""
-        s["catalog"]=""
-        s["serv_detail"]=""
-      else
-        s["serv_catagory"]=good.serv_catagory
-        s["catalog"]=good.catalog
-        s["serv_detail"]=good.serv_detail
-      end
-      request_u = User.find(s["user_id"])
-      s["avatar"] = request_u.avatar
-      s["created_at"] = s["created_at"].strftime('%Y-%m-%d %H:%M:%S')
-      if(smt.status == Const::SysMsg::STATUS[:created] && good.user_id != user_id.to_i)
-        @sys_msgs.push(s)
-      end
-    end    
     respond_to do |format|
       format.any{
           render json: {status: :success, page: @result.current_page,total_pages: @result.total_pages, feeds: @sys_msgs}

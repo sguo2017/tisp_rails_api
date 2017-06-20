@@ -49,7 +49,7 @@
       <%= select_tag "sys_msg[msg_catalog]",
       options_for_select(tcl(@catalog_list,'Const::SysMsg::CATALOG'),
       selected=tcl(@catalog_selected,'Const::SysMsg::CATALOG')),
-      {:class => "form-control", :disabled => "disabled"} %>
+      {:class => "form-control"} %>
     </div>
     <%=f.error_span(:msg_catalog) %>
   </div>

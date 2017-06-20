@@ -12,7 +12,7 @@ class Api::Sys::SysMsgsController < ApplicationController
   def index
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
-    @sys_msgs = SysMsg.all.order("created_at desc").page(params[:page]).per(7)
+    @sys_msgs = SysMsg.where(:msg_catalog => Const::SysMsg::CATALOG[:public]).order("created_at desc").page(params[:page]).per(7)
     @msgs = []
     @sys_msgs.each do |msg|
          set_interval(msg)
