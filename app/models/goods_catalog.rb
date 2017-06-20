@@ -10,7 +10,7 @@
 #  updated_at  :datetime         not null
 #  ancestry    :string(255)
 #  goods_count :integer          default(0)
-#
+#  request_count :integer        default(0)
 
 class GoodsCatalog < ApplicationRecord
     has_ancestry

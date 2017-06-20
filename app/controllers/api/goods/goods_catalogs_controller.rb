@@ -31,7 +31,6 @@ class Api::Goods::GoodsCatalogsController < ApplicationController
     	else
     		c["goods_catalogs_II"] = goods_catalogs_II.to_json
       end
-      logger.debug("需要#{c['name']}专业人士#{c['request_count']}")
     	goods_catalogs_arr.push(c)
     end
 

@@ -120,6 +120,8 @@ class Api::Goods::ServOffersController < ApplicationController
           @catalog =GoodsCatalog.where("id = ?", @serv_offer.goods_catalog_id).first
           @catalog.goods_count = @catalog.goods_count + 1
           @catalog.save
+          user.offer_count = user.offer_count + 1
+          user.save
         elsif @serv_offer.serv_catagory == Const::SysMsg::GOODS_TYPE[:request]
           @catalog =GoodsCatalog.where("id = ?", @serv_offer.goods_catalog_id).first
           if @catalog.request_count 
@@ -128,6 +130,8 @@ class Api::Goods::ServOffersController < ApplicationController
             @catalog.request_count = 1
           end
           @catalog.save
+          user.request_count =user.request_count + 1
+          user.save
         end
         
         format.json {

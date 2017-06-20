@@ -65,7 +65,7 @@ class Api::Me::FavoritesController < ApplicationController
     @favorite.good_id = @favorite.obj_id
 
     respond_to do |format|
-      if @favorite.save
+      if @favorite.save        
         format.html { redirect_to @favorite, notice: 'Favorite was successfully created.' }
         #format.json { render :show, status: :created, location: @favorite }
         format.json {
