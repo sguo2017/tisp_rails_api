@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170620091220) do
+ActiveRecord::Schema.define(version: 20170620154759) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -56,8 +56,8 @@ ActiveRecord::Schema.define(version: 20170620091220) do
     t.string   "serv_detail"
     t.string   "serv_images"
     t.string   "serv_catagory"
-    t.datetime "created_at",       null: false
-    t.datetime "updated_at",       null: false
+    t.datetime "created_at",                         null: false
+    t.datetime "updated_at",                         null: false
     t.integer  "user_id"
     t.string   "catalog"
     t.integer  "goods_catalog_id"
@@ -68,6 +68,8 @@ ActiveRecord::Schema.define(version: 20170620091220) do
     t.string   "latitude"
     t.string   "longitude"
     t.integer  "favorites_count"
+    t.string   "via",              default: "local"
+    t.integer  "orders_count",     default: 0
   end
 
   create_table "goods_catalogs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -181,6 +183,12 @@ ActiveRecord::Schema.define(version: 20170620091220) do
     t.string   "msg_catalog"
     t.string   "accept_users_type"
     t.string   "status"
+    t.string   "via"
+    t.string   "district"
+    t.string   "city"
+    t.string   "province"
+    t.string   "country"
+    t.integer  "goods_catalog_id"
   end
 
   create_table "sys_msgs_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
