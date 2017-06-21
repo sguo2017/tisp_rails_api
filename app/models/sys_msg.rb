@@ -28,11 +28,11 @@ class SysMsg < ApplicationRecord
     when Const::SysMsg::ACCEPT_USERS_TYPE[:same_city]
       case self.via
       when Const::SERV_VIA[:local]
-        @accept_users_ids = Good.all.where("via = ? and goods_catalog_id = ? and district = ? and city = ? and province = ? and country = ?", self.via, self.goods_catalog_id, self.district, self.city, self.province, self.country).map{|u| u.id}
+        @accept_users_ids = Good.all.where("serv_catagory = '"+Const::GOODS_TYPE[:offer]+"' and via = ? and goods_catalog_id = ? and district = ? and city = ? and province = ? and country = ?", self.via, self.goods_catalog_id, self.district, self.city, self.province, self.country).map{|u| u.id}
       when Const::SERV_VIA[:remote]
-        @accept_users_ids = Good.all.where("via = ? and goods_catalog_id = ? ", self.via, self.goods_catalog_id).map{|u| u.id}
+        @accept_users_ids = Good.all.where("serv_catagory = '"+Const::GOODS_TYPE[:offer]+"' and via = ? and goods_catalog_id = ? ", self.via, self.goods_catalog_id).map{|u| u.id}
       else
-        @accept_users_ids = Good.all.where("via = ? and goods_catalog_id = ? and district = ? and city = ? and province = ? and country = ?", self.via, self.goods_catalog_id, self.district, self.city, self.province, self.country).map{|u| u.id}
+        @accept_users_ids = Good.all.where("serv_catagory = '"+Const::GOODS_TYPE[:offer]+"' and via = ? and goods_catalog_id = ? and district = ? and city = ? and province = ? and country = ?", self.via, self.goods_catalog_id, self.district, self.city, self.province, self.country).map{|u| u.id}
       end          
       #@accept_users_ids = User.all.where("city = ?", User.find(self.user_id).city).map{|u| u.id}
     when Const::SysMsg::ACCEPT_USERS_TYPE[:specify_cities]
