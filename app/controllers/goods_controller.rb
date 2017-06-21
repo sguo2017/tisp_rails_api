@@ -86,7 +86,7 @@ class GoodsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def good_params
-      params.require(:good).permit(:serv_title, :serv_detail, :serv_images, :serv_catagory, :user_id, :goods_catalog_id)
+      params.require(:good).permit(:serv_title, :serv_detail, :serv_images, :serv_catagory, :user_id, :goods_catalog_id, :orders_count)
     end
 
 	def set_goods_search

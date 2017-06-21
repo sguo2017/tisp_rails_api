@@ -63,14 +63,34 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
             @order = Order.new()
             token = params[:token].presence
             user = token && User.find_by_authentication_token(token.to_s)
-            @order.serv_offer_id = @SysMsg.serv_id
-            @order.request_user_id = @SysMsg.user_id
-            @order.lately_chat_content = params[:lately_chat_content].presence        
-            @order.offer_user_id = user.id
-            @order.status = '00A'
-            @order.connect_time = Time.new
-            @order.save 
-            format.json { render json:{status: 0, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable-1}}
+
+
+            #需求的订单数量达到上限后不再向其它用户推送
+            good = Good.find(@SysMsg.serv_id)
+            @sys_msgs_timelines = SysMsgsTimeline.where("sys_msg_id = ?", @sys_msgs_timeline.sys_msg_id)
+            if good.orders_count >=  Const::REQUEST_ORDERS_LIMIT
+               @sys_msgs_timelines.each do |t|
+                t.status = Const::SysMsg::STATUS[:discarded]
+                t.save
+               end
+               logger.debug("需求订单数达到上限，停止接单了")
+               format.json { render json:{status: -1, msg: "需求订单数达到上限，停止接单了"} }
+            else
+                @order.serv_offer_id = @SysMsg.serv_id
+                @order.request_user_id = @SysMsg.user_id
+                @order.lately_chat_content = params[:lately_chat_content].presence        
+                @order.offer_user_id = user.id
+                @order.status = '00A'
+                @order.connect_time = Time.new
+                @order.save
+
+                logger.debug("87 #{good.orders_count}")
+                good.orders_count = 4
+                logger.debug("89 #{good.orders_count}")
+                good.save
+                format.json { render json:{status: :ok, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable-1}}
+            end 
+            
          end 
         if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:discarded]
             format.json { render json:{status: :ok, location: @sys_msgs_timeline}}
