@@ -68,7 +68,7 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
             #需求的订单数量达到上限后不再向其它用户推送
             good = Good.find(@SysMsg.serv_id)
             @sys_msgs_timelines = SysMsgsTimeline.where("sys_msg_id = ?", @sys_msgs_timeline.sys_msg_id)
-            if good.orders_count >=  Const::REQUEST_ORDERS_LIMIT
+            if good.order_cnt >=  Const::REQUEST_ORDERS_LIMIT
                @sys_msgs_timelines.each do |t|
                 t.status = Const::SysMsg::STATUS[:discarded]
                 t.save
@@ -84,10 +84,9 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
                 @order.connect_time = Time.new
                 @order.save
 
-                logger.debug("87 #{good.orders_count}")
-                good.orders_count = 4
-                logger.debug("89 #{good.orders_count}")
+                good.order_cnt = good.order_cnt + 1
                 good.save
+
                 format.json { render json:{status: :ok, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable-1}}
             end 
             
