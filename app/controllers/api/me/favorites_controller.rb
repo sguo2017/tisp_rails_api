@@ -19,22 +19,23 @@ class Api::Me::FavoritesController < ApplicationController
 
     @offers = []
     @favorites.each do |favorite|
-         offer = Good.find(favorite.obj_id)
-         s = offer.attributes.clone
+      begin
+        offer = Good.find(favorite.obj_id)
+        s = offer.attributes.clone
         logger.debug "s:#{s.to_s}"
-	 begin
-            u = User.find(offer.user_id)
-            u.authentication_token = "***"
-            s["user"]=u
-	 rescue ActiveRecord::RecordNotFound => e
-
-	 end
-         s["isFavorited"] = true
-         s["favorite_id"] = favorite.id.to_s
-         @offers.push(s)
+    	 
+        u = User.find(offer.user_id)
+        u.authentication_token = "***"
+        s["user"]=u
+    	 rescue ActiveRecord::RecordNotFound => e
+          next
+    	 end
+       s["isFavorited"] = true
+       s["favorite_id"] = favorite.id.to_s
+       @offers.push(s)
     end
 
-    logger.debug "offers:#{@offers.to_json}"
+    #logger.debug "offers:#{@offers.to_json}"
 
     respond_to do |format|
       format.json {
