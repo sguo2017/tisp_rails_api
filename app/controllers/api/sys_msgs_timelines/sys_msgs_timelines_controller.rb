@@ -87,7 +87,7 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
                 good.order_cnt = good.order_cnt + 1
                 good.save
 
-                format.json { render json:{status: :ok, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable-1}}
+                format.json { render json:{status: 0, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable-1}}
             end 
             
          end 

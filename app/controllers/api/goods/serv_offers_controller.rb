@@ -19,17 +19,31 @@ class Api::Goods::ServOffersController < ApplicationController
 	if user_id.nil? && !extra_parm_s.nil? && 'undefined' != extra_parm_s
 		extra_parm_h = JSON.parse extra_parm_s
 		@serv_offers = Good.all
-    @serv_offers =@serv_offers.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(5)
+    @serv_offers =@serv_offers.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer])
     #查询参数有title且title不为空
     if extra_parm_h.include?("title") && extra_parm_h['title']!=''
-		  @serv_offers = @serv_offers.where("serv_title like ?", "%#{extra_parm_h['title']}%").order("created_at DESC").page(params[:page]).per(5)
+		  @serv_offers = @serv_offers.where("serv_title like ?", "%#{extra_parm_h['title']}%")
     end
     #查询参数有goods_catalog_id且goods_catalog_id不等于undedined
     if extra_parm_h.include?("goods_catalog_I") && 'undefined' != extra_parm_h['goods_catalog_I']
-      @serv_offers = @serv_offers.where("goods_catalog_id in (?)",extra_parm_h['goods_catalog_I']).order("created_at DESC").page(params[:page]).per(5)
+      @serv_offers = @serv_offers.where("goods_catalog_id in (?)",extra_parm_h['goods_catalog_I'])
     end     
     if extra_parm_h.include?("district")
-      @serv_offers = @serv_offers.where("district =? and serv_catagory =?",extra_parm_h['district'], Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(5)
+      @serv_offers = @serv_offers.where("district =? and serv_catagory =?",extra_parm_h['district'], Const::SysMsg::GOODS_TYPE[:offer])
+    end
+    #查询参数有sort_by
+    if extra_parm_h.include?("sort_by")
+      if extra_parm_h['sort_by'] == "created_at"
+        @serv_offers = @serv_offers.order("created_at DESC").page(params[:page]).per(5)
+      elsif extra_parm_h['sort_by'] == "favorites_count"
+        @serv_offers = @serv_offers.order("favorites_count DESC").page(params[:page]).per(5)
+      elsif extra_parm_h['sort_by'] == "order_cnt"
+        @serv_offers = @serv_offers.order("order_cnt DESC").page(params[:page]).per(5)
+      else     
+        @serv_offers = @serv_offers.order("created_at DESC").page(params[:page]).per(5)         
+      end
+    else     
+      @serv_offers = @serv_offers.order("created_at DESC").page(params[:page]).per(5)      
     end
   #场景二：全部查询
 	elsif user_id.nil?

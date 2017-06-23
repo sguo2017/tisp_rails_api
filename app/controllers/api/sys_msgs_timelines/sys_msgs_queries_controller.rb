@@ -67,6 +67,7 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
           s["serv_catagory"]=good.serv_catagory
           s["catalog"]=good.catalog
           s["serv_detail"]=good.serv_detail
+          s["serv_images"] = good.serv_images
         end
         request_u = User.find(s["user_id"])
         s["avatar"] = request_u.avatar
