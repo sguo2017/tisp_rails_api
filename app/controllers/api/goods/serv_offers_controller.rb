@@ -184,7 +184,7 @@ class Api::Goods::ServOffersController < ApplicationController
   def avaliable_goods_to_add(user,serv_catagory)
     has_added = user.goods.where("created_at >= ? and serv_catagory = ?", Time.now.beginning_of_day, serv_catagory).size 
     limit = 0
-    limit = 5 if user.level == 1
+    limit = 10 if user.level == 1
     limit = 20 if user.level == 2
     limit = 30 if user.level == 3
     limit = has_added + 1 if user.admin #管理员无限制

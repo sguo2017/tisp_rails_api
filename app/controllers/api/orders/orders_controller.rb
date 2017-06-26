@@ -37,6 +37,21 @@ class Api::Orders::OrdersController < ApplicationController
          o["deal_id"]=order.id
          o["serv_offer_user_name"]=@offer_user.name
          o["updated_at"]=o["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
+
+         #查找对方发出的消息
+         if order.request_user_id.to_s ==  user.id.to_s
+          @chat = Chat.where('deal_id = ? and user_id = ?', order.id.to_s, order.offer_user_id.to_s).order("created_at DESC")
+         else
+          @chat = Chat.where('deal_id = ? and user_id = ?', order.id.to_s, order.request_user_id.to_s).order("created_at DESC")          
+         end
+
+         if @chat.blank?
+            o["chat_status"]=Const::SysMsg::STATUS[:read]
+         elsif Const::SysMsg::STATUS[:unread] == @chat.first.status
+            o["chat_status"]=Const::SysMsg::STATUS[:unread]
+         else
+            o["chat_status"]=Const::SysMsg::STATUS[:read]
+         end
          @order_list.push(o)
     end
 

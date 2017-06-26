@@ -9,6 +9,9 @@ class Api::Chats::ChatsController < ApplicationController
   # GET /chats.json
 
   def index
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s)
+
     @deal_id = params[:deal_id].presence
     @deal = Order.find(@deal_id)
 	
@@ -22,6 +25,12 @@ class Api::Chats::ChatsController < ApplicationController
          c["name"]=@chat_user.name
          c["avatar"]=@chat_user.avatar		 
          @chat_list.push(c)
+         if chat.user_id.to_s == user.id.to_s
+
+         else
+           chat.status = Const::SysMsg::STATUS[:read]
+           chat.save
+         end
     end
 
     logger.debug "msgs:#{@chats.to_json}"
