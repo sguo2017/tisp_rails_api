@@ -1,0 +1,35 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      suggestion: "意见"
+    attributes:
+      suggestion: 
+        content: "内容"
+        user_id: "用户ID"
+        status: "状态"
+        created_at: "创建时间"
+  helpers:
+    submit:
+      suggestion:
+        create: "创建意见"
+        update: "更新意见"
+  suggestions:
+    edit:
+      title: "编辑意见"
+    form:
+      suggestion: "意见"
+    index:
+      confirm: "你确定删除这条意见吗？"
+      empty: "没有记录"
+      new_suggestion: "新增"
+      title: "意见列表"
+    new:
+      title: "新增意见"
+    show:
+      title: "意见详情"
+      confirm: "你确定删除这条意见吗?"
+      empty: "没有记录"
+    was_created: "意见添加成功"
+    was_deleted: "意见删除成功"
+    was_updated: "意见修改成功"

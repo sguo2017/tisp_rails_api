@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :suggestions
   resources :sms_sends
   resources :sms_sends_searches
 
@@ -67,6 +68,9 @@ Rails.application.routes.draw do
     namespace :sys_msgs_timelines do
       resources :sys_msgs_timelines
       resources :sys_msgs_queries
+    end
+    namespace :suggestion do 
+      resources :suggestions, only: [:index, :create, :show, :update, :destroy] 
     end
   end
 
