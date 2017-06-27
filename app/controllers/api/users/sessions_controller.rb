@@ -3,17 +3,25 @@ class Api::Users::SessionsController < ApplicationController
 	#POST /api/users/sessions/
 	def create
 		@user = User.find_for_database_authentication(:email => params[:user][:email])
+		@check_password = params[:check_password]
 		return render json: {error: {status:-1}} unless @user
 		respond_to do |format|
 		  if @user.valid_password?(params[:user][:password])
-		    sign_in("user", @user)
-			set_geo_infos
-			format.json {
-			  render json: {token:@user.authentication_token, user: @user.to_json}
-			}
-			format.js {
-			  render json: {token:@user.authentication_token, user: @user.to_json}
-			}
+		  	#判断是登录还是验证密码的过程
+		  	if @check_password.blank?
+		  		sign_in("user", @user)
+				set_geo_infos
+				format.json {
+				  render json: {token:@user.authentication_token, user: @user.to_json}
+				}
+				format.js {
+				  render json: {token:@user.authentication_token, user: @user.to_json}
+				}
+			else				
+				format.json {
+				  render json: {status:'OK'}
+				}
+		  	end	    
 		  else
 			format.json {
 			  render json: {error: {status:-1}}
@@ -28,26 +36,33 @@ class Api::Users::SessionsController < ApplicationController
     sms_code = params[:user][:code].presence
     num = params[:user][:num].presence
     sms = SmsSend.where("TIMESTAMPDIFF(MINUTE,created_at ,now())<#{Const::SMS_TIME_LIMIT} and sms_type='code' and send_content=? and recv_num =?", sms_code, num).first
+    @change_phone = params[:change_phone]
     return render json: {error: {status:-1}} unless sms
     user_id = sms.user_id
     @user = User.find(user_id)
     return render json: {error: {status:-1}} unless @user
-    respond_to do |format|
-        sign_in("user", @user)
-        set_geo_infos
-        if !@current_user
-           @current_user = @user
-           Thread.current[:tispr_user] = @user
-           session[:current_tispr_user] = @user
-        end
-        if @user.avatar
-            session[:user_avatar]=@user.avatar
-        end
+    respond_to do |format|	
+    	if @change_phone.blank?    	
+	        sign_in("user", @user)
+	        set_geo_infos
+	        if !@current_user
+	           @current_user = @user
+	           Thread.current[:tispr_user] = @user
+	           session[:current_tispr_user] = @user
+	        end
+	        if @user.avatar
+	            session[:user_avatar]=@user.avatar
+	        end
 
-        format.json {
-          render json: {token:@user.authentication_token, user: @user.to_json}
-        }
-    end
+	        format.json {
+	          render json: {token:@user.authentication_token, user: @user.to_json}
+	        }	    
+		else
+		format.json {
+		  render json: {status:'OK'}
+		}
+	end
+    end	    
   end
 
   #POST /api/users/token_login/
