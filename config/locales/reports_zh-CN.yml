@@ -1,0 +1,36 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      report: "举报"
+    attributes:
+      report: 
+        obj_id: "举报对象ID"
+        obj_type: "举报对象类型"
+        content: "举报内容"
+        status: "状态"
+        created_at: "创建时间"
+  helpers:
+    submit:
+      report:
+        create: "创建举报"
+        update: "更新举报"
+  reports:
+    edit:
+      title: "编辑举报"
+    form:
+      report: "举报"
+    index:
+      confirm: "你确定删除这条举报吗？"
+      empty: "没有记录"
+      new_report: "新增"
+      title: "举报列表"
+    new:
+      title: "新增举报"
+    show:
+      title: "举报详情"
+      confirm: "你确定删除这条举报吗?"
+      empty: "没有记录"
+    was_created: "举报添加成功"
+    was_deleted: "举报删除成功"
+    was_updated: "举报修改成功"

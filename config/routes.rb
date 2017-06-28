@@ -1,5 +1,6 @@
 Rails.application.routes.draw do
 
+  resources :reports
   resources :suggestions
   resources :sms_sends
   resources :sms_sends_searches
