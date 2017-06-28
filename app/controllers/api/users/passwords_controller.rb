@@ -13,10 +13,27 @@ class Api::Users::PasswordsController < ApplicationController
       end
 	end
   end
-  
+
+  # PATCH
+  #/api/users/passwords/:id(.:format)
+  def update
+    respond_to do |format|
+      @user = User.find(params[:id])
+      if @user.update(user_params)
+        format.json {
+           render json: {status:0, msg:"success"}
+        }
+      else
+        format.json {
+           render json: {status:-1, msg:"fail"}
+        }
+      end
+    end
+  end 
+
   private 
     def user_params
-      params.require(:user).permit(:email)
+      params.require(:user).permit(:email, :password)
     end
 	
 	def successfully_sent?(resource)
