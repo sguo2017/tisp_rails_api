@@ -1,14 +1,19 @@
 class Api::Users::SessionsController < ApplicationController
 
 	#POST /api/users/sessions/
+	#
+	#功能：1 登录功能；2 修改密码首先要验证密码；
+	#
 	def create
 		@user = User.find_for_database_authentication(:email => params[:user][:email])
 		@check_password = params[:check_password]
+		logger.debug "验证密码参数#{@check_password}"
 		return render json: {error: {status:-1}} unless @user
 		respond_to do |format|
 		  if @user.valid_password?(params[:user][:password])
 		  	#判断是登录还是验证密码的过程
 		  	if @check_password.blank?
+		  		logger.debug "登录过程"
 		  		sign_in("user", @user)
 				set_geo_infos
 				format.json {
@@ -58,10 +63,14 @@ class Api::Users::SessionsController < ApplicationController
 	          render json: {token:@user.authentication_token, user: @user.to_json}
 	        }	    
 		else
-		format.json {
-		  render json: {status:'OK'}
-		}
-	end
+			@user.num = num 
+			if @user.save
+				format.json {
+				  render json: {status:'OK'}
+				}	
+			end
+			
+		end
     end	    
   end
 
