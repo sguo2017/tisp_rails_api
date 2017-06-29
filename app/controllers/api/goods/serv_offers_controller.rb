@@ -71,30 +71,27 @@ class Api::Goods::ServOffersController < ApplicationController
 
     @offers = []
     @serv_offers.each do |offer|
-         s = offer.attributes.clone
-         begin
-            u = User.find(offer.user_id)
-            u.authentication_token = "***"
-            s["user"]=u
-         rescue ActiveRecord::RecordNotFound => e
+      s = offer.attributes.clone
+      begin
+        u = User.find(offer.user_id)
+        u.authentication_token = "***"
+        s["user"]=u
+      rescue ActiveRecord::RecordNotFound => e
 
-         end
+      end
 
-         #是否收藏
-         f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "serv_offer").first
-         if f.blank?
-           s["isFavorited"] = false
-         else
-           s["isFavorited"] = true
-           s["favorite_id"] = f["id"].to_s
-         end
-         s["created_at"] = s["created_at"].strftime('%Y-%m-%d %H:%M:%S')
-         s["updated_at"] = s["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
-         @offers.push(s)
-         #logger.debug "m:#{s}"
+      #是否收藏
+      f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "serv_offer").first
+      if f.blank?
+        s["isFavorited"] = false
+      else
+        s["isFavorited"] = true
+        s["favorite_id"] = f["id"].to_s
+      end
+      s["created_at"] = s["created_at"].strftime('%Y-%m-%d %H:%M:%S')
+      s["updated_at"] = s["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
+      @offers.push(s)
     end
-
-    #logger.debug "发现服务msgs:#{@serv_offers.to_json}"
 
     respond_to do |format|
       format.json {

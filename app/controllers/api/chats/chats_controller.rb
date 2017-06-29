@@ -16,28 +16,27 @@ class Api::Chats::ChatsController < ApplicationController
     @deal = Order.find(@deal_id)
 	
     @chats = Chat.where('deal_id ='+@deal_id.to_s).order("created_at DESC")
-    logger.debug "chats1 :#{@chats.to_json}"
     @chat_list = []
     @chats.each do |chat|
-         c = chat.attributes.clone  		 
-         @chat_user = User.find(chat.user_id)
-         c["_id"]=@chat_user.id
-         c["name"]=@chat_user.name
-         c["avatar"]=@chat_user.avatar		 
-         @chat_list.push(c)
-         if chat.user_id.to_s == user.id.to_s
+      c = chat.attributes.clone  		 
+      @chat_user = User.find(chat.user_id)
+      c["_id"]=@chat_user.id
+      c["name"]=@chat_user.name
+      c["avatar"]=@chat_user.avatar		 
+      @chat_list.push(c)
 
-         else
-           chat.status = Const::SysMsg::STATUS[:read]
-           chat.save
-         end
+      #当获取消息列表的用户不是发送这条消息的用户时，
+      #将这条消息的状态标记为已读
+      if chat.user_id.to_s == user.id.to_s
+
+      else
+        chat.status = Const::SysMsg::STATUS[:read]
+        chat.save
+      end
+
     end
-
-    logger.debug "msgs:#{@chats.to_json}"
-
     respond_to do |format|
       format.json {
-        #logger.debug "Chat index json"
         render json: {messages: @chat_list.to_json}
       }
     end
@@ -64,21 +63,20 @@ class Api::Chats::ChatsController < ApplicationController
     @chat = Chat.new(chat_params)
 
     respond_to do |format|
+      #消息保存时更新订单的最近聊天内容
       if @chat.save
         order = Order.find(@chat.deal_id);
         order.lately_chat_content = @chat.chat_content
         order.save;
 
         format.html { redirect_to @chat, notice: 'Deal chat detail was successfully created.' }
-        #format.json { render :show, status: :created, location: @chat }
         format.json {
-                render json: {status:0, msg: "成功"}
+          render json: {status:0, msg: "成功"}
         }
       else
         format.html { render :new }
-        #format.json { render json: @chat.errors, status: :unprocessable_entity }
         format.json {
-       		render json: {status:0, msg: "失败"}
+       		render json: {status:-1, msg: "失败"}
         }
       end
     end

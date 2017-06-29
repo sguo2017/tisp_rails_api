@@ -7,13 +7,11 @@ class Api::Users::SessionsController < ApplicationController
 	def create
 		@user = User.find_for_database_authentication(:email => params[:user][:email])
 		@check_password = params[:check_password]
-		logger.debug "验证密码参数#{@check_password}"
 		return render json: {error: {status:-1}} unless @user
 		respond_to do |format|
 		  if @user.valid_password?(params[:user][:password])
 		  	#判断是登录还是验证密码的过程
 		  	if @check_password.blank?
-		  		logger.debug "登录过程"
 		  		sign_in("user", @user)
 				set_geo_infos
 				format.json {
@@ -28,15 +26,15 @@ class Api::Users::SessionsController < ApplicationController
 				}
 		  	end	    
 		  else
-			format.json {
-			  render json: {error: {status:-1}}
-			}
+				format.json {
+				  render json: {error: {status:-1}}
+				}
 		  end
 		end
 	end
 
 	#POST /api/users/sms_login/
-  #
+    #change_phone参数判断是更换手机号还是通过手机号登录
 	def sms_login
     sms_code = params[:user][:code].presence
     num = params[:user][:num].presence
@@ -48,29 +46,27 @@ class Api::Users::SessionsController < ApplicationController
     return render json: {error: {status:-1}} unless @user
     respond_to do |format|	
     	if @change_phone.blank?    	
-	        sign_in("user", @user)
-	        set_geo_infos
-	        if !@current_user
-	           @current_user = @user
-	           Thread.current[:tispr_user] = @user
-	           session[:current_tispr_user] = @user
-	        end
-	        if @user.avatar
-	            session[:user_avatar]=@user.avatar
-	        end
-
-	        format.json {
-	          render json: {token:@user.authentication_token, user: @user.to_json}
-	        }	    
-		else
-			@user.num = num 
-			if @user.save
-				format.json {
-				  render json: {status:'OK'}
-				}	
+        sign_in("user", @user)
+        set_geo_infos
+        if !@current_user
+					@current_user = @user
+					Thread.current[:tispr_user] = @user
+					session[:current_tispr_user] = @user
+        end
+        if @user.avatar
+          session[:user_avatar]=@user.avatar
+        end
+        format.json {
+          render json: {token:@user.authentication_token, user: @user.to_json}
+        }	    
+			else
+				@user.num = num 
+				if @user.save
+					format.json {
+					  render json: {status:'OK'}
+					}	
+				end			
 			end
-			
-		end
     end	    
   end
 
@@ -92,10 +88,9 @@ class Api::Users::SessionsController < ApplicationController
 			if @user.avatar
 				session[:user_avatar]=@user.avatar
 			end
-
-        format.json {
-          render json: {token:@user.authentication_token, user: @user.to_json}
-        }
+      format.json {
+        render json: {token:@user.authentication_token, user: @user.to_json}
+      }
 		end
 	end
 
@@ -117,6 +112,4 @@ class Api::Users::SessionsController < ApplicationController
 	    geo_params = params.require(:user).permit(:district, :city, :province, :country, :latitude, :longitude)
         @user.update(geo_params)
 	  end
-
-
 end

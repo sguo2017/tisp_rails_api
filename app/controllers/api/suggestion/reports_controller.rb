@@ -39,7 +39,9 @@ class Api::Suggestion::ReportsController < ApplicationController
         }
       else
         format.html { render :new }
-        format.json { render json: @report.errors, status: :unprocessable_entity }
+        format.json { 
+          render json: {status:-1, msg:"failed"} 
+        }
       end
     end
   end

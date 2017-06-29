@@ -8,15 +8,9 @@ class Api::Suggestion::SuggestionsController < ApplicationController
   # GET /suggestions.json
   def index
 		token = params[:token].presence
-    	user = token && User.find_by_authentication_token(token.to_s)
+    user = token && User.find_by_authentication_token(token.to_s)
     	
-    	@suggestions = Suggestion.page(params[:page]).per(5)
-    	# respond_to do |format|
-     #  		format.json {
-     #    		render json: {status: 'ok', s: @suggestions.to_json}
-     #  		}
-    	# end
-
+    @suggestions = Suggestion.page(params[:page]).per(5)
     respond_to do |format|
       format.json {
         render json: {messages: @suggestions.to_json}
@@ -46,12 +40,13 @@ class Api::Suggestion::SuggestionsController < ApplicationController
     respond_to do |format|
       if @suggestion.save
         format.html { redirect_to @suggestion, notice: 'Suggestion was successfully created.' }
-        #format.json { render :show, status: :created, location: @favorite }
         format.json {
-           render json: {status:0, msg:"success"}
+          render json: {status:0, msg:"success"}
         }else
         format.html { render :new }
-        format.json { render json: @suggestion.errors, status: :unprocessable_entity }
+        format.json { 
+          render json: status:-1, msg:"failed"}
+        }
       end
     end
   end

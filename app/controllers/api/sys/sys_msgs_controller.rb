@@ -15,32 +15,30 @@ class Api::Sys::SysMsgsController < ApplicationController
     @sys_msgs = SysMsg.where(:msg_catalog => Const::SysMsg::CATALOG[:public]).order("created_at desc").page(params[:page]).per(7)
     @msgs = []
     @sys_msgs.each do |msg|
-         set_interval(msg)
-         m = msg.attributes.clone
-         begin
-             s = Good.find(msg.serv_id)
-             m["serv_offer"] = s
-             f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, s.id, "serv_offer").first
-             #是否收藏
-		         if f.blank?
-		           m["isFavorited"] = false
-		         else
-		           m["isFavorited"] = true
-		           m["favorite_id"] = f["id"].to_s
-		         end
-         rescue ActiveRecord::RecordNotFound => e
+      set_interval(msg)
+      m = msg.attributes.clone
+      begin
+        s = Good.find(msg.serv_id)
+        m["serv_offer"] = s
+        f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, s.id, "serv_offer").first
+        #是否收藏
+        if f.blank?
+          m["isFavorited"] = false
+        else
+          m["isFavorited"] = true
+          m["favorite_id"] = f["id"].to_s
+        end
+      rescue ActiveRecord::RecordNotFound => e
 
-         end
+      end
 
-         u = User.find(msg.user_id)
-         u.authentication_token = "***"
-         m["user"]=u
+      u = User.find(msg.user_id)
+      u.authentication_token = "***"
+      m["user"]=u
 
-         @msgs.push(m)
-         #logger.debug "m:#{m}"
+      @msgs.push(m)
     end
 
-    #logger.debug "msgs:#{@msgs.to_json}"
     respond_to do |format|
       format.json {
         render json: {page: @sys_msgs.current_page,total_pages: @sys_msgs.total_pages, feeds: @msgs.to_json}

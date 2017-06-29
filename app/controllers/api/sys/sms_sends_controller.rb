@@ -43,7 +43,6 @@ class Api::Sys::SmsSendsController < ApplicationController
     ret_msg = "失败"
     @sms_send = SmsSend.new()
     @change_phone = params[:change_phone]
-    logger.debug "更改手机号参数#{@change_phone}"
 
     recv_num = params[:sms_send][:recv_num].presence
     user = recv_num && User.find_by_num(recv_num.to_s)
@@ -62,9 +61,9 @@ class Api::Sys::SmsSendsController < ApplicationController
         }
       end
     elsif user.blank? && @change_phone
-       @sms_send.user_id = params[:sms_send][:user_id].presence
+      @sms_send.user_id = params[:sms_send][:user_id].presence
     elsif user && @change_phone.blank?
-       @sms_send.user_id = user.id     
+      @sms_send.user_id = user.id     
     end
     
     @sms_send.recv_num = recv_num
@@ -76,7 +75,7 @@ class Api::Sys::SmsSendsController < ApplicationController
     if sms
       respond_to do |format|
         format.json {
-           render json: {status:"-1", msg:"10分钟内容不允许重新发送"}
+          render json: {status:"-1", msg:"10分钟内容不允许重新发送"}
         } 
       end
     end
@@ -112,7 +111,7 @@ class Api::Sys::SmsSendsController < ApplicationController
            render json: {status:"#{ret_status}", msg:"#{ret_msg}"}
         }
       else
-       format.json {
+        format.json {
            render json: {status:"#{ret_status}", msg:"#{ret_msg}"}
         } 
       end

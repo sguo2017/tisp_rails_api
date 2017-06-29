@@ -17,6 +17,8 @@ class Api::Goods::GoodsCatalogsController < ApplicationController
     @goods_catalogs.each do |catalog|
     	c = catalog.attributes.clone
     	parent_id = catalog.id
+      
+      #计算大分类的服务量和需求量
       c["goods_count"] = 0
       c["request_count"] = 0
     	goods_catalogs_II =  GoodsCatalog.where("ancestry=?","1/#{parent_id}").order("created_at ASC")

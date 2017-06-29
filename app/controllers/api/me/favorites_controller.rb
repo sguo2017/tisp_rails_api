@@ -22,7 +22,6 @@ class Api::Me::FavoritesController < ApplicationController
       begin
         offer = Good.find(favorite.obj_id)
         s = offer.attributes.clone
-        logger.debug "s:#{s.to_s}"
     	 
         u = User.find(offer.user_id)
         u.authentication_token = "***"
@@ -35,12 +34,9 @@ class Api::Me::FavoritesController < ApplicationController
        @offers.push(s)
     end
 
-    #logger.debug "offers:#{@offers.to_json}"
-
     respond_to do |format|
       format.json {
-        logger.debug "sysMsg index json"
-        render json: {page: "1",total_pages: "7", feeds: @offers.to_json, count:@size}
+        render json: {page: @favorites.current_page, total_pages: @favorites.total_pages, feeds: @offers.to_json, count:@size}
       }
     end
   end

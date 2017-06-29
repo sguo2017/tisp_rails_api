@@ -19,7 +19,7 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
   # GET /sys_msgs_timelines/1.json
   def show
     respond_to do |format|
-        format.json { render json:{location: @sys_msgs_timeline }}
+      format.json { render json:{location: @sys_msgs_timeline }}
     end
   end
 
@@ -58,40 +58,37 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
            render json: {status: -2, msg:"您今天创建订单数量已达上限！"}
         }
       elsif @sys_msgs_timeline.update(sys_msgs_timeline_params)
-         if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:finished]
-            @SysMsg = SysMsg.find(@sys_msgs_timeline.sys_msg_id)
-            @order = Order.new()
-            token = params[:token].presence
-            user = token && User.find_by_authentication_token(token.to_s)
+        if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:finished]
+          @SysMsg = SysMsg.find(@sys_msgs_timeline.sys_msg_id)
+          @order = Order.new()
+          token = params[:token].presence
+          user = token && User.find_by_authentication_token(token.to_s)
 
+          #需求的订单数量达到上限后不再向其它用户推送
+          good = Good.find(@SysMsg.serv_id)
+          @sys_msgs_timelines = SysMsgsTimeline.where("sys_msg_id = ?", @sys_msgs_timeline.sys_msg_id)
+          if good.order_cnt >=  Const::REQUEST_ORDERS_LIMIT
+            @sys_msgs_timelines.each do |t|
+            t.status = Const::SysMsg::STATUS[:discarded]
+            t.save
+            end
+            format.json { render json:{status: -1, msg: "需求订单数达到上限，停止接单了"} }
+          else
+            @order.serv_offer_id = @SysMsg.serv_id
+            @order.request_user_id = @SysMsg.user_id
+            @order.serv_offer_title = @SysMsg.action_desc
+            @order.lately_chat_content = params[:lately_chat_content].presence        
+            @order.offer_user_id = user.id
+            @order.status = '00A'
+            @order.connect_time = Time.new
+            @order.save
 
-            #需求的订单数量达到上限后不再向其它用户推送
-            good = Good.find(@SysMsg.serv_id)
-            @sys_msgs_timelines = SysMsgsTimeline.where("sys_msg_id = ?", @sys_msgs_timeline.sys_msg_id)
-            if good.order_cnt >=  Const::REQUEST_ORDERS_LIMIT
-               @sys_msgs_timelines.each do |t|
-                t.status = Const::SysMsg::STATUS[:discarded]
-                t.save
-               end
-               logger.debug("需求订单数达到上限，停止接单了")
-               format.json { render json:{status: -1, msg: "需求订单数达到上限，停止接单了"} }
-            else
-                @order.serv_offer_id = @SysMsg.serv_id
-                @order.request_user_id = @SysMsg.user_id
-                @order.serv_offer_title = @SysMsg.action_desc
-                @order.lately_chat_content = params[:lately_chat_content].presence        
-                @order.offer_user_id = user.id
-                @order.status = '00A'
-                @order.connect_time = Time.new
-                @order.save
+            good.order_cnt = good.order_cnt + 1
+            good.save
 
-                good.order_cnt = good.order_cnt + 1
-                good.save
-
-                format.json { render json:{status: 0, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable-1}}
-            end 
-            
-         end 
+            format.json { render json:{status: 0, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable-1}}
+          end 
+        end 
         if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:discarded]
             format.json { render json:{status: :ok, location: @sys_msgs_timeline}}
         end       
