@@ -72,6 +72,7 @@ Rails.application.routes.draw do
     end
     namespace :suggestion do 
       resources :suggestions, only: [:index, :create, :show, :update, :destroy] 
+      resources :reports, only: [:index, :create, :show, :update, :destroy] 
     end
   end
 
