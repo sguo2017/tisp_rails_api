@@ -89,7 +89,7 @@ class Api::Goods::ServOffersController < ApplicationController
            s["favorite_id"] = f["id"].to_s
          end
          s["created_at"] = s["created_at"].strftime('%Y-%m-%d %H:%M:%S')
-         logger.debug "我的需求时间#{s['created_at']}"
+         s["updated_at"] = s["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
          @offers.push(s)
          #logger.debug "m:#{s}"
     end

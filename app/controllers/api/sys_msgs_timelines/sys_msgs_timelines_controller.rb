@@ -78,6 +78,7 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
             else
                 @order.serv_offer_id = @SysMsg.serv_id
                 @order.request_user_id = @SysMsg.user_id
+                @order.serv_offer_title = @SysMsg.action_desc
                 @order.lately_chat_content = params[:lately_chat_content].presence        
                 @order.offer_user_id = user.id
                 @order.status = '00A'

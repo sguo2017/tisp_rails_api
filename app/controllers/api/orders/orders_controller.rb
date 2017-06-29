@@ -18,14 +18,7 @@ class Api::Orders::OrdersController < ApplicationController
          o = order.attributes.clone
          logger.debug "order_id #{order.id}"
          logger.debug "order #{@order}"
-         #@serv = ServOffer.find(order.serv_offer_id) rescue nil
-         begin
-              @serv = Good.find(order.serv_offer_id)
-              o["serv_offer_titile"]=@serv.serv_title
-              o["serv"]=@serv.serv_title
-         rescue ActiveRecord::RecordNotFound => e
-              o["serv_offer_titile"]=""
-         end
+
          @request_user = User.find(order.request_user_id)
          @request_user.authentication_token = "***"
          @offer_user = User.find(order.offer_user_id)
