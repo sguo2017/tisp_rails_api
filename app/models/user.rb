@@ -56,12 +56,12 @@ class User < ApplicationRecord
     sign_in_count = User.find(self.id).sign_in_count
     #logger.debug "53 sign_in_count.blank? #{sign_in_count.blank?}  sign_in_count < self.sign_in_count #{sign_in_count < self.sign_in_count}"
     unless sign_in_count.blank? 
-    if sign_in_count < self.sign_in_count
-      self.authentication_token = generate_authentication_token
-    end
+      if sign_in_count < self.sign_in_count
+        self.authentication_token = generate_authentication_token
+      end
     end
 
-   logger.debug "authentication_token:#{authentication_token}"
+   logger.debug "before save user:#{self.to_json} authentication_token:#{authentication_token}"
   end
 
 
