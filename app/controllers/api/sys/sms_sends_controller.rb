@@ -36,24 +36,25 @@ class Api::Sys::SmsSendsController < ApplicationController
   # POST /sms_sends
   # POST /sms_sends.json
 
-  #1、有参数change_phone时，发送更改手机号的验证码
-  #2、没有参数change_phone时，发送手机号登录的验证码
+  #场景1、有参数change_phone时，发送更改手机号的验证码
+  #场景2、没有参数时，发送手机号登录的验证码
+  #场景3、有参数register_phone时，发送注册时绑定手机号的验证码
   def create
     ret_status = -1
     ret_msg = "失败"
     @sms_send = SmsSend.new()
     @change_phone = params[:change_phone]
-
+    @register_phone =params[:register_phone]
     recv_num = params[:sms_send][:recv_num].presence
     user = recv_num && User.find_by_num(recv_num.to_s)
-    if user.blank? && @change_phone.blank?
+    if user.blank? && @change_phone.blank? && @register_phone.blank?
       ret_msg = "此号码没有注册用户"
       respond_to do |format|
 		    format.json {
 	      	render json: {status:"#{ret_status}", msg:"此号码没有注册用户"}
 	      }
     	end
-    elsif user && @change_phone
+    elsif user && (@change_phone || @register_phone)
       ret_msg = "此号码已经被注册了"
       respond_to do |format|
         format.json {

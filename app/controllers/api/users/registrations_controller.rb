@@ -9,6 +9,12 @@ class Api::Users::RegistrationsController < ApplicationController
   # POST /api/users/registrations/  
   # ×¢²á
   def create
+    #注册时验证验证码是否正确
+    sms_code = params[:user][:code].presence
+    num = params[:user][:num].presence
+    sms = SmsSend.where("TIMESTAMPDIFF(MINUTE,created_at ,now())<#{Const::SMS_TIME_LIMIT} and sms_type='code' and send_content=? and recv_num =?", sms_code, num).first
+    return render json: {error: {status:-1 ,msg: "验证码不正确"}} unless sms
+
     @user = User.new(user_params)
     @pre_user = User.find_by_email(@user.email)
     respond_to do |format|
@@ -52,7 +58,7 @@ class Api::Users::RegistrationsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def user_params
-      params.require(:user).permit(:name, :email, :password, :password_confirmation, :current_password, :avatar, :profile, :user_id, :district, :city, :province, :country, :latitude, :longitude)
+      params.require(:user).permit(:name, :email, :password, :password_confirmation, :num, :current_password, :avatar, :profile, :user_id, :district, :city, :province, :country, :latitude, :longitude)
     end
 
 end
