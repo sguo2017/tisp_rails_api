@@ -40,6 +40,7 @@ class Api::Sys::SmsSendsController < ApplicationController
   #场景2、没有参数时，发送手机号登录的验证码
   #场景3、有参数register_phone时，发送注册时绑定手机号的验证码
   def create
+    logger.debug "43"
     ret_status = -1
     ret_msg = "失败"
     @sms_send = SmsSend.new()
@@ -54,6 +55,7 @@ class Api::Sys::SmsSendsController < ApplicationController
 	      	render json: {status:"#{ret_status}", msg:"此号码没有注册用户"}
 	      }
     	end
+      return
     elsif user && (@change_phone || @register_phone)
       ret_msg = "此号码已经被注册了"
       respond_to do |format|
@@ -61,6 +63,7 @@ class Api::Sys::SmsSendsController < ApplicationController
           render json: {status:"#{ret_status}", msg:"此号码已经被注册了"}
         }
       end
+      return
     elsif user.blank? && @change_phone
       @sms_send.user_id = params[:sms_send][:user_id].presence
     elsif user && @change_phone.blank?
@@ -109,7 +112,7 @@ class Api::Sys::SmsSendsController < ApplicationController
 			    ret_msg = "fails"        
 	      end           
         format.json {
-           render json: {status:"#{ret_status}", msg:"#{ret_msg}"}
+           render json: {status:"#{ret_status}", msg:"#{ret_msg}", send_content: "#{send_content}"}
         }
       else
         format.json {
