@@ -50,6 +50,7 @@ Rails.application.routes.draw do
 	    resources :phone_call, only: [:update]
       match '/image_server_url' ,to: 'registrations#image_server_url', via: [:get,:post]
 	    match '/sms_login' ,to: 'sessions#sms_login', via: [:post]
+      match '/phone_login' ,to: 'sessions#phone_login', via: [:post]
 	    match '/token_login' ,to: 'sessions#token_login', via: [:post]
 	    match '/client_ip' ,to: 'users_behaviors#client_ip', via: [:get, :post]
     end
