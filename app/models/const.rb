@@ -20,6 +20,7 @@ class Const
   SERV_QRY_TYPE = {:offer => "1", :request => "2"}  #good或offer查詢類型
   SERV_VIA = {:local => "local", :remote => "remote", :all => "all"} #服务方式 本地|远程|全部
   REQUEST_ORDERS_LIMIT = 2   #需求订单数限制
+  USER_PROFILE ="大家好，我来自%s，请多多关照"
 
   
   module SysMsg
@@ -36,9 +37,9 @@ class Const
     ACCEPT_USERS_TYPE_TRANSLATE = {:same_city => "同城", :specify_cities => "指定区域", :specify_users => "指定用户", :all => "所有人"}
     ACTION_TITLE_OF_REGISTRATION = "加入奇客"
     ACTION_TITLE_OF_USER_CREATE_SERV_OFFER = "发布了一项专项服务"
-    ACTION_TITLE_OF_INQUIRIED_ORDER = "正在了解%s专业服务"
-    ACTION_TITLE_OF_OFFERED_ORDER = "正在与%s沟通一个工作机会"
-    ACTION_TITLE_OF_CONFIRMED_ORDER ="与%s达成一个工作机会"
+    ACTION_TITLE_OF_REQUEST_ORDER = "正在与__%s__沟通一个工作机会"
+    ACTION_TITLE_OF_OFFERED_ORDER = "正在了解__%s__的服务"
+    ACTION_TITLE_OF_CONFIRMED_ORDER ="与__%s__达成一个工作机会"
 
   end
 

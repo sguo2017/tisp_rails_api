@@ -77,9 +77,10 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
             @order.serv_offer_id = @SysMsg.serv_id
             @order.request_user_id = @SysMsg.user_id
             @order.serv_offer_title = @SysMsg.action_desc
+            @order.serv_catagory = good.serv_catagory
             @order.lately_chat_content = params[:lately_chat_content].presence        
             @order.offer_user_id = user.id
-            @order.status = '00A'
+            @order.status = Const::SysMsg::ORDER_STATUS[:inquiried]
             @order.connect_time = Time.new
             @order.save
 

@@ -76,7 +76,7 @@ class Api::Orders::OrdersController < ApplicationController
     user = token && User.find_by_authentication_token(token.to_s)
 
     @order.request_user_id = user.id
-    @order.status = '00A'
+    @order.status = Const::SysMsg::ORDER_STATUS[:inquiried]
     @order.connect_time = Time.new
     respond_to do |format|
       avaliable = avaliable_orders_to_add(user)
@@ -141,6 +141,6 @@ class Api::Orders::OrdersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def order_params
-      params.require(:order).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :status, :connect_time, :bidder, :signature, :lately_chat_content)
+      params.require(:order).permit(:serv_offer_title, :serv_offer_id, :offer_user_id, :request_user_id, :status, :connect_time, :bidder, :signature, :lately_chat_content, :serv_catagory)
     end
 end

@@ -16,6 +16,7 @@ class Api::Users::RegistrationsController < ApplicationController
     return render json: {error: {status:-1 ,msg: "验证码不正确"}} unless sms
 
     @user = User.new(user_params)
+    @user.profile = Const::USER_PROFILE % @user.city
     @pre_user = User.find_by_email(@user.email)
     respond_to do |format|
       if @pre_user

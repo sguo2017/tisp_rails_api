@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170630072020) do
+ActiveRecord::Schema.define(version: 20170704073310) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -55,10 +55,10 @@ ActiveRecord::Schema.define(version: 20170630072020) do
   create_table "goods", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.string   "serv_title"
     t.string   "serv_detail"
-    t.string   "serv_images"
+    t.string   "serv_images",      limit: 2000
     t.string   "serv_catagory"
-    t.datetime "created_at",                         null: false
-    t.datetime "updated_at",                         null: false
+    t.datetime "created_at",                                      null: false
+    t.datetime "updated_at",                                      null: false
     t.integer  "user_id"
     t.string   "catalog"
     t.integer  "goods_catalog_id"
@@ -69,9 +69,9 @@ ActiveRecord::Schema.define(version: 20170630072020) do
     t.string   "latitude"
     t.string   "longitude"
     t.integer  "favorites_count"
-    t.string   "via",              default: "local"
-    t.integer  "orders_count",     default: 0
-    t.integer  "order_cnt",        default: 0
+    t.string   "via",                           default: "local"
+    t.integer  "orders_count",                  default: 0
+    t.integer  "order_cnt",                     default: 0
   end
 
   create_table "goods_catalogs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
@@ -134,6 +134,7 @@ ActiveRecord::Schema.define(version: 20170630072020) do
     t.string   "lately_chat_content"
     t.integer  "bidder"
     t.integer  "signature"
+    t.string   "serv_catagory"
   end
 
   create_table "orders_searches", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

@@ -45,23 +45,21 @@ class User < ApplicationRecord
 
   after_create :after_created_callback
 
-  #token为空时自动生成新的token
-  #通过登录修改登录次数来触发token更新，避免token是静态。后面可以改判断时间周期：一天前登录就失效
+  # token为空时自动生成新的token
+  # 通过登录修改登录次数来触发token更新，避免token是静态。后面可以改判断时间周期：一天前登录就失效
+  # 修改用户信息时不能改变token
   def ensure_authentication_token
     #注册场景下直接生成tocken
     if self.id.blank?
       self.authentication_token = generate_authentication_token
       return
     end
-    sign_in_count = User.find(self.id).sign_in_count
+    # sign_in_count = User.find(self.id).sign_in_count
     #logger.debug "53 sign_in_count.blank? #{sign_in_count.blank?}  sign_in_count < self.sign_in_count #{sign_in_count < self.sign_in_count}"
-    unless sign_in_count.blank? 
-      if sign_in_count < self.sign_in_count
-        self.authentication_token = generate_authentication_token
-      end
+    if sign_in_count_changed? 
+      self.authentication_token = generate_authentication_token
     end
 
-   logger.debug "before save user:#{self.to_json} authentication_token:#{authentication_token}"
   end
 
 
