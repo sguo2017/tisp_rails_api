@@ -7,10 +7,18 @@ class Api::Orders::OrdersController < ApplicationController
 
   # GET /orders
   # GET /orders.json
+  # 场景一：个人信息里全部订单 personal
+  # 场景二：邀标订单 bidder
   def index
     token = params[:token].presence
-    user = token && User.find_by_authentication_token(token.to_s)
-    @orders = Order.where('offer_user_id ='+user.id.to_s).or(Order.where('request_user_id ='+ user.id.to_s)).order("updated_at DESC").page(params[:page]).per(5)
+    scence = params[:scence].presence
+    if scence == "personal"
+      user = token && User.find_by_authentication_token(token.to_s)
+      @orders = Order.where('offer_user_id ='+user.id.to_s).or(Order.where('request_user_id ='+ user.id.to_s)).order("updated_at DESC").page(params[:page]).per(5)
+    end
+    if scence == "bidder"
+      @orders = Order.where('request_user_id ='+ user.id.to_s).order("updated_at DESC").page(params[:page]).per(5)
+    end    
     #@orders = Order.page(params[:page]).per(5)
     logger.debug "orders:#{@orders.to_json}"
     @order_list = []
