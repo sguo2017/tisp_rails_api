@@ -17,10 +17,10 @@ class Api::Orders::OrdersController < ApplicationController
       @orders = Order.where('offer_user_id ='+user.id.to_s).or(Order.where('request_user_id ='+ user.id.to_s)).order("updated_at DESC").page(params[:page]).per(5)
     end
     if scence == "bidder"
-      @orders = Order.where('request_user_id ='+ user.id.to_s).order("updated_at DESC").page(params[:page]).per(5)
+      serv_offer_id = params[:serv_id].presence
+      @orders = Order.where('serv_offer_id ='+ serv_offer_id).order("updated_at DESC").page(params[:page]).per(5)
+      logger.debug "邀标订单#{@orders.to_json}"
     end    
-    #@orders = Order.page(params[:page]).per(5)
-    logger.debug "orders:#{@orders.to_json}"
     @order_list = []
     @orders.each do |order|
       o = order.attributes.clone
@@ -36,21 +36,21 @@ class Api::Orders::OrdersController < ApplicationController
       o["deal_id"]=order.id
       o["serv_offer_user_name"]=@offer_user.name
       o["updated_at"]=o["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
-
+      if scence == "personal"
       #查找订单对方发出的消息，如果最近一条的消息为未读，聊天状态标记为未读
-      if order.request_user_id.to_s ==  user.id.to_s
-      @chat = Chat.where('deal_id = ? and user_id = ?', order.id.to_s, order.offer_user_id.to_s).order("created_at DESC")
-      else
-      @chat = Chat.where('deal_id = ? and user_id = ?', order.id.to_s, order.request_user_id.to_s).order("created_at DESC")          
+        if order.request_user_id.to_s ==  user.id.to_s
+        @chat = Chat.where('deal_id = ? and user_id = ?', order.id.to_s, order.offer_user_id.to_s).order("created_at DESC")
+        else
+        @chat = Chat.where('deal_id = ? and user_id = ?', order.id.to_s, order.request_user_id.to_s).order("created_at DESC")          
+        end
+        if @chat.blank?
+          o["chat_status"]=Const::SysMsg::STATUS[:read]
+        elsif Const::SysMsg::STATUS[:unread] == @chat.first.status
+          o["chat_status"]=Const::SysMsg::STATUS[:unread]
+        else
+          o["chat_status"]=Const::SysMsg::STATUS[:read]
+        end
       end
-      if @chat.blank?
-        o["chat_status"]=Const::SysMsg::STATUS[:read]
-      elsif Const::SysMsg::STATUS[:unread] == @chat.first.status
-        o["chat_status"]=Const::SysMsg::STATUS[:unread]
-      else
-        o["chat_status"]=Const::SysMsg::STATUS[:read]
-      end
-
       @order_list.push(o)
     end
 
