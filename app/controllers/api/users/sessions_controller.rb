@@ -13,17 +13,17 @@ class Api::Users::SessionsController < ApplicationController
 		  	#判断是登录还是验证密码的过程
 		  	if @check_password.blank?
 		  		sign_in("user", @user)
-				set_geo_infos
-				format.json {
-				  render json: {token:@user.authentication_token, user: @user.to_json}
-				}
-				format.js {
-				  render json: {token:@user.authentication_token, user: @user.to_json}
-				}
-			else				
-				format.json {
-				  render json: {status:'OK'}
-				}
+					set_geo_infos
+					format.json {
+					  render json: {token:@user.authentication_token, user: @user.to_json}
+					}
+					format.js {
+					  render json: {token:@user.authentication_token, user: @user.to_json}
+					}
+				else				
+					format.json {
+					  render json: {status:'OK'}
+					}
 		  	end	    
 		  else
 				format.json {
