@@ -32,11 +32,15 @@ class Order < ApplicationRecord
 				action_desc = ''
 				user_name = offer_user.name
 				user_id = offer_user.id
+				link_user_id = request_user.id
+				link_user_name = request_user.name
 			when Const::SysMsg::GOODS_TYPE[:offer]
 				action_title = Const::SysMsg::ACTION_TITLE_OF_OFFERED_ORDER%offer_user.name
-				action_desc = ''
+				action_desc = self.serv_offer_title
 				user_id = request_user.id
 				user_name = request_user.name
+				link_user_id = offer_user.id
+				link_user_name = offer_user.name
 			else
 				return
 			end
@@ -48,7 +52,10 @@ class Order < ApplicationRecord
 				:serv_id => self.serv_offer_id,
 				:accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:all],
 				:msg_catalog => Const::SysMsg::CATALOG[:public],
-				:status => Const::SysMsg::STATUS[:created]
+				:status => Const::SysMsg::STATUS[:created],
+				:order_id => self.id,
+				:link_user_id => link_user_id,
+				:link_user_name => link_user_name,
 			}
 			SysMsg.create!(params_hash)
 
@@ -90,6 +97,8 @@ class Order < ApplicationRecord
 				:action_desc => action_desc,
 				:user_id => request_user.id,
 				:user_name => request_user.name,
+				:link_user_id => offer_user_id,
+				:link_user_name => offer_user.name,
 				:serv_id => self.serv_offer_id,
 				:accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:all],
 				:msg_catalog => Const::SysMsg::CATALOG[:public],

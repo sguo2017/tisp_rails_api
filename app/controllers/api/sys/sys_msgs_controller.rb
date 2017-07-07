@@ -18,6 +18,13 @@ class Api::Sys::SysMsgsController < ApplicationController
       set_interval(msg)
       m = msg.attributes.clone
       begin
+        u = User.find(msg.user_id)
+        u.authentication_token = "***"
+        m["user"]=u
+        if msg.link_user_id
+          link_u = User.find(msg.link_user_id)
+          m["link_user"] = link_u
+        end       
         s = Good.find(msg.serv_id)
         m["serv_offer"] = s
         f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, s.id, "serv_offer").first
@@ -31,11 +38,6 @@ class Api::Sys::SysMsgsController < ApplicationController
       rescue ActiveRecord::RecordNotFound => e
 
       end
-
-      u = User.find(msg.user_id)
-      u.authentication_token = "***"
-      m["user"]=u
-
       @msgs.push(m)
     end
 

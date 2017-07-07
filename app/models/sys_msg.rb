@@ -6,7 +6,7 @@
 #  user_name         :string(255)
 #  action_title      :string(255)
 #  action_desc       :string(255)
-#  user_id           :integer
+#  user_id           :integer         1、后端管理员新建系统消息；2、新建[订单]发起人；3、新建[serv]的创建人；                       
 #  created_at        :datetime         not null
 #  updated_at        :datetime         not null
 #  serv_id           :integer
@@ -15,6 +15,8 @@
 #  accept_users_type :string(255)
 #  accept_users      :string(255)
 #  status            :string(255)
+#  link_user_id      :integer         1、订单创建时接受人
+#  order_id          :integer         1、订单创建时订单IDs
 #
 
 class SysMsg < ApplicationRecord
