@@ -60,7 +60,9 @@ class GoodsController < ApplicationController
     respond_to do |format|
       if @good.update(good_params)
         format.html { redirect_to @good, notice: '成功更新商品！' }
-        format.json { render :show, status: :ok, location: @good }
+        @code = 200
+        @msg = "success"
+        format.json { render json: {status: :update, code: @code, msg: @msg} }
       else
         format.html { render :edit }
         format.json { render json: @good.errors, status: :unprocessable_entity }
@@ -86,7 +88,7 @@ class GoodsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def good_params
-      params.require(:good).permit(:serv_title, :serv_detail, :serv_images, :serv_catagory, :user_id, :goods_catalog_id)
+      params.require(:good).permit(:serv_title, :serv_detail, :serv_images, :serv_catagory, :user_id, :goods_catalog_id, :status)
     end
 
 	def set_goods_search

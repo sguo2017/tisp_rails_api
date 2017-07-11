@@ -6,26 +6,34 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th><%= model_class.human_attribute_name(:id) %></th>
+      <!-- <th><%= model_class.human_attribute_name(:id) %></th> -->
       <th><%= model_class.human_attribute_name(:serv_title) %></th>
-      <th><%= model_class.human_attribute_name(:serv_detail) %></th>
+      <!-- <th><%= model_class.human_attribute_name(:serv_detail) %></th> -->
       <th><%= model_class.human_attribute_name(:serv_images) %></th>
       <th><%= model_class.human_attribute_name(:serv_catagory) %></th>
       <th><%= model_class.human_attribute_name(:user_id) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
+      <th><%= model_class.human_attribute_name(:status) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
     </tr>
   </thead>
   <tbody>
     <% @goods.each do |good| %>
       <tr>
-        <td><%= link_to good.id, good_path(good) %></td>
+        <!-- <td><%= link_to good.id, good_path(good) %></td> -->
         <td><%= good.serv_title %></td>
-        <td><%= good.serv_detail %></td>
+        <!-- <td><%= good.serv_detail %></td> -->
         <td><image class="media-object" src="<%= good.serv_images %>"/></td>
         <td><%= good.serv_catagory %></td>
-        <td><%= good.user_id %></td>
-        <td><%=l good.created_at %></td>
+        <td><%= good.user.name %></td>
+        <td><%= good.created_at.strftime('%Y-%m-%d')
+ %></td>
+        <td>
+          <button type="button" class="btn btn-warning btn-xs mr5 lock-good-btn"  data-good=<%= good.id %> data-status=<%= good.status %>  >
+            <span class='lock-text' style="display: <% if good.status == '00X' %>none<%end%>" >发布</span>
+            <span class='unlock-text' style="display: <% if good.status == '00A' %>none<%end%>">失效</span>
+          </button>
+        </td>
         <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
                       good_path(good), :class => 'btn btn-default btn-xs' %>
@@ -46,3 +54,42 @@
 <%= link_to t('.new', :default => t("helpers.links.new")),
             new_good_path,
             :class => 'btn btn-primary' %>
+
+<script type="text/javascript">
+  $(document).ready(function(){
+        $('.lock-good-btn').click(function() {
+          var status, that, url, good_id;
+          that = $(this);
+          good_id = $(this).data('good');
+          status = $(this).data('status');
+          if (status === '00A') {
+            status = '00X';
+          } else if (status === '00X') {
+            status = '00A';
+          }
+          url = '/goods/' + good_id + '.json';
+          return $.ajax(url, {
+            type: 'patch',
+            dataType: 'json',
+            data: {
+              good: {
+                status: status
+              }
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+              return console.log("AJAX Error: " + textStatus);
+            },
+            success: function(data, textStatus, jqXHR) {
+              that.data('status', status);
+              if (status === '00A') {
+                that.children('.unlock-text').hide();
+                return that.children('.lock-text').show();
+              } else if (status === '00X') {
+                that.children('.lock-text').hide();
+                return that.children('.unlock-text').show();
+              }
+            }
+          });
+        });
+  })
+</script>

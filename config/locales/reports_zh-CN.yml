@@ -1,5 +1,5 @@
 ---
-en:
+zh-CN:
   activerecord:
     models:
       report: "举报"
