@@ -15,6 +15,7 @@ class Api::Goods::ServOffersController < ApplicationController
     user_id = params[:user_id].presence
     qry_type = params[:qry_type].presence
     catalog_id = params[:catalog_id].presence
+    serv_id = params[:serv_id].presence
 	extra_parm_s = params[:exploreparams]
 	#场景一：模糊查询
 	if user_id.nil? && !extra_parm_s.nil? && 'undefined' != extra_parm_s
@@ -47,10 +48,10 @@ class Api::Goods::ServOffersController < ApplicationController
     else     
       @serv_offers = @serv_offers.order("created_at DESC").page(params[:page]).per(5)      
     end
-    #场景三：分类查询
+    #场景三：某[二级分类]相关服务查询
   elsif user_id.nil? && catalog_id
     logger.debug "查找分类为#{catalog_id}"
-    @serv_offers = Good.where("user_id != ? and status = ? and goods_catalog_id = ? and serv_catagory = ?", user.id, Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
+    @serv_offers = Good.where("id != ? and status = ? and goods_catalog_id = ? and serv_catagory = ?", serv_id, Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
   
   #场景二：全部查询
 	elsif user_id.nil?
