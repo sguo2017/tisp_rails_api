@@ -5,7 +5,7 @@
 #  id               :integer          not null, primary key
 #  serv_title       :string(255)
 #  serv_detail      :string(255)
-#  serv_images       :string(255)
+#  serv_images      :string(2000)
 #  serv_catagory    :string(255)
 #  created_at       :datetime         not null
 #  updated_at       :datetime         not null
@@ -18,50 +18,65 @@
 #  country          :string(255)
 #  latitude         :string(255)
 #  longitude        :string(255)
-#
+#  status           :string(255)    :default 00A  desc:缺省00A未审核，前端不能查看;00B审核通过，前端可以查看；00X审核不通过，前端不可以查看
 
 class Good < ApplicationRecord
   belongs_to :user
   belongs_to :goods_catalog, counter_cache: true
-  after_create :after_created_callback
+  after_save :after_saved_callback
   has_many :favorites
 
   protected
-    def after_created_callback
-      if self.serv_catagory == Const::SysMsg::GOODS_TYPE[:request]
+    def after_saved_callback
+      if status_changed? 
+        if self.status == "00A"
+          new_mgs(self)
+        elsif self.status == "00X"
+          SysMsg.where(serv_id: self.id).update_all(status: Const::SysMsg::STATUS[:discarded])
+        else
+
+        end  
+      end
+    end
+
+  private
+    def new_mgs(param)
+      if param.serv_catagory == Const::SysMsg::GOODS_TYPE[:request]
         params_hash = {
-          :user_id => self.user_id,
-          :user_name => self.user.name,
-          :serv_id => self.id,
-          :action_desc => self.serv_title,
+          :user_id => param.user_id,
+          :user_name => param.user.name,
+          :serv_id => param.id,
+          :action_desc => param.serv_title,
           :accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:same_city],
           :msg_catalog => Const::SysMsg::CATALOG[:private],
           :status => Const::SysMsg::STATUS[:created],
-          :via => self.via,
-          :district => self.district,
-          :city => self.city,
-          :province => self.province,
-          :country => self.country,
-          :goods_catalog_id => self.goods_catalog_id
+          :via => param.via,
+          :district => param.district,
+          :city => param.city,
+          :province => param.province,
+          :country => param.country,
+          :goods_catalog_id => param.goods_catalog_id
         }
         sys_msg = SysMsg.new(params_hash)
         sys_msg.set_accept_users #设置接受用户为同城人，插入中间表
         sys_msg.save
         logger.debug "Good created callback has been executed!"
-      elsif self.serv_catagory == Const::SysMsg::GOODS_TYPE[:offer]
+      elsif param.serv_catagory == Const::SysMsg::GOODS_TYPE[:offer]
         params_hash={
           :action_title => Const::SysMsg::ACTION_TITLE_OF_USER_CREATE_SERV_OFFER,
-          :action_desc => self.serv_title,
-          :user_id => self.user_id,
-          :user_name => self.user.name,
-          :serv_id => self.id,
+          :action_desc => param.serv_title,
+          :user_id => param.user_id,
+          :user_name => param.user.name,
+          :serv_id => param.id,
           :accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:all],
           :msg_catalog => Const::SysMsg::CATALOG[:public],
           :status => Const::SysMsg::STATUS[:created],
-          :via => self.via
+          :via => param.via
         }
         sys_msg = SysMsg.create!(params_hash) #公共消息，不需要指定接收人，直接保存
         logger.debug "Good created callback has been executed!"
       end
+
     end
+
 end

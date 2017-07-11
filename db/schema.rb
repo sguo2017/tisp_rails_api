@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170711063505) do
+ActiveRecord::Schema.define(version: 20170711074832) do
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -72,7 +72,7 @@ ActiveRecord::Schema.define(version: 20170711063505) do
     t.string   "via",                           default: "local"
     t.integer  "orders_count",                  default: 0
     t.integer  "order_cnt",                     default: 0
-    t.string   "status",                        default: "00X"
+    t.string   "status",                        default: "00A"
   end
 
   create_table "goods_catalogs", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|

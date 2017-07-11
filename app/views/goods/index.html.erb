@@ -13,8 +13,9 @@
       <th><%= model_class.human_attribute_name(:serv_catagory) %></th>
       <th><%= model_class.human_attribute_name(:user_id) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
-      <th><%= model_class.human_attribute_name(:status) %></th>
-      <th><%=t '.actions', :default => t("helpers.actions") %></th>
+      <th>状态</th>
+      <th>失效/发布</th><!-- 
+      <th><%=t '.actions', :default => t("helpers.actions") %></th> -->
     </tr>
   </thead>
   <tbody>
@@ -25,16 +26,22 @@
         <!-- <td><%= good.serv_detail %></td> -->
         <td><image class="media-object" src="<%= good.serv_images %>"/></td>
         <td><%= good.serv_catagory %></td>
-        <td><%= good.user.name %></td>
+        <td><%= good.user.name %></td>        
         <td><%= good.created_at.strftime('%Y-%m-%d')
  %></td>
         <td>
-          <button type="button" class="btn btn-warning btn-xs mr5 lock-good-btn"  data-good=<%= good.id %> data-status=<%= good.status %>  >
-            <span class='lock-text' style="display: <% if good.status == '00X' %>none<%end%>" >发布</span>
-            <span class='unlock-text' style="display: <% if good.status == '00A' %>none<%end%>">失效</span>
-          </button>
+          <% if good.status == '00A' %>未审核<%end%>  
+          <% if good.status == '00B' %>审核通过<%end%>  
+          <% if good.status == '00X' %>审核否决<%end%>          
         </td>
         <td>
+          <button type="button" class="btn btn-warning btn-xs mr5 lock-good-btn"  data-good=<%= good.id %> data-status=<%= good.status %>  >
+            <% if good.status == '00A' %><span class='lock-text'>同意发布</span><%end%>
+            <% if good.status == '00B' %><span class='lock-text'>不同意发布</span><%end%> 
+            <% if good.status == '00X' %><span class='lock-text'>同意发布</span><%end%> 
+          </button>
+        </td>
+        <!-- <td>
           <%= link_to t('.show', :default => t("helpers.links.show")),
                       good_path(good), :class => 'btn btn-default btn-xs' %>
           <%= link_to t('.edit', :default => t("helpers.links.edit")),
@@ -44,7 +51,7 @@
                       :method => :delete,
                       :data => { :confirm => t('.confirm', :default => t("helpers.links.confirm", :default => 'Are you sure?')) },
                       :class => 'btn btn-xs btn-danger' %>
-        </td>
+        </td> -->
       </tr>
     <% end %>
   </tbody>
@@ -63,9 +70,11 @@
           good_id = $(this).data('good');
           status = $(this).data('status');
           if (status === '00A') {
+            status = '00B';
+          }else if (status === '00X') {
+            status = '00B';
+          }else if (status === '00B') {
             status = '00X';
-          } else if (status === '00X') {
-            status = '00A';
           }
           url = '/goods/' + good_id + '.json';
           return $.ajax(url, {
@@ -80,14 +89,15 @@
               return console.log("AJAX Error: " + textStatus);
             },
             success: function(data, textStatus, jqXHR) {
-              that.data('status', status);
-              if (status === '00A') {
-                that.children('.unlock-text').hide();
-                return that.children('.lock-text').show();
-              } else if (status === '00X') {
-                that.children('.lock-text').hide();
-                return that.children('.unlock-text').show();
-              }
+              // that.data('status', status);
+              // if (status === '00A') {
+              //   that.children('.unlock-text').hide();
+              //   return that.children('.lock-text').show();
+              // } else if (status === '00X') {
+              //   that.children('.lock-text').hide();
+              //   return that.children('.unlock-text').show();
+              // }
+              location.reload();
             }
           });
         });
