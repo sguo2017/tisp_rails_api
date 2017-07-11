@@ -8,8 +8,12 @@
   <dd><%= @report.obj_id %></dd>
   <dt><strong><%= model_class.human_attribute_name(:obj_type) %>:</strong></dt>
   <dd><%= @report.obj_type %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:tag) %>:</strong></dt>
+  <dd><%= @report.tag %></dd>
   <dt><strong><%= model_class.human_attribute_name(:content) %>:</strong></dt>
   <dd><%= @report.content %></dd>
+  <dt><strong><%= model_class.human_attribute_name(:image) %>:</strong></dt>
+  <dd><%= image_tag @report.image || '' %></dd>
   <dt><strong><%= model_class.human_attribute_name(:status) %>:</strong></dt>
   <dd><%= @report.status %></dd>
 </dl>

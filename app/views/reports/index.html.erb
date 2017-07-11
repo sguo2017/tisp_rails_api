@@ -8,7 +8,9 @@
       <th><%= model_class.human_attribute_name(:id) %></th>
       <th><%= model_class.human_attribute_name(:obj_id) %></th>
       <th><%= model_class.human_attribute_name(:obj_type) %></th>
+      <th><%= model_class.human_attribute_name(:tag) %></th>
       <th><%= model_class.human_attribute_name(:content) %></th>
+      <th><%= model_class.human_attribute_name(:image) %></th>
       <th><%= model_class.human_attribute_name(:status) %></th>
       <th><%= model_class.human_attribute_name(:created_at) %></th>
       <th><%=t '.actions', :default => t("helpers.actions") %></th>
@@ -20,7 +22,9 @@
         <td><%= link_to report.id, report_path(report) %></td>
         <td><%= report.obj_id %></td>
         <td><%= report.obj_type %></td>
-        <td><%= report.content %></td>
+        <td><%= report.tag %></td>
+        <td><%= report.content %></td>        
+        <td><image class="media-object" src="<%= report.image %>"/></td>
         <td><%= report.status %></td>
         <td><%=l report.created_at %></td>
         <td>
