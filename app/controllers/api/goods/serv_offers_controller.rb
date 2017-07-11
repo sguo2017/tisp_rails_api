@@ -20,7 +20,8 @@ class Api::Goods::ServOffersController < ApplicationController
 	if user_id.nil? && !extra_parm_s.nil? && 'undefined' != extra_parm_s
 		extra_parm_h = JSON.parse extra_parm_s
 		@serv_offers = Good.all
-    @serv_offers =@serv_offers.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer])
+    @serv_offers = @serv_offers.where("status = ?", Const::GOODS_STATUS[:pass])
+    @serv_offers = @serv_offers.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer])
     #查询参数有title且title不为空
     if extra_parm_h.include?("title") && extra_parm_h['title']!=''
 		  @serv_offers = @serv_offers.where("serv_title like ?", "%#{extra_parm_h['title']}%")
@@ -49,17 +50,19 @@ class Api::Goods::ServOffersController < ApplicationController
     #场景三：分类查询
   elsif user_id.nil? && catalog_id
     logger.debug "查找分类为#{catalog_id}"
-    @serv_offers = Good.where("goods_catalog_id = ? and serv_catagory = ?", catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
+    @serv_offers = Good.where("user_id != ? and status = ? and goods_catalog_id = ? and serv_catagory = ?", user.id, Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
   
   #场景二：全部查询
 	elsif user_id.nil?
     if (qry_type == Const::SERV_QRY_TYPE[:offer])
-      @serv_offers = Good.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(5)
+      @serv_offers = Good.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer])
     elsif (qry_type == Const::SERV_QRY_TYPE[:request])
-      @serv_offers = Good.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:request]).order("created_at DESC").page(params[:page]).per(5)
+      @serv_offers = Good.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:request])
     else
-    @serv_offers = Good.order("created_at DESC").page(params[:page]).per(5) 
+      @serv_offers = Good.order("created_at DESC")
 		end
+    @serv_offers =@serv_offers.where("status =?", Const::GOODS_STATUS[:pass]).order("created_at DESC").page(params[:page]).per(5)
+    
   #场景四：个人查询
   else
       if(qry_type == Const::SERV_QRY_TYPE[:offer])#我的->服務

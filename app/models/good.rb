@@ -29,9 +29,9 @@ class Good < ApplicationRecord
   protected
     def after_saved_callback
       if status_changed? 
-        if self.status == "00B"
+        if self.status == Const::GOODS_STATUS[:pass]
           new_mgs(self)
-        elsif self.status == "00X"
+        elsif self.status == Const::GOODS_STATUS[:reject]
           SysMsg.where(serv_id: self.id).update_all(status: Const::SysMsg::STATUS[:discarded])
         else
 
