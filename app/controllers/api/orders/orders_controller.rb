@@ -93,8 +93,16 @@ class Api::Orders::OrdersController < ApplicationController
            render json: {status:-2, msg:"您今天创建订单数量已达上限！"}
         }
       elsif @order.save
+        @offer_user = User.find(@order.offer_user_id)
+        o = @order.attributes.clone
+        o["request_user"]=user.name
+        o["request_user_avatar"]=user.avatar
+        o["offer_user"]=@offer_user.name
+        o["offer_user_avatar"]=@offer_user.avatar
+        o["deal_id"]=@order.id
+        o["serv_offer_user_name"]=@offer_user.name
         format.json {
-           render json: {status:0, msg:"success",id: @order.id, avaliable:avaliable-1}
+           render json: {status:0, msg:"success",feed: o, avaliable:avaliable-1}
         }
       else
         format.json {

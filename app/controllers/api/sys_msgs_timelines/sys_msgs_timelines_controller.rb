@@ -84,10 +84,21 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
             @order.connect_time = Time.new
             @order.save
 
+            #发送消息新增订单后，需要跳转到聊天页面
+            #以下是返回聊天页面需要的数据
+            @request_user = User.find(@SysMsg.user_id)
+            o = @order.attributes.clone
+            o["request_user"]=@request_user.name
+            o["request_user_avatar"]=@request_user.avatar
+            o["offer_user"]=user.name
+            o["offer_user_avatar"]=user.avatar
+            o["deal_id"]=@order.id
+            o["serv_offer_user_name"]=user.name
+
             good.order_cnt = good.order_cnt + 1
             good.save
 
-            format.json { render json:{status: 0, location: @sys_msgs_timeline, id:@order.id, avaliable: avaliable-1}}
+            format.json { render json:{status: 0, location: @sys_msgs_timeline, feed: o, avaliable: avaliable-1}}
           end 
         end 
         if @sys_msgs_timeline.status == Const::SysMsg::STATUS[:discarded]

@@ -36,7 +36,7 @@ class Const
     ORDER_STATUS_TRANSLATE = {:inquiried => "已询价", :offered => "已报价" ,:confirmed => "已确定"}
     ACCEPT_USERS_TYPE = {:same_city => "same_city", :specify_cities => "specify_cities", :specify_users => "specify_users", :all => "all"}
     ACCEPT_USERS_TYPE_TRANSLATE = {:same_city => "同城", :specify_cities => "指定区域", :specify_users => "指定用户", :all => "所有人"}
-    ACTION_TITLE_OF_REGISTRATION = "加入奇客"
+    ACTION_TITLE_OF_REGISTRATION = "加入了奇客"
     ACTION_TITLE_OF_USER_CREATE_SERV_OFFER = "发布了一项专业服务"
     ACTION_TITLE_OF_REQUEST_ORDER = "正在与__%s__沟通一个工作机会"
     ACTION_TITLE_OF_OFFERED_ORDER = "正在了解__%s__的服务"
