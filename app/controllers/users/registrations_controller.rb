@@ -101,7 +101,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
 
   private
   def user_params
-    params.require(:user).permit(:name, :email, :password, :password_confirmation, :current_password, :avatar)
+    params.require(:user).permit(:name, :email, :password, :password_confirmation, :current_password, :avatar, :website)
   end
   
   def valify_captcha!

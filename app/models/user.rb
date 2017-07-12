@@ -29,6 +29,7 @@
 #  latitude               :string(255)
 #  longitude              :string(255)
 #  profile                :string(255)
+#  website                :string(255)
 #
 
 class User < ApplicationRecord
