@@ -34,6 +34,10 @@ class Api::Goods::ServOffersController < ApplicationController
     if extra_parm_h.include?("district")
       @serv_offers = @serv_offers.where("district =? and serv_catagory =?",extra_parm_h['district'], Const::SysMsg::GOODS_TYPE[:offer])
     end
+    #查询参数有via
+    if extra_parm_h.include?("via") 
+      @serv_offers = @serv_offers.where("(via = ? || via = 'all') ", extra_parm_h['via'])
+    end
     #查询参数有sort_by
     if extra_parm_h.include?("sort_by")
       if extra_parm_h['sort_by'] == "created_at"
