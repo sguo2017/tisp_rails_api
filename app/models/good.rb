@@ -18,7 +18,7 @@
 #  country          :string(255)
 #  latitude         :string(255)
 #  longitude        :string(255)
-#  status           :string(255)    :default 00A  desc:缺省00A未审核，前端不能查看;00B审核通过，前端可以查看；00X审核不通过，前端不可以查看
+#  status           :string(255)    :default 00A  desc:缺省00A未审核，前端不能查看;00B审核通过，前端可以查看;00D个人删除，个人服务不可查看;00X审核不通过，前端不可以查看
 
 class Good < ApplicationRecord
   belongs_to :user

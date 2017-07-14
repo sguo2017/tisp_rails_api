@@ -33,6 +33,9 @@ class Api::Goods::ServOffersController < ApplicationController
     end     
     if extra_parm_h.include?("district")
       @serv_offers = @serv_offers.where("district =? and serv_catagory =?",extra_parm_h['district'], Const::SysMsg::GOODS_TYPE[:offer])
+    end     
+    if extra_parm_h.include?("city")
+      @serv_offers = @serv_offers.where("city =? and serv_catagory =?",extra_parm_h['city'], Const::SysMsg::GOODS_TYPE[:offer])
     end
     #查询参数有via
     if extra_parm_h.include?("via") 
@@ -71,13 +74,13 @@ class Api::Goods::ServOffersController < ApplicationController
   #场景四：个人查询
   else
       if(qry_type == Const::SERV_QRY_TYPE[:offer])#我的->服務
-        @serv_offers = Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).order("created_at DESC").page(params[:page]).per(5)
-        @size = Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).size;
+        @serv_offers = Good.where(" serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:offer], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)
+        @size = 0 #Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).size;
       elsif(qry_type == Const::SERV_QRY_TYPE[:request])#我的->需求
-        @serv_offers = Good.where("serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:request], user_id).order("created_at DESC").page(params[:page]).per(5)  
-        @size = Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:request], user_id).size;
+        @serv_offers = Good.where("serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)  
+        @size = 0 #Good.where(" serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).size;
       else
-        @serv_offers = Good.where("user_id = ?", user_id).order("created_at DESC").page(params[:page]).per(5)
+        @serv_offers = Good.where("user_id = ? and status != ? ", user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)
       end
   end
 
@@ -176,10 +179,14 @@ class Api::Goods::ServOffersController < ApplicationController
     respond_to do |format|
       if @serv_offer.update(serv_offer_params)
         format.html { redirect_to @serv_offer, notice: 'Serv offer was successfully updated.' }
-        format.json { render :show, status: :ok, location: @serv_offer }
+        format.json { 
+          render json: {status:0, msg:"success"}
+        }
       else
         format.html { render :edit }
-        format.json { render json: @serv_offer.errors, status: :unprocessable_entity }
+        format.json {
+          render json: { status: -1 }
+        }
       end
     end
   end
@@ -187,11 +194,20 @@ class Api::Goods::ServOffersController < ApplicationController
   # DELETE /serv_offers/1
   # DELETE /serv_offers/1.json
   def destroy
-    @serv_offer.destroy
-    respond_to do |format|
-      format.html { redirect_to serv_offers_url, notice: 'Serv offer was successfully destroyed.' }
-      format.json { head :no_content }
+    # @serv_offer.destroy
+    @serv_offer.status = Const::GOODS_STATUS[:destroy]
+    if @serv_offer.save
+      respond_to do |format|
+        # format.html { redirect_to serv_offers_url, notice: 'Serv offer was successfully destroyed.' }
+        format.json {render json: {status:0, msg:"success"}}
+      end
+    else
+      respond_to do |format|
+        # format.html { redirect_to serv_offers_url, notice: 'Serv offer was successfully destroyed.' }
+        format.json {render json: {status:-1, msg:"fail"}}
+      end
     end
+
   end
 
   def avaliable_goods_to_add(user,serv_catagory)
@@ -214,6 +230,6 @@ class Api::Goods::ServOffersController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def serv_offer_params
-      params.require(:serv_offer).permit(:serv_title, :serv_detail, :serv_images, :serv_catagory, :catalog, :goods_catalog_id, :user_id, :district, :city, :province, :country, :latitude, :longitude, :via)
+      params.require(:serv_offer).permit(:serv_title, :serv_detail, :serv_images, :serv_catagory, :catalog, :goods_catalog_id, :user_id, :district, :city, :province, :country, :latitude, :longitude, :via, :status)
     end
 end
