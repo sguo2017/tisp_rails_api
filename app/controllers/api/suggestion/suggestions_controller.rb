@@ -45,7 +45,7 @@ class Api::Suggestion::SuggestionsController < ApplicationController
         }else
         format.html { render :new }
         format.json { 
-          render json: status:-1, msg:"failed"}
+          render json: {status:-1, msg:"failed"}
         }
       end
     end
