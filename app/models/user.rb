@@ -38,6 +38,7 @@ class User < ApplicationRecord
   has_many :sys_msgs_timelines, dependent: :delete_all
   has_many :sys_msgs, through: :sys_msgs_timelines  
   has_many :favorites
+  has_many :reports
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   before_save :ensure_authentication_token

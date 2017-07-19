@@ -105,6 +105,16 @@ class Api::Goods::ServOffersController < ApplicationController
         s["isFavorited"] = true
         s["favorite_id"] = f["id"].to_s
       end
+
+      #是否举报
+      r = Report.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "good").first
+      if r.blank?
+        s["isReported"] = false
+      else
+        s["isReported"] = true
+        s["report_id"] = r["id"].to_s
+      end
+
       s["created_at"] = s["created_at"].strftime('%Y-%m-%d %H:%M:%S')
       s["updated_at"] = s["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
       @offers.push(s)
