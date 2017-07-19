@@ -21,7 +21,7 @@ class Const
   SERV_QRY_TYPE = {:offer => "1", :request => "2"}  #good或offer查詢類型
   SERV_VIA = {:local => "local", :remote => "remote", :all => "all"} #服务方式 本地|远程|全部
   REQUEST_ORDERS_LIMIT = 2   #需求订单数限制
-  USER_PROFILE ="大家好，我来自%s，请多多关照"
+  USER_PROFILE ="大家好，我来自__%s__，请多多关照"
 
   
   module SysMsg
