@@ -23,7 +23,9 @@ class Const
   REQUEST_ORDERS_LIMIT = 2   #需求订单数限制
   USER_PROFILE ="大家好，我来自__%s__，请多多关照"
 
-  
+  #错误类型
+  ERROR_TYPE= {:user_is_nil => -101, :default => -1}
+
   module SysMsg
     SYSTEM_USER_ID = 1
     GOODS_TYPE = {:request => "serv_request", :offer => "serv_offer"}

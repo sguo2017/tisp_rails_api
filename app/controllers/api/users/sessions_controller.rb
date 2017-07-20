@@ -104,25 +104,37 @@ class Api::Users::SessionsController < ApplicationController
   #POST /api/users/token_login/
 	def token_login
 		token = params[:token].presence
-		return render json: {error: {status:-1}} unless token
+		
 		@user = User.where("TIMESTAMPDIFF(DAY,updated_at ,now())<#{Const::TOKEN_TIME_LIMIT} and authentication_token=?", token.to_s).first
-		@user = User.find(@user.id)
-		return render json: {error: {status:-1}} unless @user
-		respond_to do |format|
-			sign_in("user", @user)
-			set_geo_infos
-			if !@current_user
-				@current_user = @user
-				Thread.current[:tispr_user] = @user
-				session[:current_tispr_user] = @user
+		
+		if @user.blank?
+			respond_to do |format|
+			  format.json {
+			  	render json: {status: Const::ERROR_TYPE[:user_is_nil].to_s}
+			  }
 			end
-			if @user.avatar
-				session[:user_avatar]=@user.avatar
+		else 
+			# @user = User.find(@user.id)
+	
+			respond_to do |format|
+				sign_in("user", @user)
+				set_geo_infos
+				if !@current_user
+					@current_user = @user
+					Thread.current[:tispr_user] = @user
+					session[:current_tispr_user] = @user
+				end
+				if @user.avatar
+					session[:user_avatar]=@user.avatar
+				end
+	      format.json {
+	        render json: {token: @user.authentication_token, user: @user.to_json}
+	      }
 			end
-      format.json {
-        render json: {token:@user.authentication_token, user: @user.to_json}
-      }
-		end
+
+		end	
+
+
 	end
 
 	#DELETE /api/users/sessions/:id/

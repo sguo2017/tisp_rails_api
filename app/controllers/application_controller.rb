@@ -14,13 +14,12 @@ class ApplicationController < ActionController::Base
     logger.debug "token:#{token.to_s}"
     user = token && User.find_by_authentication_token(token.to_s)
     if user
-      logger.debug "Hello world! #{@user}"
+      #logger.debug "Hello world! #{@user}"
       #走token不用重复登录操作——登录操作会触发登录用户的修改，修改会触发token变化
       #sign_in user, store: false
     else
-      render json: {error: {status:-1}}
+      render json: {status: Const::ERROR_TYPE[:user_is_nil]}
     end
-    logger.debug "user is nil"
   end
 
 
