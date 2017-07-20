@@ -36,6 +36,16 @@ class Api::Orders::OrdersController < ApplicationController
       o["deal_id"]=order.id
       o["serv_offer_user_name"]=@offer_user.name
       o["updated_at"]=o["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
+      r1 = Report.where('user_id = ? and obj_id =? and obj_type = ?', user.id, order.request_user_id, "user").first
+      r2 = Report.where('user_id = ? and obj_id =? and obj_type = ?', user.id, order.offer_user_id, "user").first
+
+      if r1.blank? && r2.blank?
+        logger.debug "没有举报"
+        o["is_reported"] = false
+      else
+        logger.debug "举报了用户#{@offer_user.name}与#{@request_user.name} "
+        o["is_reported"] = true
+      end
       if scence == "personal"
       #查找订单对方发出的消息，如果最近一条的消息为未读，聊天状态标记为未读
         if order.request_user_id.to_s ==  user.id.to_s
