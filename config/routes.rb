@@ -13,6 +13,7 @@ Rails.application.routes.draw do
   resources :sys_msgs_timelines
 
   resources :goods
+  resources :goods_show
   resources :goods_searches
   resources :goods_catalogs
   resources :goods_catalogs_searches
