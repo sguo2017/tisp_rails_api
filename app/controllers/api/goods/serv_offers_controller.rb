@@ -11,11 +11,14 @@ class Api::Goods::ServOffersController < ApplicationController
   def index
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
+
     @serv_offers
     user_id = params[:user_id].presence
     qry_type = params[:qry_type].presence
     catalog_id = params[:catalog_id].presence
     serv_id = params[:serv_id].presence
+    #个人已存档的需求查询的参数为request
+    archived = params[:archived].presence
 	extra_parm_s = params[:exploreparams]
 	#场景一：模糊查询
 	if user_id.nil? && !extra_parm_s.nil? && 'undefined' != extra_parm_s
@@ -77,8 +80,35 @@ class Api::Goods::ServOffersController < ApplicationController
         @serv_offers = Good.where(" serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:offer], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)
         @size = 0 #Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).size;
       elsif(qry_type == Const::SERV_QRY_TYPE[:request])#我的->需求
-        @serv_offers = Good.where("serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)  
-        @size = 0 #Good.where(" serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).size;
+        if(archived)
+           @favorites = Favorite.where("user_id = ? and obj_type = ?", user.id, Const::SysMsg::GOODS_TYPE[:request]).order("created_at DESC").page(params[:page]).per(5)
+           @requests = []
+           logger.debug "收藏的需求#{@favorites.to_json}"
+           @favorites.each do |favorite|
+              offer = Good.find(favorite.obj_id)
+              s = offer.attributes.clone
+              s["isFavorited"] = true
+              s["favorite_id"] = favorite.id.to_s
+              r = Report.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "good").first
+              if r.blank?
+                s["isReported"] = false
+              else
+                s["isReported"] = true
+                s["report_id"] = r["id"].to_s
+              end
+              s["user"]=user
+             @requests.push(s)
+          end
+          respond_to do |format|
+            format.json {
+              render json: {page: @favorites.current_page, total_pages: @favorites.total_pages, feeds: @requests.to_json}
+            }
+          end
+          return
+        else
+          @serv_offers = Good.where("serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)  
+          @size = 0 #Good.where(" serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).size;
+        end      
       else
         @serv_offers = Good.where("user_id = ? and status != ? ", user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)
       end
@@ -98,7 +128,7 @@ class Api::Goods::ServOffersController < ApplicationController
       end
 
       #是否收藏
-      f = Favorite.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "serv_offer").first
+      f = Favorite.where("user_id = ? and obj_id = ?", user.id, offer.id).first
       if f.blank?
         s["isFavorited"] = false
       else
