@@ -1,0 +1,2 @@
+module GoodsShowHelper
+end
