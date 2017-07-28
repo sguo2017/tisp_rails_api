@@ -142,6 +142,8 @@ class Api::Users::SessionsController < ApplicationController
 	def destroy
 		@user=User.find(params[:id])
 		@user.ensure_authentication_token
+		@user.generate_authentication_token
+		@user.save
 		logger.debug "user_id:#{@user.id}### logined out! token changed!"
 		respond_to do |format|
 		  format.json { render json:{msg: "logined out"}}

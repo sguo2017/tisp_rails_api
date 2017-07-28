@@ -116,7 +116,7 @@ class User < ApplicationRecord
       if User.all.size > 0
         params_hash={
           :action_title => Const::SysMsg::ACTION_TITLE_OF_REGISTRATION,
-          :action_desc => self.profile,
+          :action_desc => Const::USER_PROFILE % self.city,
           :user_id => self.id,
           :user_name =>  self.name,
           :accept_users_type => Const::SysMsg::ACCEPT_USERS_TYPE[:all],

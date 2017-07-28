@@ -30,20 +30,22 @@ class Api::Goods::ServOffersController < ApplicationController
     if extra_parm_h.include?("title") && extra_parm_h['title']!=''
 		  @serv_offers = @serv_offers.where("serv_title like ?", "%#{extra_parm_h['title']}%")
     end
+    #查询参数有via
+    if extra_parm_h.include?("via") 
+      @serv_offers = @serv_offers.where("(via = ? || via = 'all') ", extra_parm_h['via'])
+    end
     #查询参数有goods_catalog_id且goods_catalog_id不等于undedined
     if extra_parm_h.include?("goods_catalog_I") && 'undefined' != extra_parm_h['goods_catalog_I']
       @serv_offers = @serv_offers.where("goods_catalog_id in (?)",extra_parm_h['goods_catalog_I'])
     end     
     if extra_parm_h.include?("district")
       @serv_offers = @serv_offers.where("district =? and serv_catagory =?",extra_parm_h['district'], Const::SysMsg::GOODS_TYPE[:offer])
-    end     
-    if extra_parm_h.include?("city")
+    end   
+
+    if extra_parm_h.include?("city") && extra_parm_h['city']!='undefined'
       @serv_offers = @serv_offers.where("city =? and serv_catagory =?",extra_parm_h['city'], Const::SysMsg::GOODS_TYPE[:offer])
     end
-    #查询参数有via
-    if extra_parm_h.include?("via") 
-      @serv_offers = @serv_offers.where("(via = ? || via = 'all') ", extra_parm_h['via'])
-    end
+    
     #查询参数有sort_by
     if extra_parm_h.include?("sort_by")
       if extra_parm_h['sort_by'] == "created_at"
