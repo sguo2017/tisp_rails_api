@@ -106,7 +106,7 @@ class Api::Goods::ServOffersController < ApplicationController
           end
           return
         else
-          @serv_offers = Good.where("serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)  
+          @serv_offers = Good.where("serv_catagory =? and user_id = ? and status != ? and not exists (select obj_id from favorites f where f.obj_id = goods.id) ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)  
           @size = 0 #Good.where(" serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).size;
         end      
       else
