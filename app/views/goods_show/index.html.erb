@@ -1,28 +1,140 @@
-<td><%= @goods_show.user.name %></td>
-<td><%= @goods_show.created_at %></td>
-<td><%= @goods_show.serv_detail %></td>
 <!DOCTYPE html>
 <html>
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 	<meta name="viewport" content="initial-scale=1.0, user-scalable=no" />
 	<style type="text/css">
-	body, html,#allmap {width: 100%;height: 100%;overflow: hidden;margin:0;font-family:"微软雅黑";}
+	body, html {width: 100%;height: 100%;overflow: scroll;margin:0;font-family:"微软雅黑";}
+	#allmap{
+		width: 100%;height: 200px;
+	}
+	.container{
+		margin: 16px;
+		overflow:scroll;
+	}
+	.avatar-warpper{
+        width:40px;
+		height:40px;
+		display:relative;
+		float:left;
+		overflow: hidden;
+        border-radius: 20px;
+    }
+    .user-avatar{
+	    min-width: 40px;
+	  	max-height: 40px;
+	  	height:auto;
+	  	border-radius: 20px
+	  }
+  .image-warpper{
+    width:100%;
+	height:300px;
+	display:relative;
+	float:left;
+	overflow: hidden;
+	margin-bottom: 20px;
+    }
+    .serv-image{
+	    min-width: 80%;
+	  	height:auto;
+	}
+	.span{
+		float: right;
+		font-size: 12px;
+		color: #B8B8B8;
+		line-height: 18px;
+	}
+	.download{
+		height: 56px;
+		background-color: rgba(24,24,24,0.7);
+		background-blend-mode: multiply
+	}
+	.button{
+		background-color: #FFC400;
+		border: 0;
+		color: white;
+		height: 32px;
+		width: 72px;
+		border-radius: 4px;
+		position: relative;
+		left: 280px;
+		bottom: 10px
+	}
+	.connect{
+		background-color: #FFC400;
+		color: white;
+		height: 40px,
+		width:100px;
+		padding: 20px
+	}
 	</style>
 	<script type="text/javascript" src="http://api.map.baidu.com/api?v=2.0&ak=UkGlS1os9PpxMQ7l38Ov11AiWXHZrzOR"></script>
 	<!-- 加载百度地图样式信息窗口 -->
 	<script type="text/javascript" src="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.js"></script>
 	<link rel="stylesheet" href="http://api.map.baidu.com/library/SearchInfoWindow/1.5/src/SearchInfoWindow_min.css" />
-	<title>附近门店</title>
+	<title>Qiker</title>
 </head>
 <body>
-	<div id="allmap"></div>
+	<div class="download">
+		<img src=""/>
+		<div style="color: white;height: 22px;line-height: 58px;margin-left: 16px">发现无限奇才</div>
+		<button class="button">下载</button>
+	</div>
+	<div class="container">
+		<div class="avatar-warpper">
+         <%= image_tag(@goods_show.user.avatar,:class=>"user-avatar") %>
+        </div>
+        <div style="margin-left: 48px">
+        	<p style="height: 20px;margin:0">
+	        	<span style="font-size: 14px"><%= @goods_show.user.name %></span>
+	        	<span class="span"><%= @goods_show.created_at.strftime('%Y/%m/%d') %></span>
+	        </p>
+        	<p style="font-size: 12px;height: 18px;margin:0;color: #999999"><span><%= @goods_show.catalog %></span></p>
+        </div>
+        <div>
+        	<p><span><%= @goods_show.serv_detail %></span></p>
+        </div>
+        <div class="image-warpper">
+         <%= image_tag(@goods_show.serv_images.split(",")[0],:class=>"serv-image") %>
+        </div>
+        <div style="font-size: 14px; color: #999999">远程或附近</div>
+        <div style="width: 100%">
+			<div id="allmap"></div>
+		</div>
+	</div>
+	<div class="connect">
+		<div style="text-align: center">立即沟通</div>
+	</div>
 </body>
 </html>
 <script type="text/javascript">
+    document.ready = function (callback) {
+            ///兼容FF,Google
+            if (document.addEventListener) {
+                document.addEventListener('DOMContentLoaded', function () {
+                    document.removeEventListener('DOMContentLoaded', arguments.callee, false);
+                    callback();
+                }, false)
+            }
+             //兼容IE
+            else if (document.attachEvent) {
+                document.attachEvent('onreadystatechange', function () {
+                      if (document.readyState == "complete") {
+                                document.detachEvent("onreadystatechange", arguments.callee);
+                                callback();
+                       }
+                })
+            }
+            else if (document.lastChild == document.body) {
+                callback();
+            }
+}
+
+document.ready(function () {
+
 	// 百度地图API功能
 	var map = new BMap.Map("allmap");
-	var point = new BMap.Point(116.331398,39.897445);
+	var point = new BMap.Point(113.293414,23.022078);
 	map.centerAndZoom(point,12);
 	var mypoint ;
 	var geolocation = new BMap.Geolocation();
@@ -34,63 +146,25 @@
             var lngCurrent = r.point.lng;  
 			// map.addOverlay(mk);//您的位置加标注
 			map.panTo(r.point);
-			// alert('您的位置：'+r.point.lng+','+r.point.lat);
-
-			// customLayer=new BMap.CustomLayer({
-			// 	geotableId: 170620,
-			// 	q: '', //检索关键字
-			// 	tags: '', //空格分隔的多字符串
-			// 	filter: '' //过滤条件,参考http://developer.baidu.com/map/lbs-geosearch.htm#.search.nearby
-			// 	}
-			// );
-
-			// customLayer.addEventListener('hotspotclick',callback);
-
-			// map.addTileLayer(customLayer);	
 			
-
-			
-			var china_unicom_gz_p1 = new BMap.Point(<%= @goods_show.longitude %>,<%= @goods_show.latitude %>);
-			var marker_china_unicom_gz_1 = new BMap.Marker(china_unicom_gz_p1); 
-			var label = new BMap.Label("商品目标点",{offset:new BMap.Size(20,-10)});
-			marker_china_unicom_gz_1.setLabel(label);
-			marker_china_unicom_gz_1.addEventListener("click",attribute1);
-			map.addOverlay(marker_china_unicom_gz_1);    //增加点	
-
-			function attribute1(){
-				var p = marker_china_unicom_gz_1.getPosition();  //
-				// var driving = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
-				// driving.search(mypoint, p );	
-
-				location.href="http://api.map.baidu.com/direction?origin="+latCurrent+","+lngCurrent+"&destination="+p.lat+","+p.lng+"&mode=driving&region=广州&output=html";  			
-
-			}
-
-/*
-			var china_unicom_gz_p2 = new BMap.Point(113.300988,23.141692);
+			var china_unicom_gz_p2 = new BMap.Point(<%= @goods_show.longitude %>,<%= @goods_show.latitude %>);
 			var marker_china_unicom_gz_2 = new BMap.Marker(china_unicom_gz_p2); 
-			var labe2 = new BMap.Label("(先烈营业厅)",{offset:new BMap.Size(20,-10)});
+			var labe2 = new BMap.Label("服务地点",{offset:new BMap.Size(20,-10)});
 			marker_china_unicom_gz_2.setLabel(labe2);
 			marker_china_unicom_gz_2.addEventListener("click",attribute2);
 			map.addOverlay(marker_china_unicom_gz_2);    //增加点	
 
 			function attribute2(){
-				var p = marker_china_unicom_gz_2.getPosition();  //
-				// var driving = new BMap.DrivingRoute(map, {renderOptions:{map: map, autoViewport: true}});
-				// driving.search(mypoint, p);	
+				var p = marker_china_unicom_gz_2.getPosition();  
 
 				location.href="http://api.map.baidu.com/direction?origin="+latCurrent+","+lngCurrent+"&destination="+p.lat+","+p.lng+"&mode=driving&region=广州&output=html";  				
 
-			}*/			
+			}		
 		}
 		else {
 			alert('failed'+this.getStatus());
 		}        
 	},{enableHighAccuracy: true})
-
-
-
-
 
 
 	function callback(e)//单击热点图层
@@ -99,18 +173,5 @@
 
 	}
 
-
-
-
-</script>
-<script type="text/javascript">
-$(document).ready(function(){  
-  var needRefresh = sessionStorage.getItem("sub-need-refresh");
-  if(needRefresh){
-      sessionStorage.removeItem("sub-need-refresh");
-      location.reload();
-  }
-
-  sessionStorage.setItem("need-refresh", true);  
-})
+});
 </script>	
