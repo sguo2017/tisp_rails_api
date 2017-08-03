@@ -63,7 +63,11 @@ class Api::Goods::ServOffersController < ApplicationController
     #场景三：某[二级分类]相关服务查询
   elsif user_id.nil? && catalog_id
     logger.debug "查找分类为#{catalog_id}"
-    @serv_offers = Good.where("id != ? and status = ? and goods_catalog_id = ? and serv_catagory = ?", serv_id, Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
+    if serv_id
+      @serv_offers = Good.where("id != ? and status = ? and goods_catalog_id = ? and serv_catagory = ?", serv_id, Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
+    else
+      @serv_offers = Good.where("status = ? and goods_catalog_id = ? and serv_catagory = ?", Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
+    end
   
   #场景二：全部查询
 	elsif user_id.nil?

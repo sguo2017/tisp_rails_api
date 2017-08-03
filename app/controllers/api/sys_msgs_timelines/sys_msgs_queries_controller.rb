@@ -38,6 +38,7 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
     @result = @result.order("created_at DESC").page(params[:page]).per(10)
     
     @sys_msgs = []
+    @goods = []
     #返回推送消息的id
     @u = User.find(user_id)
     if query_type != '2'
@@ -68,6 +69,8 @@ class Api::SysMsgsTimelines::SysMsgsQueriesController < ApplicationController
           s["catalog"]=good.catalog
           s["serv_detail"]=good.serv_detail
           s["serv_images"] = good.serv_images
+          s['latitude'] = good.latitude
+          s['longitude'] = good.longitude
         end
         request_u = User.find(s["user_id"])
         s["avatar"] = request_u.avatar
