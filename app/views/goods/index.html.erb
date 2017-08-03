@@ -26,7 +26,7 @@
         <!-- <td><%= good.serv_detail %></td> -->
         <td><image class="media-object" src="<%= good.serv_images %>"/></td>
         <td><%= good.serv_catagory %></td>
-        <td><%= good.user.name %></td>        
+        <td> <%= good.user.name unless good.user.blank?  %></td>        
         <td><%= good.created_at.strftime('%Y-%m-%d')
  %></td>
         <td>
