@@ -9,7 +9,12 @@ class Api::Users::SessionsController < ApplicationController
 		@check_password = params[:check_password]
 		return render json: {error: {status:-1}} unless @user
 		respond_to do |format|
-		  if @user.valid_password?(params[:user][:password])
+			if @user.lock == 3
+				logger.debug "账户锁定了"
+  			format.json {
+				  render json: {status: Const::ERROR_TYPE[:user_is_lock] }
+				}
+  		elsif @user.valid_password?(params[:user][:password])
 		  	#判断是登录还是验证密码的过程
 		  	if @check_password.blank?
 		  		sign_in("user", @user)
@@ -44,8 +49,13 @@ class Api::Users::SessionsController < ApplicationController
     user_id = sms.user_id
     @user = User.find(user_id)
     return render json: {error: {status:-1}} unless @user
+
     respond_to do |format|	
-    	if @change_phone.blank?    	
+    	if @user.lock == 3
+  			format.json {
+				  render json: {status: Const::ERROR_TYPE[:user_is_lock]}
+				}
+  		elsif @change_phone.blank?    	
         sign_in("user", @user)
         set_geo_infos
         if !@current_user
@@ -77,18 +87,23 @@ class Api::Users::SessionsController < ApplicationController
 		@check_password = params[:check_password]
 		return render json: {error: {status:-1}} unless @user
 		respond_to do |format|
-		  if @user.valid_password?(params[:user][:password])
+			if @user.lock == 3
+				logger.debug "用户锁定了"
+  			format.json {
+					  render json: { status: Const::ERROR_TYPE[:user_is_lock]}
+					}
+  		elsif @user.valid_password?(params[:user][:password])
 		  	#判断是登录还是验证密码的过程
 		  	if @check_password.blank?
 		  		sign_in("user", @user)
-				set_geo_infos
-				format.json {
-				  render json: {token:@user.authentication_token, user: @user.to_json}
-				}
-				format.js {
-				  render json: {token:@user.authentication_token, user: @user.to_json}
-				}
-			else				
+					set_geo_infos
+					format.json {
+					  render json: {token:@user.authentication_token, user: @user.to_json}
+					}
+					format.js {
+					  render json: {token:@user.authentication_token, user: @user.to_json}
+					}
+				else				
 				format.json {
 				  render json: {status:'OK'}
 				}
@@ -113,9 +128,11 @@ class Api::Users::SessionsController < ApplicationController
 			  	render json: {status: Const::ERROR_TYPE[:user_is_nil].to_s}
 			  }
 			end
-		else 
-			# @user = User.find(@user.id)
-	
+		elsif @user.lock == 3
+  			format.json {
+				  render json: {status: Const::ERROR_TYPE[:user_is_lock]}
+				}
+		else
 			respond_to do |format|
 				sign_in("user", @user)
 				set_geo_infos
@@ -131,10 +148,7 @@ class Api::Users::SessionsController < ApplicationController
 	        render json: {token: @user.authentication_token, user: @user.to_json}
 	      }
 			end
-
 		end	
-
-
 	end
 
 	#DELETE /api/users/sessions/:id/
