@@ -89,6 +89,9 @@
   $("#prev").hover(function(){ 
     //滑入清除定时器
     clearInterval(autoChange);
+  },function(){ 
+    //滑出则重置定时器
+    autoChangeAgain();
   });
   //左箭头点击处理
   $("#prev").click(function(){ 
@@ -100,6 +103,9 @@
   $("#next").hover(function(){ 
     //滑入清除定时器
     clearInterval(autoChange);
+  },function(){ 
+    //滑出则重置定时器
+    autoChangeAgain();
   });
   //右箭头点击处理
   $("#next").click(function(){ 

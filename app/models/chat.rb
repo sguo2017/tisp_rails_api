@@ -13,4 +13,15 @@
 
 class Chat < ApplicationRecord
 	self.table_name="chats"
+
+  after_create :after_created_callback
+
+	protected
+    def after_created_callback
+    	@target_user = User.find(self.receive_user_id)
+    	if @target_user.blank?
+    		
+    	end
+      Jpush.singleMsgPushV2(@target_user.regist_id, self.chat_content)
+    end
 end

@@ -114,6 +114,6 @@ class Api::Chats::ChatsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def chat_params
-      params.require(:chat).permit(:deal_id, :chat_content, :user_id, :catalog)
+      params.require(:chat).permit(:deal_id, :chat_content, :user_id, :catalog, :receive_user_id)
     end
 end

@@ -46,4 +46,12 @@ class Const
 
   end
 
+  module JPushTemplate
+    GOOD_PASS = "您的%s已通过管理员审核，发布成功了"
+    GOOD_REJECT = "您的%s违反平台相关规定，不允许发布"
+    GLANCE = "您的服务被%s浏览了"
+    LOCK_USER = "您的账户被锁定了"
+    UNLOCK_USER = "您的账户已解锁，可以正常使用了"
+  end
+
 end

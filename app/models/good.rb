@@ -30,10 +30,14 @@ class Good < ApplicationRecord
   protected
     def after_saved_callback
       if status_changed? 
+        @target_user = User.find(self.user_id)
         if self.status == Const::GOODS_STATUS[:pass]
           new_mgs(self)
+          Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::GOOD_PASS%self.serv_title)
+
         elsif self.status == Const::GOODS_STATUS[:reject]
           SysMsg.where(serv_id: self.id).update_all(status: Const::SysMsg::STATUS[:discarded])
+          Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::GOOD_REJECT%self.serv_title)
         else
 
         end  

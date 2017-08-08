@@ -168,7 +168,7 @@ class Api::Users::SessionsController < ApplicationController
 
 	private
 	  def set_geo_infos
-	    geo_params = params.require(:user).permit(:district, :city, :province, :country, :latitude, :longitude)
+	    geo_params = params.require(:user).permit(:district, :city, :province, :country, :latitude, :longitude, :regist_id, :device_type)
         @user.update(geo_params)
 	  end
 end

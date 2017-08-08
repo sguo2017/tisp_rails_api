@@ -68,13 +68,15 @@ class AdminUsersController < ApplicationController
   #GET/POST
   def lock_proc
     if @target_user.admin
-	  false
+  	  false
     elsif @target_user.has_locked?
-	  @target_user.unlock
-	else
-	  @target_user.lock_it
-	end
-	redirect_to admin_users_path
+  	  @target_user.unlock
+      Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::UNLOCK_USER)
+  	else
+  	  @target_user.lock_it
+      Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::LOCK_USER)
+  	end
+	  redirect_to admin_users_path
   end
 
   private
