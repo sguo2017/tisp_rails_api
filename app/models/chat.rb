@@ -22,6 +22,6 @@ class Chat < ApplicationRecord
     	if @target_user.blank?
     		
     	end
-      Jpush.singleMsgPushV2(@target_user.regist_id, self.chat_content)
+      Jpush.singleMsgPushV2(@target_user.regist_id, self.chat_content, Const::JPushTemplate::TYPE[:chat])
     end
 end

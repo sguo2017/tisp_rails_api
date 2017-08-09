@@ -129,9 +129,11 @@ class Api::Users::SessionsController < ApplicationController
 			  }
 			end
 		elsif @user.lock == 3
+			respond_to do |format|
   			format.json {
-				  render json: {status: Const::ERROR_TYPE[:user_is_lock]}
+				  render json: {status: Const::ERROR_TYPE[:user_is_lock].to_s}
 				}
+			end
 		else
 			respond_to do |format|
 				sign_in("user", @user)

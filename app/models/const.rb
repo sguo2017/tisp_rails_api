@@ -52,6 +52,7 @@ class Const
     GLANCE = "您的服务被%s浏览了"
     LOCK_USER = "您的账户被锁定了"
     UNLOCK_USER = "您的账户已解锁，可以正常使用了"
+    TYPE = {:chat => "0" ,:good_pass => "1", :good_reject => "2", :glance => "3", :lock_user => "4", :unlock_user => "5"}
   end
 
 end
