@@ -66,9 +66,11 @@ class Api::Goods::ServOffersController < ApplicationController
     @target_user = Good.find(serv_id).user
     #serv_id不为空时是查看服务的相关服务
     #serv_id为空时是查看需求的相关服务
-    if serv_id
-      Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::GLANCE%user.name, Const::JPushTemplate::TYPE[:glance])
+    if serv_id 
       @serv_offers = Good.where("id != ? and status = ? and goods_catalog_id = ? and serv_catagory = ?", serv_id, Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
+      if user.id != @target_user.id
+        Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::GLANCE%user.name, Const::JPushTemplate::TYPE[:glance])
+      end
     else
       @serv_offers = Good.where("status = ? and goods_catalog_id = ? and serv_catagory = ?", Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
     end
