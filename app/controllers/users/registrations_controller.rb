@@ -2,7 +2,7 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # before_action :configure_sign_up_params, only: [:create]
   # before_action :configure_account_update_params, only: [:update]
   layout 'unauthorized' ,only: [:new]
-  prepend_before_action :valify_captcha!, only: [:create]
+  prepend_before_action :valify_captcha!, only: [:create, :index]
   def current_user
       if @user.nil?
                 build_global_user_from_session
@@ -27,8 +27,8 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # end
 
   def create
-     super
-     reset_session
+     # super
+     # reset_session
   end
 
   # GET /resource/edit
