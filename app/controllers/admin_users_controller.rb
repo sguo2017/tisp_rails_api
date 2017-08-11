@@ -71,10 +71,10 @@ class AdminUsersController < ApplicationController
   	  false
     elsif @target_user.has_locked?
   	  @target_user.unlock
-      Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::UNLOCK_USER, Const::JPushTemplate::TYPE[:unlock_user])
+      Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::UNLOCK_USER, Const::JPushTemplate::TYPE[:unlock_user], @target_user.device_type)
   	else
   	  @target_user.lock_it
-      Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::LOCK_USER, Const::JPushTemplate::TYPE[:lock_user])
+      Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::LOCK_USER, Const::JPushTemplate::TYPE[:lock_user], @target_user.device_type)
   	end
 	  redirect_to admin_users_path
   end

@@ -33,11 +33,11 @@ class Good < ApplicationRecord
         @target_user = User.find(self.user_id)
         if self.status == Const::GOODS_STATUS[:pass]
           new_mgs(self)
-          Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::GOOD_PASS%self.serv_title,  Const::JPushTemplate::TYPE[:good_pass])
+          Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::GOOD_PASS%self.serv_title,  Const::JPushTemplate::TYPE[:good_pass], @target_user.device_type)
 
         elsif self.status == Const::GOODS_STATUS[:reject]
           SysMsg.where(serv_id: self.id).update_all(status: Const::SysMsg::STATUS[:discarded])
-          Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::GOOD_REJECT%self.serv_title,  Const::JPushTemplate::TYPE[:good_reject])
+          Jpush.singleMsgPushV2(@target_user.regist_id, Const::JPushTemplate::GOOD_REJECT%self.serv_title,  Const::JPushTemplate::TYPE[:good_reject], @target_user.device_type)
         else
 
         end  

@@ -14,9 +14,13 @@ class Jpush
     return @data 
   end
 
-  def Jpush.singleMsgPushV2(regId, msgContent, type)
-    # exec "curl -X POST -v https: //api.jpush.cn/v3/push -H 'Content-Type: application/json' -u 'e0e54eb860345971931c8af9:#{regId}' -d  '{\"platform\":\"all\",\"audience\":\"all\",\"notification\":{\"alert\":\"#{msgContent}\"}}' ";
-    system "curl -X POST -v https://api.jpush.cn/v3/push -H 'Content-Type: application/json' -u '550e59c50b9bb72ad34ab473:e0e54eb860345971931c8af9' -d  '{\"platform\":\"all\",\"audience\":{\"registration_id\" : [\"#{regId}\"]},\"notification\":{\"alert\":\"#{msgContent}\", \"android\":{\"extras\":{\"type\":\"#{type}\"}}}}' ";
+  def Jpush.singleMsgPushV2(regId, msgContent, type, deviceType)
+    #puts "curl -X POST -v https://api.jpush.cn/v3/push -H 'Content-Type: application/json' -u '550e59c50b9bb72ad34ab473:e0e54eb860345971931c8af9' -d  '{\"platform\":\"all\",\"audience\":{\"registration_id\" : [\"#{regId}\"]},\"notification\":{\"alert\":\"#{msgContent}\", \"android\":{\"extras\":{\"type\":\"#{type}\"}}}}' ";
+    if deviceType == 'iOS'
+      system "curl -X POST -v https://api.jpush.cn/v3/push -H 'Content-Type: application/json' -u '550e59c50b9bb72ad34ab473:e0e54eb860345971931c8af9' -d  '{\"platform\":\"all\",\"audience\":{\"registration_id\" : [\"#{regId}\"]},\"notification\":{\"alert\":\"#{msgContent}\", \"ios\":{\"extras\":{\"type\":\"#{type}\",\"badge\":\"+1\"}}}, \"options\": {\"apns_production\": true}}' ";
+    else
+     system "curl -X POST -v https://api.jpush.cn/v3/push -H 'Content-Type: application/json' -u '550e59c50b9bb72ad34ab473:e0e54eb860345971931c8af9' -d  '{\"platform\":\"all\",\"audience\":{\"registration_id\" : [\"#{regId}\"]},\"notification\":{\"alert\":\"#{msgContent}\", \"android\":{\"extras\":{\"type\":\"#{type}\"}}}}' ";      
+    end
   end
 
   def Jpush.allMsgPush(msgContent)
