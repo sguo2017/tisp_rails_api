@@ -18,26 +18,36 @@ class Api::Orders::OrdersController < ApplicationController
     end
     if scence == "bidder"
       serv_offer_id = params[:serv_id].presence
-      @orders = Order.where('serv_offer_id ='+ serv_offer_id).order("updated_at DESC").page(params[:page]).per(5)
-      logger.debug "邀标订单#{@orders.to_json}"
-    end    
-    @order_list = []
-    @orders.each do |order|
-      o = order.attributes.clone
+      @orders = Order.where('serv_offer_id ='+ serv_offer_id).order("updated_at DESC")
+      @order_list = []
+      @orders.each do |order|
+        o = order.attributes.clone
+        @offer_user = User.find(order.offer_user_id)
+        o["offer_user_avatar"]=@offer_user.avatar
+        @order_list.push(o)
+      end
+      respond_to do |format|
+        format.json {
+          render json: {feeds: @order_list.to_json}
+        }
+      end
+    elsif scence == "personal"
+      @order_list = []
+      @orders.each do |order|
+        o = order.attributes.clone
 
-      @request_user = User.find(order.request_user_id)
-      @request_user.authentication_token = "***"
-      @offer_user = User.find(order.offer_user_id)
-      @offer_user.authentication_token = "***"
-      o["request_user"]=@request_user.name
-      o["request_user_avatar"]=@request_user.avatar
-      o["offer_user"]=@offer_user.name
-      o["offer_user_avatar"]=@offer_user.avatar
-      o["deal_id"]=order.id
-      o["serv_offer_user_name"]=@offer_user.name
-      o["updated_at"]=o["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
-      
-      if scence == "personal"
+        @request_user = User.find(order.request_user_id)
+        @request_user.authentication_token = "***"
+        @offer_user = User.find(order.offer_user_id)
+        @offer_user.authentication_token = "***"
+        o["request_user"]=@request_user.name
+        o["request_user_avatar"]=@request_user.avatar
+        o["offer_user"]=@offer_user.name
+        o["offer_user_avatar"]=@offer_user.avatar
+        o["deal_id"]=order.id
+        o["serv_offer_user_name"]=@offer_user.name
+        o["updated_at"]=o["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
+        
       #查找订单对方发出的消息，如果最近一条的消息为未读，聊天状态标记为未读
         r1 = Report.where('user_id = ? and obj_id =? and obj_type = ?', user.id, order.request_user_id, "user").first
         r2 = Report.where('user_id = ? and obj_id =? and obj_type = ?', user.id, order.offer_user_id, "user").first
@@ -61,15 +71,16 @@ class Api::Orders::OrdersController < ApplicationController
         else
           o["chat_status"]=Const::SysMsg::STATUS[:read]
         end
+        @order_list.push(o)
       end
-      @order_list.push(o)
-    end
 
-    respond_to do |format|
-      format.json {
-        render json: {page: @orders.current_page, total_pages: @orders.total_pages, feeds: @order_list.to_json}
-      }
-    end
+      respond_to do |format|
+        format.json {
+          render json: {page: @orders.current_page, total_pages: @orders.total_pages, feeds: @order_list.to_json}
+        }
+      end
+    end    
+    
 
   end
 
