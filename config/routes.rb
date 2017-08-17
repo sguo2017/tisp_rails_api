@@ -1,3 +1,4 @@
+require 'sidekiq/web'
 Rails.application.routes.draw do
 
   resources :reports
@@ -34,6 +35,10 @@ Rails.application.routes.draw do
 
   devise_for :users, :skip => :registrations, controllers:{registrations:'users/registrations', sessions:'users/sessions',passwords:'users/passwords'}
 
+  concern :paginatable do
+    get '(page/:page)', :action => :show, :on => :collection, :as => ''
+  end
+  
   namespace :api do
     namespace :goods do
       resources :serv_offers, only: [:index, :create, :show, :update, :destroy]
@@ -65,6 +70,9 @@ Rails.application.routes.draw do
     end
     namespace :chats do
       resources :chats, only: [:index, :create, :show, :update, :destroy]
+      resources :chat_rooms do
+        resources :chat_messages, :concerns => :paginatable
+      end
     end
 	  namespace :goods_catalogs do
       resources :goods_catalogs, only: [:index, :create, :show, :update, :destroy]
@@ -81,4 +89,5 @@ Rails.application.routes.draw do
   end
 
   root "goods#index"
+  mount Sidekiq::Web => '/sidekiq'
 end

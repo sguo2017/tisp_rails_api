@@ -29,15 +29,20 @@ class ApplicationController < ActionController::Base
 
   def current_user
       if @user.nil?
-                build_global_user_from_session
-            end
+        build_global_user_from_session
+      end
       return @user
   end
   
   def build_global_user_from_session
-     @session_user = session[:current_tispr_user]
-     user_id = @session_user["id"]
-     @user = User.find_by_id(user_id.to_i)
+    @session_user = session[:current_tispr_user]
+    if @session_user.blank?
+      token = params[:token].presence
+      @user = token && User.find_by_authentication_token(token.to_s)
+    else
+      user_id = @session_user["id"]
+      @user = User.find_by_id(user_id.to_i)
+    end
   end
   
   #非法访问时的处理
@@ -45,7 +50,7 @@ class ApplicationController < ActionController::Base
     respond_to do |format|
       format.json { head :forbidden, content_type: 'text/html' }
       format.html { redirect_to goods_path, :alert => exception.message }
-	  format.js   { head :forbidden, content_type: 'text/html' }
+	    format.js   { head :forbidden, content_type: 'text/html' }
     end
   end
 end

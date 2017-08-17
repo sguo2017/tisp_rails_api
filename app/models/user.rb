@@ -39,6 +39,8 @@ class User < ApplicationRecord
   has_many :sys_msgs, through: :sys_msgs_timelines  
   has_many :favorites
   has_many :reports
+  has_many :chat_rooms, :foreign_key => :sender_id
+  has_many :chat_messages, :foreign_key => :user_id
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   before_save :ensure_authentication_token

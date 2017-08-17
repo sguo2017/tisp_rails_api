@@ -10,7 +10,27 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170808090313) do
+ActiveRecord::Schema.define(version: 20170817070558) do
+
+  create_table "chat_messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.text     "message",      limit: 65535
+    t.integer  "chat_room_id"
+    t.integer  "user_id"
+    t.datetime "created_at",                 null: false
+    t.datetime "updated_at",                 null: false
+    t.index ["chat_room_id"], name: "index_chat_messages_on_chat_room_id", using: :btree
+    t.index ["user_id"], name: "index_chat_messages_on_user_id", using: :btree
+  end
+
+  create_table "chat_rooms", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.integer  "sender_id"
+    t.integer  "recipient_id"
+    t.datetime "created_at",   null: false
+    t.datetime "updated_at",   null: false
+    t.integer  "deal_id"
+    t.index ["recipient_id"], name: "index_chat_rooms_on_recipient_id", using: :btree
+    t.index ["sender_id"], name: "index_chat_rooms_on_sender_id", using: :btree
+  end
 
   create_table "chats", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.integer  "deal_id"
@@ -311,4 +331,6 @@ ActiveRecord::Schema.define(version: 20170808090313) do
     t.datetime "updated_at",   null: false
   end
 
+  add_foreign_key "chat_messages", "chat_rooms"
+  add_foreign_key "chat_messages", "users"
 end

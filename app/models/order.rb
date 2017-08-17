@@ -17,6 +17,8 @@
 #
 
 class Order < ApplicationRecord
+	has_one :chat_room
+
 	self.table_name="orders"
 	after_create :after_created_callback
 	after_save :after_saved_callback
