@@ -62,7 +62,7 @@ class Api::Orders::OrdersController < ApplicationController
       #查找订单对方发出的消息，如果最近一条的消息为未读，聊天状态标记为未读
         @chat_room = ChatRoom.find_by_deal_id(order.id)
         if @chat_room.blank?
-          next
+          @chat_room = ChatRoom.create!(deal_id: order.id, sender_id: order.offer_user_id, recipient_id: order.request_user_id)
         end
         if order.request_user_id.to_s ==  user.id.to_s
         @chat = @chat_room.chat_messages.where('user_id = ?',order.offer_user_id.to_s).order("created_at DESC")
@@ -129,6 +129,10 @@ class Api::Orders::OrdersController < ApplicationController
         o["offer_user_avatar"]=@offer_user.avatar
         o["deal_id"]=@order.id
         o["serv_offer_user_name"]=@offer_user.name
+
+        @chat_room = ChatRoom.create!(deal_id: @order.id, sender_id: user.id, recipient_id: @order.offer_user_id)
+        @chat_room.chat_messages.create(user_id: user.id, message: @order.lately_chat_content)
+
         format.json {
            render json: {status:0, msg:"success",feed: o, avaliable:avaliable-1}
         }

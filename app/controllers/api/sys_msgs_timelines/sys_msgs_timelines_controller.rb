@@ -95,6 +95,9 @@ class Api::SysMsgsTimelines::SysMsgsTimelinesController < ApplicationController
             o["deal_id"]=@order.id
             o["serv_offer_user_name"]=user.name
 
+            @chat_room = ChatRoom.create!(deal_id: @order.id, sender_id: user.id, recipient_id: @order.request_user_id)
+            @chat_room.chat_messages.create(user_id: user.id, message: @order.lately_chat_content)
+
             good.order_cnt = good.order_cnt + 1
             good.save
 

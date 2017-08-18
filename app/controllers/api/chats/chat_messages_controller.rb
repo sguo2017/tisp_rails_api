@@ -5,10 +5,13 @@ class Api::Chats::ChatMessagesController < ApplicationController
   def create
     @chat_room = ChatRoom.find(params[:chat_room_id])
     @chat_message = @chat_room.chat_messages.build(chat_message_params)
-    @chat_message.user_id = current_user.id
     @chat_message.save!
 
-    render json: @chat_message, serializer: ChatMessageSerializer
+    respond_to do |format|
+        format.json {
+           render json: {status:0, msg:"success"}
+        }
+    end
   end
 
   # GET /api/chats/chat_rooms/:id/chat_messages/
@@ -47,7 +50,7 @@ class Api::Chats::ChatMessagesController < ApplicationController
   private
 
   def chat_message_params
-    params.require(:chat_message).permit(:message)
+    params.require(:chat_message).permit(:message, :user_id)
   end
 
 end
