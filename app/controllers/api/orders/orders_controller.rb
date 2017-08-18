@@ -48,7 +48,6 @@ class Api::Orders::OrdersController < ApplicationController
         o["serv_offer_user_name"]=@offer_user.name
         o["updated_at"]=o["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
         
-      #查找订单对方发出的消息，如果最近一条的消息为未读，聊天状态标记为未读
         r1 = Report.where('user_id = ? and obj_id =? and obj_type = ?', user.id, order.request_user_id, "user").first
         r2 = Report.where('user_id = ? and obj_id =? and obj_type = ?', user.id, order.offer_user_id, "user").first
 
@@ -59,10 +58,16 @@ class Api::Orders::OrdersController < ApplicationController
           logger.debug "举报了用户#{@offer_user.name}与#{@request_user.name} "
           o["is_reported"] = true
         end
+
+      #查找订单对方发出的消息，如果最近一条的消息为未读，聊天状态标记为未读
+        @chat_room = ChatRoom.find_by_deal_id(order.id)
+        if @chat_room.blank?
+          next
+        end
         if order.request_user_id.to_s ==  user.id.to_s
-        @chat = Chat.where('deal_id = ? and user_id = ?', order.id.to_s, order.offer_user_id.to_s).order("created_at DESC")
+        @chat = @chat_room.chat_messages.where('user_id = ?',order.offer_user_id.to_s).order("created_at DESC")
         else
-        @chat = Chat.where('deal_id = ? and user_id = ?', order.id.to_s, order.request_user_id.to_s).order("created_at DESC")          
+        @chat = @chat_room.chat_messages.where('user_id = ?', order.request_user_id.to_s).order("created_at DESC")          
         end
         if @chat.blank?
           o["chat_status"]=Const::SysMsg::STATUS[:read]
@@ -71,6 +76,7 @@ class Api::Orders::OrdersController < ApplicationController
         else
           o["chat_status"]=Const::SysMsg::STATUS[:read]
         end
+
         @order_list.push(o)
       end
 
