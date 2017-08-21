@@ -42,8 +42,10 @@ class Api::Orders::OrdersController < ApplicationController
         @offer_user.authentication_token = "***"
         o["request_user"]=@request_user.name
         o["request_user_avatar"]=@request_user.avatar
+        o["request_user_num"]=@request_user.num
         o["offer_user"]=@offer_user.name
         o["offer_user_avatar"]=@offer_user.avatar
+        o["offer_user_num"] = @offer_user.num
         o["deal_id"]=order.id
         o["serv_offer_user_name"]=@offer_user.name
         o["updated_at"]=o["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
