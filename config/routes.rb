@@ -56,11 +56,13 @@ Rails.application.routes.draw do
 	    resources :users_behaviors, only: [:index, :show, :create, :update, :destroy, :client_ip]
 	    resources :phone_call, only: [:update]
       resources :users, only: [:show]
+      resources :invitation_code, only: [:create, :validate_code]
       match '/image_server_url' ,to: 'registrations#image_server_url', via: [:get,:post]
 	    match '/sms_login' ,to: 'sessions#sms_login', via: [:post]
 	    match '/token_login' ,to: 'sessions#token_login', via: [:post]
       match '/phone_login' ,to: 'sessions#phone_login', via: [:post]
 	    match '/client_ip' ,to: 'users_behaviors#client_ip', via: [:get, :post]
+      match '/validate_code', to: 'invitation_code#validate_code', via: [:post]
     end
     namespace :me do
       resources :favorites, only: [:index, :create, :show, :update, :destroy]
