@@ -1,6 +1,7 @@
 require 'sidekiq/web'
 Rails.application.routes.draw do
 
+  resources :friends
   resources :reports
   resources :suggestions
   resources :sms_sends
