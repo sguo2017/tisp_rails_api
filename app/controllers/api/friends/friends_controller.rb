@@ -6,9 +6,16 @@ class Api::Friends::FriendsController < ApplicationController
   #friends_controller属版本V2
   # GET /friends
   # GET /friends.json
+  #场景1：查找已添加的好友
+  #场景2：查找待验证的好友
   def index
+    qry_type = params[:qry_type].presence
     user_id = params[:user_id].presence
-    @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:created], user_id).order("created_at DESC").page(params[:page]).per(5)
+    if qry_type == Const::FRIEND_QRY_TYPE[:created]
+      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:created], user_id).order("created_at DESC").page(params[:page]).per(5)
+    elsif qry_type == Const::FRIEND_QRY_TYPE[:pending]
+      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(5)     
+    end
     respond_to do |format|
       format.json {
         render json: {page: @friends.current_page, total_pages: @friends.total_pages, feeds: @friends.to_json}
