@@ -15,7 +15,7 @@ class Api::Users::InvitationCodeController < ApplicationController
 		else
 			respond_to do |format|
 				format.json {
-           render json: {status:0}
+           render json: {status:0, msg: "邀请码验证通过"}
         }
 			end
 		end

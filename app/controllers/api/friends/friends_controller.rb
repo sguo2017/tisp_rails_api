@@ -2,7 +2,7 @@ class Api::Friends::FriendsController < ApplicationController
 	respond_to :json
 
 	before_action :set_friend, only: [:show, :edit, :update, :destroy]
-
+  #friends_controller属版本V2
   # GET /friends
   # GET /friends.json
   def index
