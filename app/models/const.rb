@@ -22,7 +22,13 @@ class Const
   SERV_VIA = {:local => "local", :remote => "remote", :all => "all"} #服务方式 本地|远程|全部
   REQUEST_ORDERS_LIMIT = 30   #需求订单数限制
   USER_PROFILE ="大家好，我来自__%s__，请多多关照"
-
+  #邀请码的状态:使用中，已过期
+  INVITATION_CODE_STATUS = {:created => "00A", :overdue => "00B"}
+  #用户状态：已注册，已推荐未激活
+  USER_STATUS = {:created => "00A", :recommended => "00B"}
+  #好友状态
+  FRIEND_STATUS = {:created => "created", :recommended => "recommended", :unjoined => "unregistered", :notfriend => "notfriend"}
+  FRIEND_STATUS_TRANSLATE= {:created => "已加好友", :recommended => "已推荐", :unjoined => "未加入" , :notfriend => "已移除好友"}
   #错误类型
   ERROR_TYPE= {:user_is_nil => -101, :default => -1, :user_is_lock => -102}
 

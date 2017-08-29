@@ -4,22 +4,14 @@ class Api::Users::InvitationCodeController < ApplicationController
 	def create
 		
 	end
-
+  #版本V2
 	def validate_code
 		@code = params[:code]
 		@invitation = Invitation.find_by_code(@code)
 		if @invitation.blank?
-			respond_to do |format|
-				format.json {
-           render json: {status:-2}
-        }
-			end
+			return render json: {error: {status:-2 ,msg: "邀请码不存在"}}
 		elsif @invitation.status != '00A'
-			respond_to do |format|
-				format.json {
-           render json: {status:-1}
-        }
-			end
+			return render json: {error: {status:-1 ,msg: "邀请码已失效"}}
 		else
 			respond_to do |format|
 				format.json {

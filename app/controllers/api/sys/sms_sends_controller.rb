@@ -56,7 +56,7 @@ class Api::Sys::SmsSendsController < ApplicationController
 	      }
     	end
       return
-    elsif user && (@change_phone || @register_phone)
+    elsif user && user.status == Const::USER_STATUS[:created] && (@change_phone || @register_phone)
       ret_msg = "此号码已经被注册了"
       respond_to do |format|
         format.json {

@@ -50,7 +50,7 @@ Rails.application.routes.draw do
       resources :sms_sends, only: [:index, :create, :show, :update, :destroy]
     end
     namespace :users do
-      resources :registrations, only: [:update, :create]
+      resources :registrations, only: [:update, :create, :validate_phone, :validate_email]
 	    resources :sessions, only: [:create, :destroy, :smslogin, :tokenlogin, :phone_login]
 	    resources :passwords, only: [:create, :update]
 	    resources :users_behaviors, only: [:index, :show, :create, :update, :destroy, :client_ip]
@@ -63,6 +63,8 @@ Rails.application.routes.draw do
       match '/phone_login' ,to: 'sessions#phone_login', via: [:post]
 	    match '/client_ip' ,to: 'users_behaviors#client_ip', via: [:get, :post]
       match '/validate_code', to: 'invitation_code#validate_code', via: [:post]
+      match '/validate_email', to: 'registrations#validate_email', via: [:post]
+      match '/validate_phone', to: 'registrations#validate_phone', via: [:post]
     end
     namespace :me do
       resources :favorites, only: [:index, :create, :show, :update, :destroy]
@@ -88,6 +90,10 @@ Rails.application.routes.draw do
     namespace :suggestion do 
       resources :suggestions, only: [:index, :create, :show, :update, :destroy] 
       resources :reports, only: [:index, :create, :show, :update, :destroy] 
+    end
+    namespace :friends do 
+      resources :friends, only: [:index, :create, :show, :update, :destroy, :friend_list] 
+      match '/friend_list', to: 'friends#friend_list', via: [:post]
     end
   end
 

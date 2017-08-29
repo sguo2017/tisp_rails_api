@@ -41,6 +41,7 @@ class User < ApplicationRecord
   has_many :reports
   has_many :chat_rooms, :foreign_key => :sender_id
   has_many :chat_messages, :foreign_key => :user_id
+  has_many :friends, :foreign_key => :user_id
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   before_save :ensure_authentication_token
@@ -60,7 +61,7 @@ class User < ApplicationRecord
     end
     # sign_in_count = User.find(self.id).sign_in_count
     #logger.debug "53 sign_in_count.blank? #{sign_in_count.blank?}  sign_in_count < self.sign_in_count #{sign_in_count < self.sign_in_count}"
-    if sign_in_count_changed? 
+    if sign_in_count_changed? ||status_changed?
       self.authentication_token = generate_authentication_token
     end
 
