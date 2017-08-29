@@ -27,8 +27,8 @@ class Const
   #用户状态：已注册，已推荐未激活
   USER_STATUS = {:created => "00A", :recommended => "00B"}
   #好友状态
-  FRIEND_STATUS = {:created => "created", :recommended => "recommended", :unjoined => "unregistered", :notfriend => "notfriend"}
-  FRIEND_STATUS_TRANSLATE= {:created => "已加好友", :recommended => "已推荐", :unjoined => "未加入" , :notfriend => "已移除好友"}
+  FRIEND_STATUS = {:created => "created",:apply => "apply", :pending => "pending",:recommended => "recommended", :unjoined => "unregistered", :notfriend => "notfriend"}
+  FRIEND_STATUS_TRANSLATE= {:created => "已加好友", :apply => "已申请", :pending => "待通过",:recommended => "已推荐", :unjoined => "未加入" , :notfriend => "已移除好友"}
   #错误类型
   ERROR_TYPE= {:user_is_nil => -101, :default => -1, :user_is_lock => -102}
 
