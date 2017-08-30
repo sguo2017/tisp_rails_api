@@ -108,6 +108,7 @@ class Api::Sys::SmsSendsController < ApplicationController
 	    		ret_msg = "success"
 	      rescue =>err
 	        #return nil
+          logger.debug "111#{err}"
 			    ret_status = -1
 			    ret_msg = "fails"        
 	      end           
