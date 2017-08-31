@@ -91,6 +91,7 @@ Rails.application.routes.draw do
     namespace :suggestion do 
       resources :suggestions, only: [:index, :create, :show, :update, :destroy] 
       resources :reports, only: [:index, :create, :show, :update, :destroy] 
+      resources :comments, only: [:index, :create, :show, :update, :destroy] 
     end
     namespace :friends do 
       resources :friends, only: [:index, :create, :show, :update, :destroy, :friend_list] 
