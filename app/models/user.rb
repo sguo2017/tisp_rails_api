@@ -42,6 +42,7 @@ class User < ApplicationRecord
   has_many :chat_rooms, :foreign_key => :sender_id
   has_many :chat_messages, :foreign_key => :user_id
   has_many :friends, :foreign_key => :user_id
+  has_many :comments
   # Include default devise modules. Others available are:
   # :confirmable, :lockable, :timeoutable and :omniauthable
   before_save :ensure_authentication_token

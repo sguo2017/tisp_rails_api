@@ -26,7 +26,7 @@ class Good < ApplicationRecord
   after_save :after_saved_callback
   has_many :favorites
   has_many :reports
-
+  has_many :comments
   protected
     def after_saved_callback
       if status_changed? 
