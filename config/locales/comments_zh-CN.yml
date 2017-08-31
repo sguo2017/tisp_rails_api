@@ -1,0 +1,33 @@
+---
+zh-CN:
+  activerecord:
+    models:
+      comment: "评论"
+    attributes:
+      comment: 
+        obj_id: "对象id"
+        user_id: "用户id"
+        obj_type: "类型"
+        content: "内容"
+  helpers:
+    submit:
+      comment:
+        create: "新建评论"
+        update: "更新评论"
+  comments:
+    edit:
+      title: "编辑评论"
+    form:
+      comment: "评论"
+    index:
+      confirm: "你确定要删除这条评论吗？"
+      empty: "没有记录"
+      new_comment: "新建一条评论"
+      title: "评论列表"
+    new:
+      title: "新建一条评论"
+    show:
+      title: "评论详情"
+    was_created: "成功新建评论"
+    was_deleted: "成功删除评论"
+    was_updated: "成功更新评论"

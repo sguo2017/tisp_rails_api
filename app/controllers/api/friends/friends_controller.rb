@@ -16,9 +16,21 @@ class Api::Friends::FriendsController < ApplicationController
     elsif qry_type == Const::FRIEND_QRY_TYPE[:pending]
       @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(5)     
     end
+    @friends_arr = []
+    @friends.each do |friend|
+      f = friend.attributes.clone
+      begin
+        u = User.find(friend.friend_id)
+        u.authentication_token = "***"
+        f["avatar"]=u.avatar
+      rescue ActiveRecord::RecordNotFound => e
+
+      end
+      @friends_arr.push(f)
+    end
     respond_to do |format|
       format.json {
-        render json: {page: @friends.current_page, total_pages: @friends.total_pages, feeds: @friends.to_json}
+        render json: {page: @friends.current_page, total_pages: @friends.total_pages, feeds: @friends_arr.to_json}
       }
     end
   end
@@ -86,7 +98,6 @@ class Api::Friends::FriendsController < ApplicationController
   		else
   			friend.status = Const::FRIEND_STATUS[:unjoined]
   		end
-
   		friend.save
   		@new_list.push(friend)
   	end
