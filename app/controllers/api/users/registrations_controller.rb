@@ -81,7 +81,7 @@ class Api::Users::RegistrationsController < ApplicationController
     if @pre_user && @pre_user.status == Const::USER_STATUS[:recommended]
       respond_to do |format|
         format.json {
-          render json:{status: 0 ,msg: "已被其他用户推荐"}
+          render json:{status: 0 ,msg: "已被其他用户推荐", id: @pre_user.id}
         }
       end
     elsif @pre_user

@@ -13,8 +13,10 @@ class Api::Friends::FriendsController < ApplicationController
     user_id = params[:user_id].presence
     if qry_type == Const::FRIEND_QRY_TYPE[:created]
       @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:created], user_id).order("created_at DESC").page(params[:page]).per(5)
+      logger.debug "16未加入好友#{@friends.to_json}"
     elsif qry_type == Const::FRIEND_QRY_TYPE[:pending]
       @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(5)     
+      logger.debug "19等待验证#{@friends.to_json}"
     end
     @friends_arr = []
     @friends.each do |friend|
@@ -30,7 +32,7 @@ class Api::Friends::FriendsController < ApplicationController
     end
     respond_to do |format|
       format.json {
-        render json: {page: @friends.current_page, total_pages: @friends.total_pages, feeds: @friends_arr.to_json}
+        render json: { feeds: @friends_arr.to_json}
       }
     end
   end

@@ -56,7 +56,7 @@ Rails.application.routes.draw do
 	    resources :passwords, only: [:create, :update]
 	    resources :users_behaviors, only: [:index, :show, :create, :update, :destroy, :client_ip]
 	    resources :phone_call, only: [:update]
-      resources :users, only: [:show]
+      resources :users, only: [:show, :update]
       resources :invitation_code, only: [:create, :validate_code]
       match '/image_server_url' ,to: 'registrations#image_server_url', via: [:get,:post]
 	    match '/sms_login' ,to: 'sessions#sms_login', via: [:post]
