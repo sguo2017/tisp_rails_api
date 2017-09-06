@@ -19,4 +19,5 @@
 //= require tisp-global
 //= require jsoneditor.min
 //= require platform
+//= require 'open-uri'
 

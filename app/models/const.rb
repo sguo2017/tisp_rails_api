@@ -2,6 +2,8 @@ class Const
   GOODS_CATALOG_ROOT_ID = 1
   SUPER_ADMIN_ID = (1..10)
   IMAGE_UPLOAD_SERVLET_ADDRESS = "http://123.56.157.233:9090/FastDFSWeb/servlet/imageUploadServlet"
+  SMS_SEND_SERVLET_ADDRESS = "http://123.56.157.233:9090/FastDFSWeb/servlet/smsSendServlet"
+  IMGKIT_SERVLET_ADDRESS = "http://123.56.157.233:9090/FastDFSWeb/servlet/imgKitServlet"
   PASSWORD_ERROR_LIMIT = 3
   USER_LEVELS = (1..3)
   DEFAULT_USER_LEVEL = 1

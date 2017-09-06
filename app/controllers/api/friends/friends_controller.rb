@@ -73,7 +73,7 @@ class Api::Friends::FriendsController < ApplicationController
     respond_to do |format|
       if @friend.save
         format.json {
-          render json: {feed: @friend}
+          render json: {status: 0, feed: @friend}
         }
       end
     end

@@ -1,3 +1,6 @@
+require 'open-uri'
+require 'net/http'
+
 class Api::Users::RegistrationsController < ApplicationController
 
   respond_to :json
@@ -40,6 +43,8 @@ class Api::Users::RegistrationsController < ApplicationController
       @pre_user.status = Const::USER_STATUS[:created]
     else
       @user = User.new(user_params)
+      @user.avatar = img_kit(@user.name.last)
+      logger.debug "用户头像#{@user.avatar}"
     end
     respond_to do |format|
       if @user.save
@@ -109,6 +114,16 @@ class Api::Users::RegistrationsController < ApplicationController
       end
     end
 
+  end
+
+  def img_kit(frist_name) 
+    url = Const::IMGKIT_SERVLET_ADDRESS + "?frist_name=#{URI::encode(frist_name)}"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri)
+    response = http.start { |http| http.request(request) }
+    re = JSON.parse(response.body)
+    return re["image_url"]
   end
 
   private

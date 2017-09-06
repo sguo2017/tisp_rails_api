@@ -95,7 +95,7 @@ class Api::Sys::SmsSendsController < ApplicationController
     respond_to do |format| 	
       if @sms_send.save       
 	      begin
-	      	uri = URI.parse("http://123.56.157.233:9090/FastDFSWeb/servlet/smsSendServlet?num=#{recv_num}&param=#{send_content}")
+	      	uri = URI.parse(Const::SMS_SEND_SERVLET_ADDRESS + "?num=#{recv_num}&param=#{send_content}")
 	      	http = Net::HTTP.new(uri.host, uri.port)
 	      	request = Net::HTTP::Post.new(uri.request_uri)
 	        #request['Content-Type'] = 'application/json;charset=utf-8'
