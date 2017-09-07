@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170831032353) do
+ActiveRecord::Schema.define(version: 20170907073536) do
 
   create_table "chat_messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text     "message",      limit: 65535
@@ -329,6 +329,7 @@ ActiveRecord::Schema.define(version: 20170831032353) do
     t.string   "regist_id"
     t.string   "device_type"
     t.string   "status",                 default: "00A"
+    t.integer  "village_id"
     t.index ["authentication_token"], name: "index_users_on_authentication_token", unique: true, using: :btree
     t.index ["email"], name: "index_users_on_email", unique: true, using: :btree
     t.index ["reset_password_token"], name: "index_users_on_reset_password_token", unique: true, using: :btree
@@ -359,6 +360,12 @@ ActiveRecord::Schema.define(version: 20170831032353) do
     t.string   "user_created"
     t.datetime "created_at",   null: false
     t.datetime "updated_at",   null: false
+  end
+
+  create_table "villages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
+    t.string   "name"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
   end
 
   add_foreign_key "chat_messages", "chat_rooms"

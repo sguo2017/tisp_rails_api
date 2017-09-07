@@ -1,0 +1,30 @@
+---
+en:
+  activerecord:
+    models:
+      village: "Village"
+    attributes:
+      village: 
+        name: "Name"
+  helpers:
+    submit:
+      village:
+        create: "Create village"
+        update: "Update village"
+  villages:
+    edit:
+      title: "Editing of the village"
+    form:
+      village: "Village"
+    index:
+      confirm: "Are you sure you want to delete the village?"
+      empty: "No villages found"
+      new_village: "Add a new village"
+      title: "Listing of villages"
+    new:
+      title: "Adding a new village"
+    show:
+      title: "Village details"
+    was_created: "Village was successfully added"
+    was_deleted: "Village was successfully deleted"
+    was_updated: "Village was successfully updated"
