@@ -11,34 +11,51 @@ class Api::Users::UsersController < ApplicationController
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s) 
     extra_parm_s = params[:exploreparams] 
-    extra_parm_h = JSON.parse extra_parm_s
+    extra_parm_h = JSON.parse(extra_parm_s)
     title = extra_parm_h['title']
     @users
     @users = User.where("status =? and id !=?", Const::USER_STATUS[:created], user.id)
     if title!=''
-      @users = @users.where("name like ?", "%#{title}%").order("created_at DESC")
+      @users = @users.where("name like ?", "%#{title}%").order("created_at DESC").page(params[:page]).per(20)
+    else
+      @users = @users.order("created_at DESC").page(params[:page]).per(20)
     end
     logger.debug "用户搜索结果：#{@users.to_json}"
     respond_to do |format|
       format.json {
-        render json: {feeds: @users}
+        render json: {page: @users.current_page, total_pages: @users.total_pages, feeds: @users}
       }
     end
   end
 
   def show
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s) 
   	@user = User.find(params[:id])
-  	respond_to do |format|
-  		if @user
+    @friend = user.friends.find_by_friend_id(@user.id)
+    # fids = user.friends.map{|x| x.friend_id}
+    if @user
+      u = @user.attributes.clone
+      # if fids.include?(@user.id)
+      #   u["friend_status"] = true
+      #   logger.debug "已经是您的好友"
+      # end
+      if @friend
+        u["friend_status"]=@friend.status
+        u["f_id"]=@friend.id
+      end
+    	respond_to do |format|
   			format.json {
-         	render json: {status:0, user: @user.to_json}
+         	render json: {status:0, user: u.to_json}
         }
-      else
-      	format.json {
-         	render json: {status:0, user: @user.to_json}
+    	end
+    else
+      respond_to do |format|
+        format.json {
+          render json: {status:-1}
         }
-  		end
-  	end
+      end
+    end
   end
 
   def update

@@ -55,13 +55,18 @@ class Api::Friends::FriendsController < ApplicationController
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
     @friend = Friend.new(friend_params)
-    @user = User.find_by_num(@friend.friend_num)
+    if @friend.friend_id
+      @user = User.find(@friend.friend_id)
+    else
+      @user = User.find_by_num(@friend.friend_num)
+    end
     #添加已注册用户为好友
     if @user && @user.status == Const::USER_STATUS[:created]
       @friend.status = Const::FRIEND_STATUS[:apply]
       @other = Friend.create!(user_id:@user.id, friend_id: user.id, friend_name:user.name, friend_num:user.num, status: Const::FRIEND_STATUS[:pending])
     #添加别人推荐过的未加入用户为好友
     elsif @user
+      logger.debug "用户已被推荐但未加入"
       @friend.status = Const::FRIEND_STATUS[:unjoined]
     #推荐未加入用户
     else
@@ -115,8 +120,17 @@ class Api::Friends::FriendsController < ApplicationController
   # PATCH/PUT /friends/1
   # PATCH/PUT /friends/1.json
   def update
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s)
     respond_to do |format|
       if @friend.update(friend_params)
+        if @friend.status == Const::FRIEND_STATUS[:created]
+          @others = Friend.where('friend_id ='+user.id.to_s).or(Order.where('user_id ='+ user.id.to_s))
+          @others.each do |f|
+            f.status = Const::FRIEND_STATUS[:created]
+            f.save
+          end
+        end
         format.json {
           render json: {status: 0 ,msg: "success", feed: @friend}
         }
