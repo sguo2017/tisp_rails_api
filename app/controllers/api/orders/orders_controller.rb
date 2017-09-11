@@ -54,10 +54,8 @@ class Api::Orders::OrdersController < ApplicationController
         r2 = Report.where('user_id = ? and obj_id =? and obj_type = ?', user.id, order.offer_user_id, "user").first
 
         if r1.blank? && r2.blank?
-          logger.debug "没有举报"
           o["is_reported"] = false
         else
-          logger.debug "举报了用户#{@offer_user.name}与#{@request_user.name} "
           o["is_reported"] = true
         end
 

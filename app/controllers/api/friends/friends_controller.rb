@@ -1,7 +1,7 @@
 class Api::Friends::FriendsController < ApplicationController
 	respond_to :json
 
-  # before_action :authenticate_user_from_token!
+  before_action :authenticate_user_from_token!
 	before_action :set_friend, only: [:show, :edit, :update, :destroy]
   #friends_controller属版本V2
   # GET /friends
@@ -84,13 +84,16 @@ class Api::Friends::FriendsController < ApplicationController
 
   # POST /friends/friend_list
   def friend_list	
+    token = params[:token].presence
+    @user = token && User.find_by_authentication_token(token.to_s)
+
   	list = params[:friends].presence
   	logger.debug "好友列表#{list.to_json}"
   	@new_list = []
   	list = JSON.parse(list.to_json)
   	list.each do |friend_arg|
       friend = Friend.new(friend_arg)
-      @pre_friend = Friend.find_by_friend_num(friend.friend_num)
+      @pre_friend = @user.friends.find_by_friend_num(friend.friend_num)
       if @pre_friend
         @new_list.push(@pre_friend)
         next

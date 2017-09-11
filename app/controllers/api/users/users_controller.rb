@@ -23,7 +23,6 @@ class Api::Users::UsersController < ApplicationController
     else
       @users = @users.order("created_at DESC").page(params[:page]).per(20)
     end
-    logger.debug "用户搜索结果：#{@users.to_json}"
     respond_to do |format|
       format.json {
         render json: {page: @users.current_page, total_pages: @users.total_pages, feeds: @users}
