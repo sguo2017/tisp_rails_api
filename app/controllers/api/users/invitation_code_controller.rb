@@ -1,8 +1,20 @@
 class Api::Users::InvitationCodeController < ApplicationController
 	respond_to :json
 
-	def create
-		
+	before_action :authenticate_user_from_token!,only: [:index]
+
+	def index
+		token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s)
+    @invitation = Invitation.find_by_user_id(user.id)
+    if @invitation.blank?
+    	@invitation = Invitation.create!(user_id:user.id, code: FFaker::IdentificationMX.rfc_persona_fisica)
+    end
+		respond_to do |format|
+			format.json {
+         render json: { status: 0, code: @invitation.code}
+      }
+		end
 	end
   #版本V2
 	def validate_code
