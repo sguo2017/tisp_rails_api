@@ -1,3 +1,6 @@
+require 'open-uri'
+require 'net/http'
+
 class Api::Users::UsersController < ApplicationController
 	respond_to :json
 
@@ -61,6 +64,10 @@ class Api::Users::UsersController < ApplicationController
   def update
     respond_to do |format|
       if @user.update(user_params)
+        if @user.avatar == nil
+          @user.avatar = img_kit(@user.name.last)
+          @user.save
+        end
         format.json {
           render json: {status: 0 ,msg: "success"}
         }
@@ -70,6 +77,16 @@ class Api::Users::UsersController < ApplicationController
         }
       end
     end
+  end
+
+  def img_kit(frist_name) 
+    url = Const::IMGKIT_SERVLET_ADDRESS + "?frist_name=#{URI::encode(frist_name)}"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri)
+    response = http.start { |http| http.request(request) }
+    re = JSON.parse(response.body)
+    return re["image_url"]
   end
 
   private 
