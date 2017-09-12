@@ -31,10 +31,14 @@ class Const
   #好友状态
   FRIEND_STATUS = {:created => "created",:apply => "apply", :pending => "pending",:recommended => "recommended", :unjoined => "unregistered", :notfriend => "notfriend"}
   FRIEND_STATUS_TRANSLATE= {:created => "已加好友", :apply => "已申请", :pending => "待通过",:recommended => "已推荐", :unjoined => "未加入" , :notfriend => "已移除好友"}
-  FRIEND_QRY_TYPE = {:created => "1", :pending => "2"} 
+  FRIEND_QRY_TYPE = {:created => "1", :pending => "2", :recommended => "3"} 
   #错误类型
   ERROR_TYPE= {:user_is_nil => -101, :default => -1, :user_is_lock => -102}
-
+  #默认服务
+  module ServOffer
+    DEFAULT_TITILE = "我是%s方面的专业人士"
+    DEFAULT_DETAIL = "这是一条默认服务，由%s推荐"
+  end
   module SysMsg
     SYSTEM_USER_ID = 1
     GOODS_TYPE = {:request => "serv_request", :offer => "serv_offer"}

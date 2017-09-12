@@ -12,7 +12,7 @@ class Api::Villages::VillagesController < ApplicationController
     @villages
     @villages = Village.all
     if title!=''
-      @villages = @villages.where("name like ?", "%#{title}%").order("created_at DESC")
+      @villages = @villages.where("name like ?", "%#{title}%").order("created_at DESC").page(params[:page]).per(5)
     end
     logger.debug "社区搜索结果：#{@villages.to_json}"
     respond_to do |format|

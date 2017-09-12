@@ -1,3 +1,5 @@
+require 'open-uri'
+require 'net/http'
 class Api::Friends::FriendsController < ApplicationController
 	respond_to :json
 
@@ -8,13 +10,17 @@ class Api::Friends::FriendsController < ApplicationController
   # GET /friends.json
   #场景1：查找已添加的好友
   #场景2：查找待验证的好友
+  #场景3：查找已推荐的好友
   def index
     qry_type = params[:qry_type].presence
     user_id = params[:user_id].presence
     if qry_type == Const::FRIEND_QRY_TYPE[:created]
-      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:created], user_id).order("created_at DESC").page(params[:page]).per(7)
+      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:created], user_id).or(Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id)).order("created_at DESC").page(params[:page]).per(5)
     elsif qry_type == Const::FRIEND_QRY_TYPE[:pending]
-      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(7)     
+      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(5)     
+    elsif qry_type == Const::FRIEND_QRY_TYPE[:recommended]
+      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id).order("created_at DESC").page(params[:page]).per(5)     
+      logger.debug "推荐好友：#{@friends.to_json}"
     end
     @friends_arr = []
     @friends.each do |friend|
@@ -52,6 +58,7 @@ class Api::Friends::FriendsController < ApplicationController
   def create
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
+
     @friend = Friend.new(friend_params)
     if @friend.friend_id
       @user = User.find(@friend.friend_id)
@@ -66,17 +73,24 @@ class Api::Friends::FriendsController < ApplicationController
     elsif @user
       logger.debug "用户已被推荐但未加入"
       @friend.status = Const::FRIEND_STATUS[:unjoined]
-    #推荐未加入用户
+    #推荐未加入用户,默认互为好友，并且发布一条默认服务
     else
       logger.debug "用户未加入"
-      @friend.status = Const::FRIEND_STATUS[:unjoined]
+      catalog_id = params[:catalog_id].presence
+      catalog_name = params[:catalog_name].presence
+      catalog = GoodsCatalog.find(catalog_id)
+      @friend.status = Const::FRIEND_STATUS[:recommended]
       @user = User.create!(num: @friend.friend_num, name: @friend.friend_name, status: Const::USER_STATUS[:recommended],email: @friend.friend_num+"@qike.com",password: "888888")
+      @user.avatar = img_kit(@user.name.last)
+      @user.save
+      @other = Friend.create!(user_id: @user.id, friend_id: user.id, friend_name:user.name, friend_num:user.num, status:Const::FRIEND_STATUS[:created])
+      @good = Good.create!(user_id: @user.id, serv_title: Const::ServOffer::DEFAULT_TITILE%catalog_name, serv_detail: Const::ServOffer::DEFAULT_DETAIL%user.name, serv_catagory: Const::GOODS_TYPE[:offer],catalog: catalog_name, goods_catalog_id:catalog_id ,serv_images: catalog.image)
       @friend.friend_id = @user.id
     end
     respond_to do |format|
       if @friend.save
         format.json {
-          render json: {status: 0, feed: @friend}
+          render json: {status: 0, feed: @friend, user: @user}
         }
       end
     end
@@ -158,6 +172,16 @@ class Api::Friends::FriendsController < ApplicationController
     end
   end
 
+  def img_kit(frist_name) 
+    url = Const::IMGKIT_SERVLET_ADDRESS + "?frist_name=#{URI::encode(frist_name)}"
+    uri = URI.parse(url)
+    http = Net::HTTP.new(uri.host, uri.port)
+    request = Net::HTTP::Post.new(uri.request_uri)
+    response = http.start { |http| http.request(request) }
+    re = JSON.parse(response.body)
+    return re["image_url"]
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_friend
@@ -167,5 +191,8 @@ class Api::Friends::FriendsController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def friend_params
       params.permit(:friend_id, :friend_name, :friend_num, :user_id, :status, { friends: [ :user_id, :friend_num, :friend_name] } )
+    end
+    def good_params
+      params.permit(:catalog_id, :catalog_name,)
     end
 end
