@@ -15,11 +15,11 @@ class Api::Friends::FriendsController < ApplicationController
     qry_type = params[:qry_type].presence
     user_id = params[:user_id].presence
     if qry_type == Const::FRIEND_QRY_TYPE[:created]
-      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:created], user_id).or(Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id)).order("created_at DESC").page(params[:page]).per(5)
+      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:created], user_id).or(Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id)).order("created_at DESC").page(params[:page]).per(10)
     elsif qry_type == Const::FRIEND_QRY_TYPE[:pending]
-      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(5)     
+      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(10)     
     elsif qry_type == Const::FRIEND_QRY_TYPE[:recommended]
-      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id).order("created_at DESC").page(params[:page]).per(5)     
+      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id).order("created_at DESC").page(params[:page]).per(15)     
     end
     @friends_arr = []
     @friends.each do |friend|

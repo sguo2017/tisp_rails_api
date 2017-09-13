@@ -33,7 +33,7 @@
 #
 
 class User < ApplicationRecord
-  belongs_to :village
+  has_and_belongs_to_many :villages
   has_many :goods
   has_many :sms_sends
   has_many :sys_msgs_timelines, dependent: :delete_all

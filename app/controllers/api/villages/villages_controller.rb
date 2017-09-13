@@ -1,23 +1,40 @@
 class Api::Villages::VillagesController < ApplicationController
-	 before_action :set_village, only: [:show, :edit, :update, :destroy]
+  before_action :authenticate_user_from_token!
+	before_action :set_village, only: [:show, :edit, :update, :destroy]
 
   # GET /villages
   # GET /villages.json
+  #场景1： qry_type = 1，查找所有社区
+  #场景2： qry_type = 2，查找用户加入的社区
   def index
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s) 
+    qry_type = params[:qry_type].presence
     extra_parm_s = params[:exploreparams] 
     extra_parm_h = JSON.parse extra_parm_s
     title = extra_parm_h['title']
     @villages
-    @villages = Village.all
-    if title!=''
-      @villages = @villages.where("name like ?", "%#{title}%").order("created_at DESC").page(params[:page]).per(5)
+    if qry_type == "1"
+      @villages = Village.all
+      if title!=''
+        @villages = @villages.where("name like ?", "%#{title}%").order("created_at DESC").page(params[:page]).per(5)
+      end
+    elsif qry_type =="2"
+      @villages = user.villages
     end
-    logger.debug "社区搜索结果：#{@villages.to_json}"
+    @villages_arr =[]
+    @villages.each do |village|
+      v = village.attributes.clone
+      if village.users.exists?(user.id)
+        v["in_village"] = true
+      else
+        v["in_village"] = false
+      end
+      @villages_arr.push(v)
+    end
     respond_to do |format|
       format.json {
-        render json: {feeds: @villages}
+        render json: {feeds: @villages_arr}
       }
     end
   end
@@ -76,6 +93,32 @@ class Api::Villages::VillagesController < ApplicationController
     end
   end
 
+  def add_user
+      user_id = params[:user_id].presence
+      village_id = params[:village_id].presence
+      @user = User.find(user_id)
+      @village = Village.find(village_id)
+      @village.users << @user
+      respond_to do |format|
+        format.json {
+            render json: {status: 0}
+          }
+      end
+  end
+
+  def delete_user
+      user_id = params[:user_id].presence
+      village_id = params[:village_id].presence
+      @user = User.find(user_id)
+      @village = Village.find(village_id)
+      @village.users.delete(@user)
+      respond_to do |format|
+        format.json {
+            render json: {status: 0}
+          }
+      end
+  end
+
   private
     # Use callbacks to share common setup or constraints between actions.
     def set_village
@@ -85,5 +128,8 @@ class Api::Villages::VillagesController < ApplicationController
     # Never trust parameters from the scary internet, only allow the white list through.
     def village_params
       params.require(:village).permit(:name)
+    end
+    def village_user_params
+      params.permit(:user_id, :village_id)
     end
 end
