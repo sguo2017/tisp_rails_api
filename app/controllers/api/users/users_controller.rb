@@ -17,7 +17,7 @@ class Api::Users::UsersController < ApplicationController
     extra_parm_h = JSON.parse(extra_parm_s)
     title = extra_parm_h['title']
     @users
-    @users = User.where("status =? and id !=?", Const::USER_STATUS[:created], user.id)
+    @users = User.where("status =? and id !=? and admin =?", Const::USER_STATUS[:created], user.id, false)
     if title!=''
       @users = @users.where("name like ?", "%#{title}%").order("created_at DESC").page(params[:page]).per(20)
     else

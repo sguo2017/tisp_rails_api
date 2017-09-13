@@ -20,7 +20,6 @@ class Api::Friends::FriendsController < ApplicationController
       @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(5)     
     elsif qry_type == Const::FRIEND_QRY_TYPE[:recommended]
       @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id).order("created_at DESC").page(params[:page]).per(5)     
-      logger.debug "推荐好友：#{@friends.to_json}"
     end
     @friends_arr = []
     @friends.each do |friend|
@@ -107,26 +106,26 @@ class Api::Friends::FriendsController < ApplicationController
   	list = JSON.parse(list.to_json)
   	list.each do |friend_arg|
       friend = Friend.new(friend_arg)
+      #如果是已注册的用户，则默认加好友
+      @pre_user = User.find_by_num(friend.friend_num)
+      if @pre_user && @pre_user.id != @user.id
+        friend.status = Const::FRIEND_STATUS[:created]
+      else
+        next
+      end
+      #如果已经是好友，则不新建friend
       @pre_friend = @user.friends.find_by_friend_num(friend.friend_num)
       if @pre_friend
         @new_list.push(@pre_friend)
         next
       end
-  		@pre_user = User.find_by_num(friend.friend_num)
-  		if @pre_user && @pre_user.status == Const::USER_STATUS[:created]
-  			friend.status = Const::FRIEND_STATUS[:created]
-  		elsif @pre_user && @pre_user.status == Const::USER_STATUS[:recommended]
-  			friend.status = Const::FRIEND_STATUS[:recommended]
-  		else
-  			friend.status = Const::FRIEND_STATUS[:unjoined]
-  		end
+  		
   		friend.save
   		@new_list.push(friend)
   	end
 
     respond_to do |format|
       format.json {
-        # render json: {feeds: @new_list.to_json}
         render json: {feeds: @new_list}
       }
     end
