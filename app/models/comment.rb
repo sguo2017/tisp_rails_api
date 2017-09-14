@@ -7,6 +7,5 @@
 # obj_type								:string
 # content									:string
 class Comment < ApplicationRecord
-	belongs_to :good
 	belongs_to :user
 end

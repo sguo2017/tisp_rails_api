@@ -10,7 +10,6 @@ class Api::Friends::FriendsController < ApplicationController
   # GET /friends.json
   #场景1：查找已添加的好友
   #场景2：查找待验证的好友
-  #场景3：查找已推荐的好友
   def index
     qry_type = params[:qry_type].presence
     user_id = params[:user_id].presence
@@ -18,8 +17,6 @@ class Api::Friends::FriendsController < ApplicationController
       @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:created], user_id).or(Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id)).order("created_at DESC").page(params[:page]).per(10)
     elsif qry_type == Const::FRIEND_QRY_TYPE[:pending]
       @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(10)     
-    elsif qry_type == Const::FRIEND_QRY_TYPE[:recommended]
-      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id).order("created_at DESC").page(params[:page]).per(15)     
     end
     @friends_arr = []
     @friends.each do |friend|
@@ -78,7 +75,7 @@ class Api::Friends::FriendsController < ApplicationController
       catalog_id = params[:catalog_id].presence
       catalog_name = params[:catalog_name].presence
       catalog = GoodsCatalog.find(catalog_id)
-      @friend.status = Const::FRIEND_STATUS[:recommended]
+      @friend.status = Const::FRIEND_STATUS[:created]
       @user = User.create!(num: @friend.friend_num, name: @friend.friend_name, status: Const::USER_STATUS[:recommended],email: @friend.friend_num+"@qike.com",password: "888888")
       @user.avatar = img_kit(@user.name.last)
       @user.save
@@ -133,11 +130,13 @@ class Api::Friends::FriendsController < ApplicationController
 
   # PATCH/PUT /friends/1
   # PATCH/PUT /friends/1.json
+  #通过好友验证
   def update
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
     respond_to do |format|
       if @friend.update(friend_params)
+        #通过好友验证，更新好友动态
         if @friend.status == Const::FRIEND_STATUS[:created]
           @others = Friend.where('friend_id ='+user.id.to_s).or(Order.where('user_id ='+ user.id.to_s))
           @others.each do |f|

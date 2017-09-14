@@ -23,7 +23,37 @@ class Api::Goods::ServOffersController < ApplicationController
 	#场景一：按职业模糊查询
 	if user_id.nil? && !extra_parm_s.nil? && 'undefined' != extra_parm_s
 		extra_parm_h = JSON.parse extra_parm_s
-		@serv_offers = Good.all
+    uids = []
+    #查找我的好友
+    @friends = Friend.where("user_id=? and status=?",user.id, Const::FRIEND_STATUS[:created])
+    #查找我的好友的推荐（好评）用户
+    @friends.each do |friend|
+      if friend.friend_id.nil?
+        next
+      end
+      begin
+        @user = User.find(friend.friend_id)
+      rescue ActiveRecord::RecordNotFound => e
+      end
+
+      if @user.blank?
+        next
+      end
+      @comments = @user.comments
+      @comments.each do |comment|
+        uids.push(comment.obj_id)
+      end
+    end
+    #查找我的社区
+    @villages=user.villages
+    @villages.each do |village|
+      @users = village.users
+      @users.each do |u|
+        uids.push(u.id)
+      end
+    end
+    uids = uids.join(",")
+		@serv_offers = Good.where("user_id in (#{uids})")
     @serv_offers = @serv_offers.where("status = ?", Const::GOODS_STATUS[:pass])
     @serv_offers = @serv_offers.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer])
     #查询参数有title且title不为空
@@ -109,6 +139,13 @@ class Api::Goods::ServOffersController < ApplicationController
 
       end
 
+      #是否推荐（好评）
+      c = Comment.where("user_id = ? and obj_id= ? and status = ?", user.id, u.id, "good").first
+      if c.blank?
+        s["isRecommanded"] = false
+      else
+        s["isRecommanded"] = true
+      end
       #是否收藏
       f = Favorite.where("user_id = ? and obj_id = ?", user.id, offer.id).first
       if f.blank?

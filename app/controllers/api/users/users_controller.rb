@@ -35,13 +35,8 @@ class Api::Users::UsersController < ApplicationController
     user = token && User.find_by_authentication_token(token.to_s) 
   	@user = User.find(params[:id])
     @friend = user.friends.find_by_friend_id(@user.id)
-    # fids = user.friends.map{|x| x.friend_id}
     if @user
       u = @user.attributes.clone
-      # if fids.include?(@user.id)
-      #   u["friend_status"] = true
-      #   logger.debug "已经是您的好友"
-      # end
       if @friend
         u["friend_status"]=@friend.status
         u["f_id"]=@friend.id

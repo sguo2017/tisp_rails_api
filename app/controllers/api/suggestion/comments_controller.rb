@@ -1,10 +1,50 @@
 class Api::Suggestion::CommentsController < ApplicationController
+  before_action :authenticate_user_from_token!
 	before_action :set_comment, only: [:show, :edit, :update, :destroy]
 
   # GET /comments
   # GET /comments.json
   def index
-    @comments = Comment.page(params[:page]).per(5)
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s)
+    user_id = params[:user_id].presence
+    qry_type = params[:qry_type].presence
+    #场景1：查找某用户的推荐（好评），返回推荐（好评）的用户
+    if qry_type=="1"
+      @comments = Comment.where("user_id=? and obj_type=? and status=?", user.id, "user", "good").order("created_at DESC").page(params[:page]).per(10)
+      @users=[]
+      @comments.each do |comment|
+        @user=User.find(comment.obj_id)
+        if @user
+          @users.push(@user)
+        end
+      end
+      respond_to do |format|
+        format.json {
+          render json: {page: @comments.current_page, total_pages: @comments.total_pages, feeds: @users.to_json}
+        }
+      end
+    #场景2：查找某用户的被评价内容，返回评价
+    elsif qry_type=="2"
+      @comments = Comment.where("obj_id=? and obj_type=?", user_id, "user").order("created_at DESC").page(params[:page]).per(10)
+      @comments_arr=[]
+      @comments.each do |comment|
+        c = comment.attributes.clone
+        @user=User.find(comment.user_id)
+        if @user
+          c["user_name"] = @user.name
+          c["user_avatar"] = @user.avatar
+          c["created_at"] = c["created_at"].strftime('%Y-%m-%d %H:%M:%S')
+        end
+        @comments_arr.push(c)
+      end
+      respond_to do |format|
+        format.json {
+          render json: {page: @comments.current_page, total_pages: @comments.total_pages, feeds: @comments_arr}
+        }
+      end
+    end
+    
   end
 
   # GET /comments/1
