@@ -53,15 +53,21 @@ class Api::Goods::ServOffersController < ApplicationController
       end
     end
     uids = uids.join(",")
-		@serv_offers = Good.where("user_id in (#{uids})")
-    @serv_offers = @serv_offers.where("status = ?", Const::GOODS_STATUS[:pass])
-    @serv_offers = @serv_offers.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer])
-    #查询参数有title且title不为空
-    if extra_parm_h.include?("title") && extra_parm_h['title']!=''
-		  @serv_offers = @serv_offers.where("catalog like ?", "%#{extra_parm_h['title']}%").order("created_at DESC").page(params[:page]).per(5) 
-    else
-      @serv_offers = @serv_offers.order("created_at DESC").page(params[:page]).per(5) 
+    if uids != ''
+      @serv_offers = Good.where("user_id in (#{uids})")
+      @serv_offers = @serv_offers.where("status = ?", Const::GOODS_STATUS[:pass])
+      @serv_offers = @serv_offers.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer])
+      #查询参数有title且title不为空
+      if extra_parm_h.include?("title") && extra_parm_h['title']!=''
+        @serv_offers = @serv_offers.where("catalog like ?", "%#{extra_parm_h['title']}%").order("created_at DESC").page(params[:page]).per(5) 
+      else
+        @serv_offers = @serv_offers.order("created_at DESC").page(params[:page]).per(5) 
+      end
+    else 
+      @serv_offers = nil
     end
+		
+   
 
     #场景三：某[二级分类]相关服务查询
   elsif user_id.nil? && catalog_id
@@ -129,50 +135,58 @@ class Api::Goods::ServOffersController < ApplicationController
 
 
     @offers = []
-    @serv_offers.each do |offer|
-      s = offer.attributes.clone
-      begin
-        u = User.find(offer.user_id)
-        u.authentication_token = "***"
-        s["user"]=u
-      rescue ActiveRecord::RecordNotFound => e
+    if @serv_offers.nil?
+      respond_to do |format|
+        format.json {
+          render json: {page: 0, total_pages: 0, feeds: @offers.to_json, count: @size ? @size : 0}
+        }
+      end
+    else
+      @serv_offers.each do |offer|
+        s = offer.attributes.clone
+        begin
+          u = User.find(offer.user_id)
+          u.authentication_token = "***"
+          s["user"]=u
+        rescue ActiveRecord::RecordNotFound => e
 
+        end
+
+        #是否推荐（好评）
+        c = Comment.where("user_id = ? and obj_id= ? and status = ?", user.id, u.id, "good").first
+        if c.blank?
+          s["isRecommanded"] = false
+        else
+          s["isRecommanded"] = true
+        end
+        #是否收藏
+        f = Favorite.where("user_id = ? and obj_id = ?", user.id, offer.id).first
+        if f.blank?
+          s["isFavorited"] = false
+        else
+          s["isFavorited"] = true
+          s["favorite_id"] = f["id"].to_s
+        end
+
+        #是否举报
+        r = Report.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "good").first
+        if r.blank?
+          s["isReported"] = false
+        else
+          s["isReported"] = true
+          s["report_id"] = r["id"].to_s
+        end
+
+        s["created_at"] = s["created_at"].strftime('%Y-%m-%d %H:%M:%S')
+        s["updated_at"] = s["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
+        @offers.push(s)
       end
 
-      #是否推荐（好评）
-      c = Comment.where("user_id = ? and obj_id= ? and status = ?", user.id, u.id, "good").first
-      if c.blank?
-        s["isRecommanded"] = false
-      else
-        s["isRecommanded"] = true
+      respond_to do |format|
+        format.json {
+          render json: {page: @serv_offers.current_page, total_pages: @serv_offers.total_pages, feeds: @offers.to_json, count: @size ? @size : 0}
+        }
       end
-      #是否收藏
-      f = Favorite.where("user_id = ? and obj_id = ?", user.id, offer.id).first
-      if f.blank?
-        s["isFavorited"] = false
-      else
-        s["isFavorited"] = true
-        s["favorite_id"] = f["id"].to_s
-      end
-
-      #是否举报
-      r = Report.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "good").first
-      if r.blank?
-        s["isReported"] = false
-      else
-        s["isReported"] = true
-        s["report_id"] = r["id"].to_s
-      end
-
-      s["created_at"] = s["created_at"].strftime('%Y-%m-%d %H:%M:%S')
-      s["updated_at"] = s["updated_at"].strftime('%Y-%m-%d %H:%M:%S')
-      @offers.push(s)
-    end
-
-    respond_to do |format|
-      format.json {
-        render json: {page: @serv_offers.current_page, total_pages: @serv_offers.total_pages, feeds: @offers.to_json, count: @size ? @size : 0}
-      }
     end
 
   end
