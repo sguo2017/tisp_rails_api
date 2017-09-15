@@ -10,13 +10,16 @@ class Api::Friends::FriendsController < ApplicationController
   # GET /friends.json
   #场景1：查找已添加的好友
   #场景2：查找待验证的好友
+  #场景3：查找客户
   def index
     qry_type = params[:qry_type].presence
     user_id = params[:user_id].presence
     if qry_type == Const::FRIEND_QRY_TYPE[:created]
-      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:created], user_id).or(Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id)).order("created_at DESC").page(params[:page]).per(10)
+      @friends = Friend.where("catalog = ? and status = ? and user_id = ?", Const::RELATION_TYPE[:friend], Const::FRIEND_STATUS[:created], user_id).or(Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:recommended], user_id)).order("created_at DESC").page(params[:page]).per(10)
     elsif qry_type == Const::FRIEND_QRY_TYPE[:pending]
-      @friends = Friend.where("status = ? and user_id = ?", Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(10)     
+      @friends = Friend.where("catalog = ? and status = ? and user_id = ?", Const::RELATION_TYPE[:friend], Const::FRIEND_STATUS[:pending], user_id).order("created_at DESC").page(params[:page]).per(10)     
+    elsif qry_type == Const::FRIEND_QRY_TYPE[:customer]
+       @friends = Friend.where("catalog = ? and user_id = ?", Const::RELATION_TYPE[:customer], user_id).order("created_at DESC").page(params[:page]).per(10)     
     end
     @friends_arr = []
     @friends.each do |friend|
@@ -25,6 +28,12 @@ class Api::Friends::FriendsController < ApplicationController
         u = User.find(friend.friend_id)
         u.authentication_token = "***"
         f["avatar"]=u.avatar
+        #加载客户列表时，如果客户用户状态是已注册，则客户状态也更新为created
+        if friend.status == Const::FRIEND_STATUS[:unjoined] && u.status == Const::USER_STATUS[:created]
+          f["status"] = Const::FRIEND_STATUS[:created]
+          friend.status = Const::FRIEND_STATUS[:created]
+          friend.save
+        end
       rescue ActiveRecord::RecordNotFound => e
 
       end
@@ -69,19 +78,29 @@ class Api::Friends::FriendsController < ApplicationController
     elsif @user
       logger.debug "用户已被推荐但未加入"
       @friend.status = Const::FRIEND_STATUS[:unjoined]
-    #推荐未加入用户,默认互为好友，并且发布一条默认服务
     else
       logger.debug "用户未加入"
-      catalog_id = params[:catalog_id].presence
-      catalog_name = params[:catalog_name].presence
-      catalog = GoodsCatalog.find(catalog_id)
-      @friend.status = Const::FRIEND_STATUS[:created]
-      @user = User.create!(num: @friend.friend_num, name: @friend.friend_name, status: Const::USER_STATUS[:recommended],email: @friend.friend_num+"@qike.com",password: "888888")
-      @user.avatar = img_kit(@user.name.last)
-      @user.save
-      @other = Friend.create!(user_id: @user.id, friend_id: user.id, friend_name:user.name, friend_num:user.num, status:Const::FRIEND_STATUS[:created])
-      @good = Good.create!(user_id: @user.id, serv_title: Const::ServOffer::DEFAULT_TITILE%catalog_name, serv_detail: Const::ServOffer::DEFAULT_DETAIL%user.name, serv_catagory: Const::GOODS_TYPE[:offer],catalog: catalog_name, goods_catalog_id:catalog_id ,serv_images: catalog.image)
-      @friend.friend_id = @user.id
+      if @friend.catalog == Const::RELATION_TYPE[:customer]
+        #推荐客户
+        @friend.status = Const::FRIEND_STATUS[:unjoined]
+        @user = User.create!(num: @friend.friend_num, name: @friend.friend_name, status: Const::USER_STATUS[:recommended],email: @friend.friend_num+"@qike.com",password: "888888")
+        @user.avatar = img_kit(@user.name.last)
+        @user.save
+        @friend.friend_id = @user.id
+      else
+        #推荐专业人士，默认互为好友，并且发布一条默认服务
+        catalog_id = params[:catalog_id].presence
+        catalog_name = params[:catalog_name].presence
+        catalog = GoodsCatalog.find(catalog_id)
+        @friend.status = Const::FRIEND_STATUS[:created]
+        @user = User.create!(num: @friend.friend_num, name: @friend.friend_name, status: Const::USER_STATUS[:recommended],email: @friend.friend_num+"@qike.com",password: "888888")
+        @user.avatar = img_kit(@user.name.last)
+        @user.save
+        @other = Friend.create!(user_id: @user.id, friend_id: user.id, friend_name:user.name, friend_num:user.num, status:Const::FRIEND_STATUS[:created])
+        @good = Good.create!(user_id: @user.id, serv_title: Const::ServOffer::DEFAULT_TITILE%catalog_name, serv_detail: Const::ServOffer::DEFAULT_DETAIL%user.name, serv_catagory: Const::GOODS_TYPE[:offer],catalog: catalog_name, goods_catalog_id:catalog_id ,serv_images: catalog.image)
+        @friend.friend_id = @user.id
+      end
+      
     end
     respond_to do |format|
       if @friend.save
@@ -136,9 +155,9 @@ class Api::Friends::FriendsController < ApplicationController
     user = token && User.find_by_authentication_token(token.to_s)
     respond_to do |format|
       if @friend.update(friend_params)
-        #通过好友验证，更新好友动态
+        #通过好友验证，更新对方好友状态
         if @friend.status == Const::FRIEND_STATUS[:created]
-          @others = Friend.where('friend_id ='+user.id.to_s).or(Order.where('user_id ='+ user.id.to_s))
+          @others = Friend.where('friend_id =? and user_id =? and catalog =?', user.id, @friend.friend_id, Const::RELATION_TYPE[:friend])
           @others.each do |f|
             f.status = Const::FRIEND_STATUS[:created]
             f.save
@@ -188,7 +207,7 @@ class Api::Friends::FriendsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def friend_params
-      params.permit(:friend_id, :friend_name, :friend_num, :user_id, :status, { friends: [ :user_id, :friend_num, :friend_name] } )
+      params.permit(:friend_id, :friend_name, :friend_num, :user_id, :status, :catalog, { friends: [ :user_id, :friend_num, :friend_name] } )
     end
     def good_params
       params.permit(:catalog_id, :catalog_name,)

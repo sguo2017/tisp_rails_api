@@ -23,9 +23,16 @@ class Api::Users::UsersController < ApplicationController
     else
       @users = @users.order("created_at DESC").page(params[:page]).per(20)
     end
+    @users_arr =[]
+    @users.each do |u|
+      a = u.attributes.clone
+      size = u.comments.size
+      a["comments_count"] = size
+      @users_arr.push(a)
+    end
     respond_to do |format|
       format.json {
-        render json: {page: @users.current_page, total_pages: @users.total_pages, feeds: @users}
+        render json: {page: @users.current_page, total_pages: @users.total_pages, feeds: @users_arr}
       }
     end
   end
@@ -37,7 +44,7 @@ class Api::Users::UsersController < ApplicationController
     @friend = user.friends.find_by_friend_id(@user.id)
     if @user
       u = @user.attributes.clone
-      if @friend
+      if @friend && @friend.catalog == Const::RELATION_TYPE[:friend]
         u["friend_status"]=@friend.status
         u["f_id"]=@friend.id
       end

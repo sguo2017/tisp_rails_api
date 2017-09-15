@@ -31,7 +31,8 @@ class Const
   #好友状态
   FRIEND_STATUS = {:created => "created",:apply => "apply", :pending => "pending", :unjoined => "unregistered", :notfriend => "notfriend"}
   FRIEND_STATUS_TRANSLATE= {:created => "已加好友", :apply => "已申请", :pending => "待通过", :unjoined => "未加入" , :notfriend => "已移除好友"}
-  FRIEND_QRY_TYPE = {:created => "1", :pending => "2", :recommended => "3"} 
+  FRIEND_QRY_TYPE = {:created => "1", :pending => "2", :customer => "3"}
+  RELATION_TYPE = {:friend => "friend", :customer => "customer"} 
   #错误类型
   ERROR_TYPE= {:user_is_nil => -101, :default => -1, :user_is_lock => -102}
   #默认服务
