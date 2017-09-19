@@ -158,7 +158,10 @@ class Api::Goods::ServOffersController < ApplicationController
           s["isRecommanded"] = false
         else
           s["isRecommanded"] = true
+          s["comment_id"] = c["id"].to_s
+          s["comment_content"] = c["content"]
         end
+
         #是否收藏
         f = Favorite.where("user_id = ? and obj_id = ?", user.id, offer.id).first
         if f.blank?

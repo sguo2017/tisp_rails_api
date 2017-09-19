@@ -79,48 +79,48 @@ class Api::Sys::SmsSendsController < ApplicationController
     if sms
       respond_to do |format|
         format.json {
-          render json: {status:"-1", msg:"10分钟内容不允许重新发送"}
+          render json: {status:"-2", msg:"10分钟内容不允许重新发送"}
         } 
+      end
+    else
+      send_content = ""
+      #code短信验证码
+      if "code" == sms_type
+          send_content = rand(9999)     
+          @sms_send.send_content = send_content
+          @sms_send.sms_type = sms_type
+      end 
+      
+      respond_to do |format|  
+        if @sms_send.save       
+          begin
+            uri = URI.parse(Const::SMS_SEND_SERVLET_ADDRESS + "?num=#{recv_num}&param=#{send_content}")
+            http = Net::HTTP.new(uri.host, uri.port)
+            request = Net::HTTP::Post.new(uri.request_uri)
+            #request['Content-Type'] = 'application/json;charset=utf-8'
+            #request['User-Agent'] = 'Mozilla/5.0 (Windows NT 5.1; rv:29.0) Gecko/20100101 Firefox/29.0'
+            #request.body = params.to_json
+            response = http.start { |http| http.request(request) }
+            puts response.body.inspect
+            puts JSON.parse response.body
+            ret_status = 0
+            ret_msg = "success"
+          rescue =>err
+            #return nil
+            logger.debug "111#{err}"
+            ret_status = -1
+            ret_msg = "fails"        
+          end           
+          format.json {
+             render json: {status:"#{ret_status}", msg:"#{ret_msg}", send_content: "#{send_content}"}
+          }
+        else
+          format.json {
+             render json: {status:"#{ret_status}", msg:"#{ret_msg}"}
+          } 
+        end
       end
     end
-
-    send_content = ""
-    #code短信验证码
-    if "code" == sms_type
-	    	send_content = rand(9999)    	
-	    	@sms_send.send_content = send_content
-	    	@sms_send.sms_type = sms_type
-    end 
-    
-    respond_to do |format| 	
-      if @sms_send.save       
-	      begin
-	      	uri = URI.parse(Const::SMS_SEND_SERVLET_ADDRESS + "?num=#{recv_num}&param=#{send_content}")
-	      	http = Net::HTTP.new(uri.host, uri.port)
-	      	request = Net::HTTP::Post.new(uri.request_uri)
-	        #request['Content-Type'] = 'application/json;charset=utf-8'
-	        #request['User-Agent'] = 'Mozilla/5.0 (Windows NT 5.1; rv:29.0) Gecko/20100101 Firefox/29.0'
-	        #request.body = params.to_json
-	        response = http.start { |http| http.request(request) }
-	        puts response.body.inspect
-	        puts JSON.parse response.body
-	        ret_status = 0
-	    		ret_msg = "success"
-	      rescue =>err
-	        #return nil
-          logger.debug "111#{err}"
-			    ret_status = -1
-			    ret_msg = "fails"        
-	      end           
-        format.json {
-           render json: {status:"#{ret_status}", msg:"#{ret_msg}", send_content: "#{send_content}"}
-        }
-      else
-        format.json {
-           render json: {status:"#{ret_status}", msg:"#{ret_msg}"}
-        } 
-      end
-     end
   end
 
   # PATCH/PUT /sms_sends/1

@@ -41,7 +41,22 @@ class Api::Villages::VillagesController < ApplicationController
 
   # GET /villages/1
   # GET /villages/1.json
+  #查看社区详情，社区用户推荐的用户
   def show
+    @users_arr = []
+    @users = @village.users.order("created_at DESC").page(params[:page]).per(5) 
+    @users.each do |user|
+      @comments = user.comments
+      @comments.each do |comment|
+         u = User.find(comment.obj_id)
+         @users_arr.push(u)
+      end 
+    end
+    respond_to do |format|
+      format.json {
+        render json: {feeds: @users_arr}
+      }
+    end
   end
 
   # GET /villages/new
