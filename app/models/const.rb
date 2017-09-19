@@ -21,6 +21,14 @@ class Const
   GOODS_STATUS = {:created => "00A", :pass => "00B", :reject => "00X", :destroy => "00D"}
   GOODS_TYPE_TRANSLATE = {:request => "正向商品", :offer => "逆向商品"}
   SERV_QRY_TYPE = {:offer => "1", :request => "2"}  #good或offer查詢類型
+  #服务查询层级：
+  #1、我自己推荐过的
+  #2、我的好友的推荐   
+  #3、同我一个社区的用户推荐
+  #4、我推荐专业人士的他们的推荐
+  #5、我推荐的专业人士，其他用户同样推荐了此人，这些用户的其他推荐
+  #6、全局所有服务卡按最新更新排序的前6名
+  SERV_QRY_LEVEL = {:myRe => "1",:friendRe => "2",:villageRe => "3",:MyResRe => "4", :reMyResRe => "5", :global => "6"}
   SERV_VIA = {:local => "local", :remote => "remote", :all => "all"} #服务方式 本地|远程|全部
   REQUEST_ORDERS_LIMIT = 30   #需求订单数限制
   USER_PROFILE ="大家好，我来自__%s__，请多多关照"

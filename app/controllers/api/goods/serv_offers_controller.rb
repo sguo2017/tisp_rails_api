@@ -15,46 +15,71 @@ class Api::Goods::ServOffersController < ApplicationController
     @serv_offers
     user_id = params[:user_id].presence
     qry_type = params[:qry_type].presence
+    qry_level = params[:qry_level].presence
     catalog_id = params[:catalog_id].presence
     serv_id = params[:serv_id].presence
     #个人已存档的需求查询的参数为request
     archived = params[:archived].presence
-	extra_parm_s = params[:exploreparams]
-	#场景一：按职业模糊查询
-	if user_id.nil? && !extra_parm_s.nil? && 'undefined' != extra_parm_s
-		extra_parm_h = JSON.parse extra_parm_s
-    uids = []
-    #查找我的好友
-    @friends = Friend.where("user_id=? and status=?",user.id, Const::FRIEND_STATUS[:created])
-    #查找我的好友的推荐（好评）用户
-    @friends.each do |friend|
-      if friend.friend_id.nil?
-        next
-      end
-      begin
-        @user = User.find(friend.friend_id)
-      rescue ActiveRecord::RecordNotFound => e
-      end
+    extra_parm_s = params[:exploreparams]
+  	#场景一：按职业模糊查询
+  	if user_id.nil? && !extra_parm_s.nil? && 'undefined' != extra_parm_s
+  		extra_parm_h = JSON.parse extra_parm_s
 
-      if @user.blank?
-        next
+      #@serv_offers = Good.all
+      uids = []
+      #我的推荐
+      if qry_level == Const::SERV_QRY_LEVEL[:myRe]
+        @comments = user.comments;
+        @comments.each do |comment|
+          uids.push(comment.obj_id)
+        end
+      #好友推荐
+      elsif qry_level == Const::SERV_QRY_LEVEL[:friendRe]
+        @friends = Friend.where("user_id=? and status=?",user.id, Const::FRIEND_STATUS[:created])
+        @friends.each do |friend|
+          if friend.friend_id.nil?
+            next
+          end
+          begin
+            @user = User.find(friend.friend_id)
+          rescue ActiveRecord::RecordNotFound => e
+          end
+          if @user.blank?
+            next
+          end
+          @comments = @user.comments
+          @comments.each do |comment|
+            uids.push(comment.obj_id)
+          end
+        end
+      #同一社区的用户推荐
+      elsif qry_level == Const::SERV_QRY_LEVEL[:villageRe]
+        @villages = user.villages
+        @villages.each do |village|
+          @users = village.users
+          @users.each do |u|
+            uids.push(u.id)
+          end
+        end
+      elsif qry_level == Const::SERV_QRY_LEVEL[:MyResRe]
+        @comments = user.comments;
+        @comments.each do |comment|
+          @user= User.find(comment.obj_id)
+          @comments2 = @user.comments
+          @comments2.each do |comment2|
+            uids.push(comment2.obj_id)
+          end
+        end      
       end
-      @comments = @user.comments
-      @comments.each do |comment|
-        uids.push(comment.obj_id)
+      uids = uids.join(",")
+      if uids != '' 
+        @serv_offers = Good.where("user_id in (#{uids})")
+      elsif qry_level == Const::SERV_QRY_LEVEL[:global]
+        @serv_offers = Good.all
+      else
+        uids = '999999999999999'
+        @serv_offers = Good.where("user_id in (#{uids})")
       end
-    end
-    #查找我的社区
-    @villages=user.villages
-    @villages.each do |village|
-      @users = village.users
-      @users.each do |u|
-        uids.push(u.id)
-      end
-    end
-    uids = uids.join(",")
-    if uids != ''
-      @serv_offers = Good.where("user_id in (#{uids})")
       @serv_offers = @serv_offers.where("status = ?", Const::GOODS_STATUS[:pass])
       @serv_offers = @serv_offers.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer])
       #查询参数有title且title不为空
@@ -63,76 +88,68 @@ class Api::Goods::ServOffersController < ApplicationController
       else
         @serv_offers = @serv_offers.order("created_at DESC").page(params[:page]).per(5) 
       end
-    else 
-      @serv_offers = nil
-    end
-		
-   
-
     #场景三：某[二级分类]相关服务查询
-  elsif user_id.nil? && catalog_id
-    logger.debug "查找分类为#{catalog_id}"
-    @target_user = Good.find(serv_id).user
-    #serv_id不为空时是查看服务的相关服务
-    #serv_id为空时是查看需求的相关服务
-    if serv_id 
-      @serv_offers = Good.where("id != ? and status = ? and goods_catalog_id = ? and serv_catagory = ?", serv_id, Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
-    else
-      @serv_offers = Good.where("status = ? and goods_catalog_id = ? and serv_catagory = ?", Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
-    end
-  
-  #场景二：全部查询
-	elsif user_id.nil?
-    if (qry_type == Const::SERV_QRY_TYPE[:offer])
-      @serv_offers = Good.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer])
-    elsif (qry_type == Const::SERV_QRY_TYPE[:request])
-      @serv_offers = Good.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:request])
-    else
-      @serv_offers = Good.order("created_at DESC")
-		end
-    @serv_offers =@serv_offers.where("status =?", Const::GOODS_STATUS[:pass]).order("created_at DESC").page(params[:page]).per(5)
-    
-  #场景四：个人查询
-  else
-      if(qry_type == Const::SERV_QRY_TYPE[:offer])#我的->服務
-        @serv_offers = Good.where(" serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:offer], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)
-        @size = 0 #Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).size;
-      elsif(qry_type == Const::SERV_QRY_TYPE[:request])#我的->需求
-        if(archived)
-           @favorites = Favorite.where("user_id = ? and obj_type = ?", user.id, Const::SysMsg::GOODS_TYPE[:request]).order("created_at DESC").page(params[:page]).per(5)
-           @requests = []
-           logger.debug "收藏的需求#{@favorites.to_json}"
-           @favorites.each do |favorite|
-              offer = Good.find(favorite.obj_id)
-              s = offer.attributes.clone
-              s["isFavorited"] = true
-              s["favorite_id"] = favorite.id.to_s
-              r = Report.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "good").first
-              if r.blank?
-                s["isReported"] = false
-              else
-                s["isReported"] = true
-                s["report_id"] = r["id"].to_s
-              end
-              s["user"]=user
-             @requests.push(s)
-          end
-          respond_to do |format|
-            format.json {
-              render json: {page: @favorites.current_page, total_pages: @favorites.total_pages, feeds: @requests.to_json}
-            }
-          end
-          return
-        else
-          @serv_offers = Good.where("serv_catagory =? and user_id = ? and status != ? and not exists (select obj_id from favorites f where f.obj_id = goods.id) ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)  
-          @size = 0 #Good.where(" serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).size;
-        end      
+    elsif user_id.nil? && catalog_id
+      logger.debug "查找分类为#{catalog_id}"
+      @target_user = Good.find(serv_id).user
+      #serv_id不为空时是查看服务的相关服务
+      #serv_id为空时是查看需求的相关服务
+      if serv_id 
+        @serv_offers = Good.where("id != ? and status = ? and goods_catalog_id = ? and serv_catagory = ?", serv_id, Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
       else
-        @serv_offers = Good.where("user_id = ? and status != ? ", user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)
+        @serv_offers = Good.where("status = ? and goods_catalog_id = ? and serv_catagory = ?", Const::GOODS_STATUS[:pass], catalog_id, Const::SysMsg::GOODS_TYPE[:offer]).order("created_at DESC").page(params[:page]).per(4) 
       end
-  end
-
-
+    
+    #场景二：全部查询
+  	elsif user_id.nil?
+      if (qry_type == Const::SERV_QRY_TYPE[:offer])
+        @serv_offers = Good.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:offer])
+      elsif (qry_type == Const::SERV_QRY_TYPE[:request])
+        @serv_offers = Good.where("serv_catagory =?", Const::SysMsg::GOODS_TYPE[:request])
+      else
+        @serv_offers = Good.order("created_at DESC")
+  		end
+      @serv_offers =@serv_offers.where("status =?", Const::GOODS_STATUS[:pass]).order("created_at DESC").page(params[:page]).per(5)
+      
+    #场景四：个人查询
+    else
+        if(qry_type == Const::SERV_QRY_TYPE[:offer])#我的->服務
+          @serv_offers = Good.where(" serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:offer], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)
+          @size = 0 #Good.where(" serv_catagory =? and user_id = ?", Const::SysMsg::GOODS_TYPE[:offer], user_id).size;
+        elsif(qry_type == Const::SERV_QRY_TYPE[:request])#我的->需求
+          if(archived)
+             @favorites = Favorite.where("user_id = ? and obj_type = ?", user.id, Const::SysMsg::GOODS_TYPE[:request]).order("created_at DESC").page(params[:page]).per(5)
+             @requests = []
+             logger.debug "收藏的需求#{@favorites.to_json}"
+             @favorites.each do |favorite|
+                offer = Good.find(favorite.obj_id)
+                s = offer.attributes.clone
+                s["isFavorited"] = true
+                s["favorite_id"] = favorite.id.to_s
+                r = Report.where("user_id = ? and obj_id = ? and obj_type = ?", user.id, offer.id, "good").first
+                if r.blank?
+                  s["isReported"] = false
+                else
+                  s["isReported"] = true
+                  s["report_id"] = r["id"].to_s
+                end
+                s["user"]=user
+               @requests.push(s)
+            end
+            respond_to do |format|
+              format.json {
+                render json: {page: @favorites.current_page, total_pages: @favorites.total_pages, feeds: @requests.to_json}
+              }
+            end
+            return
+          else
+            @serv_offers = Good.where("serv_catagory =? and user_id = ? and status != ? and not exists (select obj_id from favorites f where f.obj_id = goods.id) ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)  
+            @size = 0 #Good.where(" serv_catagory =? and user_id = ? and status != ? ", Const::SysMsg::GOODS_TYPE[:request], user_id, Const::GOODS_STATUS[:destroy]).size;
+          end      
+        else
+          @serv_offers = Good.where("user_id = ? and status != ? ", user_id, Const::GOODS_STATUS[:destroy]).order("created_at DESC").page(params[:page]).per(5)
+        end
+    end
 
     @offers = []
     if @serv_offers.nil?
