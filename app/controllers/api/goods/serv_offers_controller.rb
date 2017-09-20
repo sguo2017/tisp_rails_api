@@ -27,55 +27,26 @@ class Api::Goods::ServOffersController < ApplicationController
 
       #@serv_offers = Good.all
       uids = []
-      #我的推荐
+      
       if qry_level == Const::SERV_QRY_LEVEL[:myRe]
-        @comments = user.comments;
-        @comments.each do |comment|
-          uids.push(comment.obj_id)
-        end
-      #好友推荐
+        uids = myRe(user)
+        logger.debug "1我的推荐用户id#{uids}"
       elsif qry_level == Const::SERV_QRY_LEVEL[:friendRe]
-        @friends = Friend.where("user_id=? and status=?",user.id, Const::FRIEND_STATUS[:created])
-        @friends.each do |friend|
-          if friend.friend_id.nil?
-            next
-          end
-          begin
-            @user = User.find(friend.friend_id)
-          rescue ActiveRecord::RecordNotFound => e
-          end
-          if @user.blank?
-            next
-          end
-          @comments = @user.comments
-          @comments.each do |comment|
-            uids.push(comment.obj_id)
-          end
-        end
-      #同一社区的用户推荐
+        uids = friendRe(user) - myRe(user)
+        logger.debug "2我的好友推荐用户id#{uids}"
       elsif qry_level == Const::SERV_QRY_LEVEL[:villageRe]
-        @villages = user.villages
-        @villages.each do |village|
-          @users = village.users
-          @users.each do |u|
-            uids.push(u.id)
-          end
-        end
+        uids = villageRe(user) - friendRe(user) - myRe(user)
+        logger.debug "3社区推荐用户id#{uids}"
       elsif qry_level == Const::SERV_QRY_LEVEL[:MyResRe]
-        @comments = user.comments;
-        @comments.each do |comment|
-          @user= User.find(comment.obj_id)
-          @comments2 = @user.comments
-          @comments2.each do |comment2|
-            uids.push(comment2.obj_id)
-          end
-        end      
+        uids = MyResRe(user) - villageRe(user) - friendRe(user) - myRe(user)
+        logger.debug "4我的推荐的推荐用户id#{uids}"
+      elsif qry_level == Const::SERV_QRY_LEVEL[:reMyResRe]
+        uids = reMyResRe(user) - MyResRe(user) - villageRe(user) - friendRe(user) - myRe(user)
+        logger.debug "5、推荐了我推荐的用户的其它推荐id#{uids}"
       end
       uids = uids.join(",")
       if uids != '' 
         @serv_offers = Good.where("user_id in (#{uids})")
-      elsif qry_level == Const::SERV_QRY_LEVEL[:global]
-        @serv_offers = Good.all
       else
         uids = '999999999999999'
         @serv_offers = Good.where("user_id in (#{uids})")
@@ -178,7 +149,11 @@ class Api::Goods::ServOffersController < ApplicationController
           s["comment_id"] = c["id"].to_s
           s["comment_content"] = c["content"]
         end
-
+        c2 = Comment.where("user_id != ? and obj_id = ? and status = ?", user.id, u.id, "good").first
+        if c2.blank?
+        else
+          s["recommand_user"] = User.find(c2.user_id)
+        end
         #是否收藏
         f = Favorite.where("user_id = ? and obj_id = ?", user.id, offer.id).first
         if f.blank?
@@ -313,9 +288,85 @@ class Api::Goods::ServOffersController < ApplicationController
     avaliable = limit - has_added
     logger.debug "157:#{avaliable}"
     return avaliable
-  end 
+  end
 
   private
+    #1、我的推荐
+    def myRe(user)
+      uids = []
+      @comments = user.comments;
+      @comments.each do |comment|
+        uids.push(comment.obj_id)
+      end
+      return uids
+    end
+
+    #2、好友推荐
+    def friendRe(user)
+      uids = []
+      @friends = Friend.where("user_id=? and status=?",user.id, Const::FRIEND_STATUS[:created])
+      @friends.each do |friend|
+        if friend.friend_id.nil?
+          next
+        end
+        begin
+          @user = User.find(friend.friend_id)
+        rescue ActiveRecord::RecordNotFound => e
+        end
+        if @user.blank?
+          next
+        end
+        @comments = @user.comments
+        @comments.each do |comment|
+          uids.push(comment.obj_id)
+        end
+      end
+      return uids
+    end
+
+    #3、同一社区的用户推荐
+    def villageRe(user)
+      uids = []
+      @villages = user.villages
+      @villages.each do |village|
+        @users = village.users
+        @users.each do |u|
+          uids.push(u.id)
+        end
+      end
+      return uids
+    end
+
+    #4、我推荐的用户的推荐
+    def MyResRe(user)
+      uids = []
+      @comments = user.comments;
+      @comments.each do |comment|
+        @user= User.find(comment.obj_id)
+        @comments4 = @user.comments
+        @comments4.each do |comment4|
+          uids.push(comment4.obj_id)
+        end
+      end
+      return uids 
+    end
+
+    #5、推荐了我推荐的用户的用户的其它推荐
+    def reMyResRe(user)
+      uids = []
+      @comments = user.comments;
+      @comments.each do |comment|
+        @comments51 = Comment.where("obj_id = ? and user_id != ?", comment.obj_id, user.id)
+        @comments51.each do |comment51|
+          @user5 = User.find(comment51.obj_id)
+          @comments52 = @user5.comments
+          @comments52.each do |comment52|
+            uids.push(comment52.obj_id)
+          end
+        end
+      end 
+      return uids     
+    end
     # Use callbacks to share common setup or constraints between actions.
     def set_serv_offer
       @serv_offer = Good.find(params[:id])
