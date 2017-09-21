@@ -15,9 +15,10 @@ class Api::Villages::VillagesController < ApplicationController
     title = extra_parm_h['title']
     @villages
     if qry_type == "1"
-      @villages = Village.all
       if title!=''
-        @villages = @villages.where("name like ?", "%#{title}%").order("created_at DESC").page(params[:page]).per(5)
+        @villages = Village.where("name like ?", "%#{title}%").order("created_at DESC").page(params[:page]).per(10)
+      else
+        @villages = Village.first(10)
       end
     elsif qry_type =="2"
       @villages = user.villages
@@ -108,17 +109,60 @@ class Api::Villages::VillagesController < ApplicationController
     end
   end
 
+  def nearby_village
+    token = params[:token].presence
+    user = token && User.find_by_authentication_token(token.to_s) 
+    @user_latitude = user.latitude
+    @user_longitude = user.longitude
+    @village_array = [] 
+    r = 6371.0000;    #地球半径千米  
+    dis = 5.0000 * 2 * 10;   #0.5千米距离  
+    dlng =  2*Math.asin(Math.sin(dis/(2*r))/Math.cos(@user_latitude.to_f*3.14/180)).round(4) ;  
+    dlng = dlng*180/3.14.round(4);#角度转为弧度  
+    dlat = dis/r.round(4);  
+    dlat = dlat*180/3.14.round(4);    
+    minlat = @user_latitude.to_f - dlat;  
+    maxlat = @user_latitude.to_f + dlat;  
+    minlng = @user_longitude.to_f - dlng;  
+    maxlng = @user_longitude.to_f + dlng;  
+
+    @villages  = Village.where("latitude >= ? and latitude <= ? and longitude >= ? and longitude <= ? ", minlat, maxlat, minlng, maxlng)  
+    @villages.each_with_index do |village|
+      v = village.attributes.clone
+      if village.latitude.blank? || village.longitude.blank?
+
+      else
+        @village_array.push(v)
+      end
+    end  
+
+    respond_to do |format|
+      format.json {
+          render json: {status: 0, feeds: @village_array}
+        }
+    end
+  end
+
   def add_user
       user_id = params[:user_id].presence
       village_id = params[:village_id].presence
       @user = User.find(user_id)
-      @village = Village.find(village_id)
-      @village.users << @user
-      respond_to do |format|
-        format.json {
-            render json: {status: 0}
-          }
+      if @user.villages.length <6
+        @village = Village.find(village_id)
+        @village.users << @user
+        respond_to do |format|
+          format.json {
+              render json: {status: 0,  msg: '加入成功'}
+            }
+        end
+      else
+        respond_to do |format|
+          format.json {
+              render json: {status: -1, msg: '加入的社区不能超过6个'}
+            }
+        end
       end
+      
   end
 
   def delete_user

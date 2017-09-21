@@ -19,9 +19,9 @@ class Api::Users::UsersController < ApplicationController
     @users
     @users = User.where("status =? and id !=? and admin =?", Const::USER_STATUS[:created], user.id, false)
     if title!=''
-      @users = @users.where("name like ?", "%#{title}%").order("created_at DESC").page(params[:page]).per(20)
+      @users = @users.where("name like ?", "%#{title}%").order("created_at DESC").page(params[:page]).per(10)
     else
-      @users = @users.order("created_at DESC").page(params[:page]).per(20)
+      @users = @users.order("created_at DESC").page(params[:page]).per(10)
     end
     @users_arr =[]
     @users.each do |u|

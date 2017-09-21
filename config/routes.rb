@@ -99,9 +99,10 @@ Rails.application.routes.draw do
       match '/friend_list', to: 'friends#friend_list', via: [:post]
     end
     namespace :villages do 
-      resources :villages, only: [:index, :create, :show, :update, :destroy, :add_user, :delete_user] 
+      resources :villages, only: [:index, :create, :show, :update, :destroy, :add_user, :delete_user, :nearby_village] 
       match '/add_user', to: 'villages#add_user', via: [:post]
       match '/delete_user', to: 'villages#delete_user', via: [:post]
+      match '/nearby_village', to: 'villages#nearby_village', via: [:get]
     end
   end
 

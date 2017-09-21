@@ -25,7 +25,7 @@ class Api::Friends::FriendsController < ApplicationController
     @friends.each do |friend|
       f = friend.attributes.clone
       begin
-        u = User.find(friend.friend_id)
+        u = User.find_by_num(friend.friend_num)
         u.authentication_token = "***"
         f["avatar"]=u.avatar
         #加载客户列表时，如果客户用户状态是已注册，则客户状态也更新为created
@@ -64,51 +64,73 @@ class Api::Friends::FriendsController < ApplicationController
     token = params[:token].presence
     user = token && User.find_by_authentication_token(token.to_s)
 
+    recommand = params[:recommand].presence
+
     @friend = Friend.new(friend_params)
     if @friend.friend_id
       @user = User.find(@friend.friend_id)
     else
       @user = User.find_by_num(@friend.friend_num)
     end
-    #添加已注册用户为好友
-    if @user && @user.status == Const::USER_STATUS[:created]
-      @friend.status = Const::FRIEND_STATUS[:apply]
-      @other = Friend.create!(user_id:@user.id, friend_id: user.id, friend_name:user.name, friend_num:user.num, status: Const::FRIEND_STATUS[:pending])
-    #添加别人推荐过的未加入用户为好友
-    elsif @user
-      logger.debug "用户已被推荐但未加入"
-      @friend.status = Const::FRIEND_STATUS[:unjoined]
-    else
-      logger.debug "用户未加入"
-      if @friend.catalog == Const::RELATION_TYPE[:customer]
-        #推荐客户
+
+    if recommand.blank?
+      #添加已注册用户为好友
+      if @user && @user.status == Const::USER_STATUS[:created]
+        @friend.status = Const::FRIEND_STATUS[:apply]
+        @other = Friend.create!(user_id:@user.id, friend_id: user.id, friend_name:user.name, friend_num:user.num, status: Const::FRIEND_STATUS[:pending])
+      #添加别人推荐过的未加入用户为好友
+      elsif @user
+        logger.debug "用户已被推荐但未加入"
         @friend.status = Const::FRIEND_STATUS[:unjoined]
-        @user = User.create!(num: @friend.friend_num, name: @friend.friend_name, status: Const::USER_STATUS[:recommended],email: @friend.friend_num+"@qike.com",password: "888888")
-        @user.avatar = img_kit(@user.name.last)
-        @user.save
-        @friend.friend_id = @user.id
       else
-        #推荐专业人士，默认互为好友，并且发布一条默认服务
-        catalog_id = params[:catalog_id].presence
-        catalog_name = params[:catalog_name].presence
-        catalog = GoodsCatalog.find(catalog_id)
-        @friend.status = Const::FRIEND_STATUS[:created]
-        @user = User.create!(num: @friend.friend_num, name: @friend.friend_name, status: Const::USER_STATUS[:recommended],email: @friend.friend_num+"@qike.com",password: "888888")
-        @user.avatar = img_kit(@user.name.last)
-        @user.save
-        @other = Friend.create!(user_id: @user.id, friend_id: user.id, friend_name:user.name, friend_num:user.num, status:Const::FRIEND_STATUS[:created])
-        @good = Good.create!(user_id: @user.id, serv_title: Const::ServOffer::DEFAULT_TITILE%catalog_name, serv_detail: Const::ServOffer::DEFAULT_DETAIL%user.name, serv_catagory: Const::GOODS_TYPE[:offer],catalog: catalog_name, goods_catalog_id:catalog_id ,serv_images: catalog.image)
-        @friend.friend_id = @user.id
+        
       end
-      
-    end
-    respond_to do |format|
-      if @friend.save
-        format.json {
-          render json: {status: 0, feed: @friend, user: @user}
-        }
+      respond_to do |format|
+        if @friend.save
+          format.json {
+            render json: {status: 0, feed: @friend, user: @user}
+          }
+        end
       end
+    else
+      if @user
+        respond_to do |format|
+          format.json {
+            render json: {status: -1, msg:'用户已经加入'}
+          }
+        end
+      else
+        logger.debug "用户未加入"
+        if @friend.catalog == Const::RELATION_TYPE[:customer]
+          #推荐客户
+          @friend.status = Const::FRIEND_STATUS[:unjoined]
+          @user = User.create!(num: @friend.friend_num, name: @friend.friend_name, status: Const::USER_STATUS[:recommended],email: @friend.friend_num+"@qike.com",password: "888888")
+          @user.avatar = img_kit(@user.name.last)
+          @user.save
+          @friend.friend_id = @user.id
+        else
+          #推荐专业人士，默认互为好友，并且发布一条默认服务
+          catalog_id = params[:catalog_id].presence
+          catalog_name = params[:catalog_name].presence
+          catalog = GoodsCatalog.find(catalog_id)
+          @friend.status = Const::FRIEND_STATUS[:created]
+          @user = User.create!(num: @friend.friend_num, name: @friend.friend_name, status: Const::USER_STATUS[:recommended],email: @friend.friend_num+"@qike.com",password: "888888")
+          @user.avatar = img_kit(@user.name.last)
+          @user.save
+          @other = Friend.create!(user_id: @user.id, friend_id: user.id, friend_name:user.name, friend_num:user.num, status:Const::FRIEND_STATUS[:created])
+          @good = Good.create!(user_id: @user.id, serv_title: Const::ServOffer::DEFAULT_TITILE%catalog_name, serv_detail: Const::ServOffer::DEFAULT_DETAIL%user.name, serv_catagory: Const::GOODS_TYPE[:offer],catalog: catalog_name, goods_catalog_id:catalog_id ,serv_images: catalog.image)
+          @friend.friend_id = @user.id
+        end
+        respond_to do |format|
+          if @friend.save
+            format.json {
+              render json: {status: 0, feed: @friend, user: @user}
+            }
+          end
+        end
+      end    
     end
+    
   end
 
   # POST /friends/friend_list
