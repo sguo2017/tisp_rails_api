@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20170920062733) do
+ActiveRecord::Schema.define(version: 20170922011608) do
 
   create_table "chat_messages", force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
     t.text     "message",      limit: 65535
@@ -379,6 +379,7 @@ ActiveRecord::Schema.define(version: 20170920062733) do
     t.float    "longitude",   limit: 24
     t.string   "district"
     t.string   "postal_code"
+    t.string   "avatar"
   end
 
   create_table "villages_users", id: false, force: :cascade, options: "ENGINE=InnoDB DEFAULT CHARSET=utf8" do |t|
