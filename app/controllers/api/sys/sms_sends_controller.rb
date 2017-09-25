@@ -86,7 +86,7 @@ class Api::Sys::SmsSendsController < ApplicationController
       send_content = ""
       #code短信验证码
       if "code" == sms_type
-          send_content = rand(9999)     
+          send_content = rand(1000..9999)   
           @sms_send.send_content = send_content
           @sms_send.sms_type = sms_type
       end 

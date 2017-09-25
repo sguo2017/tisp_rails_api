@@ -44,10 +44,10 @@ class Api::Users::RegistrationsController < ApplicationController
     else
       @user = User.new(user_params)
       @user.avatar = img_kit(@user.name.last)
-      logger.debug "用户头像#{@user.avatar}"
     end
     respond_to do |format|
       if @user.save
+        logger.debug "52 用户头像#{@user.avatar}"
         format.json { render json: {"success": true, token:@user.authentication_token, user_id:@user.id,user: @user.to_json }}
       else
         format.json {render json: {"success": false}}

@@ -16,9 +16,9 @@ class Api::Villages::VillagesController < ApplicationController
     @villages
     if qry_type == "1"
       if title!=''
-        @villages = Village.where("name like ?", "%#{title}%").order("created_at DESC").page(params[:page]).per(10)
+        @villages = Village.where("status = ? and name like ?", "00A","%#{title}%").order("created_at DESC").page(params[:page]).per(15)
       else
-        @villages = Village.first(10)
+        @villages = Village.where("status = ?", "00A").first(15)
       end
     elsif qry_type =="2"
       @villages = user.villages
@@ -31,6 +31,7 @@ class Api::Villages::VillagesController < ApplicationController
       else
         v["in_village"] = false
       end
+      v["users_count"] = village.users.size
       @villages_arr.push(v)
     end
     respond_to do |format|
@@ -50,7 +51,12 @@ class Api::Villages::VillagesController < ApplicationController
       @comments = user.comments
       @comments.each do |comment|
          u = User.find(comment.obj_id)
-         @users_arr.push(u)
+         good = u.goods.first
+         c = u.attributes.clone
+         if good
+            c["goods_catalog"] = good.catalog  
+         end
+         @users_arr.push(c)
       end 
     end
     respond_to do |format|

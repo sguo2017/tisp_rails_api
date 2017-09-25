@@ -28,6 +28,8 @@ class Api::Friends::FriendsController < ApplicationController
         u = User.find_by_num(friend.friend_num)
         u.authentication_token = "***"
         f["avatar"]=u.avatar
+        f["city"] = u.city
+        f["district"] = u.district
         #加载客户列表时，如果客户用户状态是已注册，则客户状态也更新为created
         if friend.status == Const::FRIEND_STATUS[:unjoined] && u.status == Const::USER_STATUS[:created]
           f["status"] = Const::FRIEND_STATUS[:created]
