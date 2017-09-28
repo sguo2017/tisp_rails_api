@@ -21,6 +21,7 @@ $(document).bind('turbolinks:load',function() {
     $(".rucaptcha-image").attr('src', "/rucaptcha?timestamp=" + (new Date().getTime()));
     return false;
   });
+  $(".rucaptcha-refresh").click();
 
 });
 Date.prototype.format = function(fmt) {
