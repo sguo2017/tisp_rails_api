@@ -18,7 +18,7 @@ $(document).bind('turbolinks:load',function() {
   askForGeoInfos();
   $(".rucaptcha-refresh").click(function() {
     var src = $(".rucaptcha-image").attr('src');
-    $(".rucaptcha-image").attr('src', src.split("?")[0] + "?timestamp=" + (new Date().getTime()));
+    $(".rucaptcha-image").attr('src', "/rucaptcha?timestamp=" + (new Date().getTime()));
     return false;
   });
 
